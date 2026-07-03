@@ -39,6 +39,11 @@ msgstr "Permisiunile selectate vor fi aplicate acestor canale."
 msgid "Product options"
 msgstr "Opțiuni produs"
 
+#. placeholder {0}: failed.length
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:89
+msgid "Failed to delete {0} stock locations"
+msgstr ""
+
 #: src/app/routes/_authenticated/_tax-rates/tax-rates.tsx:108
 msgid "New Tax Rate"
 msgstr "Cotă de Taxă Nouă"
@@ -514,6 +519,10 @@ msgstr "Gestionează vizualizările globale salvate care sunt vizibile tuturor u
 msgid "Search payment methods..."
 msgstr "Caută metode de plată..."
 
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:79
+msgid "Deleted {deleted} stock locations"
+msgstr ""
+
 #: src/app/routes/_authenticated/_orders/orders_.draft.$id.tsx:257
 msgid "Shipping address unset for order"
 msgstr "Adresa de livrare anulată pentru comandă"
@@ -988,6 +997,10 @@ msgstr "Alocat"
 msgid "Failed to set coupon code for order: {0}"
 msgstr ""
 
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:152
+msgid "Select what to do with remaining stock"
+msgstr ""
+
 #: src/lib/components/layout/nav-user.tsx:102
 msgid "Explore Platform & Cloud"
 msgstr "Explorează Platforma și Cloud"
@@ -1360,6 +1373,11 @@ msgstr "Limbă afișare"
 msgid "Fulfillment details"
 msgstr "Detalii livrare"
 
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:68
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:163
+msgid "Discard remaining stock"
+msgstr ""
+
 #: src/lib/components/data-input/datetime-input.tsx:181
 msgid "Now"
 msgstr "Acum"
@@ -1410,6 +1428,8 @@ msgstr "Folosește ca adresă de facturare implicită"
 #: src/app/common/delete-bulk-action.tsx:139
 #: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:41
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:362
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:178
+#: src/app/routes/_authenticated/_stock-locations/components/stock-location-bulk-actions.tsx:28
 #: src/lib/components/data-table/use-generated-columns.tsx:407
 #: src/lib/components/data-table/use-generated-columns.tsx:437
 #: src/lib/components/data-table/views-sheet.tsx:270
@@ -1539,6 +1559,7 @@ msgstr "Mergi la ultima pagină"
 #: src/app/routes/_authenticated/_orders/components/settle-refund-dialog.tsx:71
 #: src/app/routes/_authenticated/_products/components/assign-facet-values-dialog.tsx:273
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:498
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:171
 #: src/app/routes/_authenticated/_system/settings-store.tsx:140
 #: src/lib/components/data-input/product-multi-selector-input.tsx:470
 #: src/lib/components/data-table/data-table-bulk-action-item.tsx:122
@@ -1798,7 +1819,7 @@ msgstr "Duplică"
 msgid "No results"
 msgstr "Fără rezultate"
 
-#: src/lib/components/data-table/data-table-view-options.tsx:89
+#: src/lib/components/data-table/data-table-view-options.tsx:95
 msgid "Column settings"
 msgstr "Setări coloane"
 
@@ -1823,6 +1844,10 @@ msgstr "Nu s-au putut elimina grupurile de opțiuni"
 #: src/app/routes/_authenticated/_orders/components/order-history/order-history-utils.tsx:97
 msgid "Order delivered"
 msgstr "Comandă livrată"
+
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:135
+msgid "Remaining stock"
+msgstr ""
 
 #: src/app/routes/_authenticated/_zones/components/zone-bulk-actions.tsx:49
 msgid "Remove from zone"
@@ -2454,6 +2479,10 @@ msgstr "Nu s-a putut crea valoarea atributului"
 #: src/lib/components/data-table/human-readable-operator.tsx:26
 msgid "="
 msgstr "="
+
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:125
+msgid "Choose what to do with any stock remaining in the {count} stock location(s) you are deleting. All selected locations transfer their remaining stock into the single location you choose, or discard it."
+msgstr ""
 
 #: src/app/routes/_authenticated/_option-groups/option-groups_.$groupId.options_.$id.tsx:151
 msgid "Failed to update product option"
@@ -3155,6 +3184,10 @@ msgstr "Caută valori de atribute..."
 msgid "Note"
 msgstr "Notă"
 
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:103
+msgid "Failed to delete {count} stock locations"
+msgstr ""
+
 #: src/app/routes/_authenticated/_channels/channels_.$id.tsx:160
 #: src/app/routes/_authenticated/_global-settings/global-settings.tsx:112
 msgid "Available languages"
@@ -3183,7 +3216,7 @@ msgstr "Total Comenzi"
 msgid "No eligible shipping methods found for this order."
 msgstr "Nu s-au găsit metode de livrare eligibile pentru această comandă."
 
-#: src/app/routes/_authenticated/_products/components/product-options-table.tsx:118
+#: src/app/routes/_authenticated/_products/components/product-options-table.tsx:126
 msgid "Add product option"
 msgstr "Adaugă opțiune produs"
 
@@ -3395,6 +3428,10 @@ msgstr "Total taxe"
 #: src/app/routes/_authenticated/_orders/orders_.draft.$id.tsx:414
 msgid "Draft order status"
 msgstr "Starea ciornei comenzii"
+
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:151
+msgid "Loading locations…"
+msgstr ""
 
 #: src/app/routes/_authenticated/_payment-methods/payment-methods_.$id.tsx:110
 msgid "Failed to create payment method"
@@ -3787,7 +3824,7 @@ msgctxt "theme"
 msgid "Light"
 msgstr "Light"
 
-#: src/lib/components/data-table/data-table-view-options.tsx:120
+#: src/lib/components/data-table/data-table-view-options.tsx:130
 msgid "Reset"
 msgstr "Resetează"
 
@@ -4363,6 +4400,10 @@ msgstr "Câmpuri personalizate"
 msgid "New Shipping Method"
 msgstr "Metodă de Livrare Nouă"
 
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:122
+msgid "Delete stock locations"
+msgstr ""
+
 #: src/lib/components/data-table/human-readable-operator.tsx:47
 msgid "is greater than or equal to"
 msgstr "este mai mare sau egal cu"
@@ -4527,6 +4568,13 @@ msgstr "Vizualizările mele salvate"
 #: src/app/routes/_authenticated/_shipping-methods/components/test-address-form.tsx:202
 msgid "State / Province"
 msgstr "Județ / Provincie"
+
+#. placeholder {0}: l.name
+#. placeholder {0}: location.name
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:67
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:159
+msgid "Transfer to {0}"
+msgstr ""
 
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:92
 #: src/app/routes/_authenticated/_payment-methods/payment-methods_.$id.tsx:147
@@ -5450,6 +5498,11 @@ msgstr "useWidgetFilters trebuie folosit în interiorul unui WidgetFiltersProvid
 #: src/app/routes/_authenticated/_customers/components/customer-address-card.tsx:129
 msgid "Edit Address"
 msgstr "Editează adresă"
+
+#. placeholder {0}: failed.length
+#: src/app/routes/_authenticated/_stock-locations/components/delete-stock-locations-dialog.tsx:88
+msgid "Failed to delete {0} stock locations: {messages}"
+msgstr ""
 
 #: src/app/routes/_authenticated/_facets/components/facet-bulk-actions.tsx:73
 msgid "Failed to remove facet from channel: {message}"
