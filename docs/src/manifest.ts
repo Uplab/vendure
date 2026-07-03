@@ -1,17 +1,20 @@
 import type { DocsPackageManifestInput, FileInfo } from '@vendure-io/docs-provider';
-import { applyLastModifiedDates, createNestedNavigationFromFolder, resolveManifest } from '@vendure-io/docs-provider';
+import { createNestedNavigationFromFolder, resolveManifest } from '@vendure-io/docs-provider';
+import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { lastModifiedDates } from './dates.generated.js';
 
 const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
+const repoRoot = dirname(packageRoot);
+const lernaJson = JSON.parse(readFileSync(join(repoRoot, 'lerna.json'), 'utf-8'));
+
 const file = (relativePath: string) => join(packageRoot, relativePath);
 const folder = (relativePath: string) => join(packageRoot, relativePath);
 
 const manifestInput: DocsPackageManifestInput = {
     id: 'core',
     name: 'Vendure Core Documentation',
-    version: '3.5.2',
+    version: lernaJson.version,
     vendureVersion: 'v3',
     basePath: packageRoot,
     navigation: [
@@ -209,6 +212,11 @@ const manifestInput: DocsPackageManifestInput = {
                     file: file('docs/guides/developer-guide/cli/index.mdx'),
                 },
                 {
+                    title: 'AI-assisted Development',
+                    slug: 'ai-assisted-development',
+                    file: file('docs/guides/developer-guide/ai-assisted-development/index.mdx'),
+                },
+                {
                     title: 'Configuration',
                     slug: 'configuration',
                     file: file('docs/guides/developer-guide/configuration/index.mdx'),
@@ -242,6 +250,11 @@ const manifestInput: DocsPackageManifestInput = {
                     title: 'Security',
                     slug: 'security',
                     file: file('docs/guides/developer-guide/security/index.mdx'),
+                },
+                {
+                    title: 'API Keys',
+                    slug: 'api-keys',
+                    file: file('docs/guides/developer-guide/api-keys/index.mdx'),
                 },
                 {
                     title: 'Strategies & Configurable Operations',
@@ -360,6 +373,11 @@ const manifestInput: DocsPackageManifestInput = {
                     slug: 'nest-devtools',
                     file: file('docs/guides/developer-guide/nest-devtools/index.mdx'),
                 },
+                {
+                    title: 'Telemetry',
+                    slug: 'telemetry',
+                    file: file('docs/guides/developer-guide/telemetry/index.mdx'),
+                },
             ],
         },
         {
@@ -438,6 +456,11 @@ const manifestInput: DocsPackageManifestInput = {
                     file: file('docs/guides/extending-the-dashboard/extending-overview/index.mdx'),
                 },
                 {
+                    title: 'Public API & Imports',
+                    slug: 'public-api',
+                    file: file('docs/guides/extending-the-dashboard/public-api/index.mdx'),
+                },
+                {
                     title: 'Creating Pages',
                     slug: 'creating-pages',
                     file: file('docs/guides/extending-the-dashboard/creating-pages/index.mdx'),
@@ -500,6 +523,20 @@ const manifestInput: DocsPackageManifestInput = {
                             ),
                         },
                         {
+                            title: 'Toolbar Items',
+                            slug: 'toolbar-items',
+                            file: file(
+                                'docs/guides/extending-the-dashboard/customizing-pages/toolbar-items.mdx',
+                            ),
+                        },
+                        {
+                            title: 'Extension Targets',
+                            slug: 'extension-targets',
+                            file: file(
+                                'docs/guides/extending-the-dashboard/customizing-pages/extension-targets.mdx',
+                            ),
+                        },
+                        {
                             title: 'Insights Widgets',
                             slug: 'insights-widgets',
                             file: file(
@@ -516,19 +553,19 @@ const manifestInput: DocsPackageManifestInput = {
                     ],
                 },
                 {
-                    title: 'Custom Form Elements',
+                    title: 'Customizing Forms',
                     slug: 'custom-form-components',
                     file: file('docs/guides/extending-the-dashboard/custom-form-components/index.mdx'),
                     children: [
                         {
-                            title: 'Form Component Examples',
+                            title: 'Input Component Examples',
                             slug: 'form-component-examples',
                             file: file(
                                 'docs/guides/extending-the-dashboard/custom-form-components/form-component-examples.mdx',
                             ),
                         },
                         {
-                            title: 'Relation Selectors',
+                            title: 'Relation Selector Components',
                             slug: 'relation-selectors',
                             file: file(
                                 'docs/guides/extending-the-dashboard/custom-form-components/relation-selectors.mdx',
@@ -575,6 +612,11 @@ const manifestInput: DocsPackageManifestInput = {
                     title: 'Migration',
                     slug: 'migration',
                     file: file('docs/guides/extending-the-dashboard/migration/index.mdx'),
+                },
+                {
+                    title: 'Custom Providers',
+                    slug: 'custom-providers',
+                    file: file('docs/guides/extending-the-dashboard/custom-providers/index.mdx'),
                 },
             ],
         },
@@ -633,6 +675,7 @@ const manifestInput: DocsPackageManifestInput = {
         {
             title: 'Deployment',
             slug: 'deployment',
+            file: file('docs/guides/deployment/index.mdx'),
             children: [
                 {
                     title: 'Production Configuration',
@@ -864,17 +907,6 @@ const manifestInput: DocsPackageManifestInput = {
                             ),
                         },
                         {
-                            title: 'ElasticsearchPlugin',
-                            slug: 'elasticsearch-plugin',
-                            file: file('docs/reference/core-plugins/elasticsearch-plugin/index.mdx'),
-                            children: createNestedNavigationFromFolder(
-                                folder('docs/reference/core-plugins/elasticsearch-plugin'),
-                                {
-                                    filter: (info: FileInfo) => info.filename !== 'index.mdx',
-                                },
-                            ),
-                        },
-                        {
                             title: 'EmailPlugin',
                             slug: 'email-plugin',
                             file: file('docs/reference/core-plugins/email-plugin/index.mdx'),
@@ -913,39 +945,6 @@ const manifestInput: DocsPackageManifestInput = {
                             file: file('docs/reference/core-plugins/job-queue-plugin/index.mdx'),
                             children: createNestedNavigationFromFolder(
                                 folder('docs/reference/core-plugins/job-queue-plugin'),
-                                {
-                                    filter: (info: FileInfo) => info.filename !== 'index.mdx',
-                                },
-                            ),
-                        },
-                        {
-                            title: 'PaymentsPlugin',
-                            slug: 'payments-plugin',
-                            file: file('docs/reference/core-plugins/payments-plugin/index.mdx'),
-                            children: createNestedNavigationFromFolder(
-                                folder('docs/reference/core-plugins/payments-plugin'),
-                                {
-                                    filter: (info: FileInfo) => info.filename !== 'index.mdx',
-                                },
-                            ),
-                        },
-                        {
-                            title: 'SentryPlugin',
-                            slug: 'sentry-plugin',
-                            file: file('docs/reference/core-plugins/sentry-plugin/index.mdx'),
-                            children: createNestedNavigationFromFolder(
-                                folder('docs/reference/core-plugins/sentry-plugin'),
-                                {
-                                    filter: (info: FileInfo) => info.filename !== 'index.mdx',
-                                },
-                            ),
-                        },
-                        {
-                            title: 'StellatePlugin',
-                            slug: 'stellate-plugin',
-                            file: file('docs/reference/core-plugins/stellate-plugin/index.mdx'),
-                            children: createNestedNavigationFromFolder(
-                                folder('docs/reference/core-plugins/stellate-plugin'),
                                 {
                                     filter: (info: FileInfo) => info.filename !== 'index.mdx',
                                 },
@@ -1117,19 +1116,10 @@ const manifestInput: DocsPackageManifestInput = {
         },
     ],
     github: {
-        repository: 'vendure-ecommerce/vendure',
+        repository: 'vendurehq/vendure',
         branch: 'master',
-        docsPath: 'docs/docs',
+        docsPath: 'docs',
     },
 };
 
-const resolvedManifest = resolveManifest(manifestInput);
-
-export const manifest = {
-    ...resolvedManifest,
-    navigation: applyLastModifiedDates(
-        resolvedManifest.navigation,
-        lastModifiedDates,
-        { basePath: 'docs' }
-    ),
-};
+export const manifest = resolveManifest(manifestInput);

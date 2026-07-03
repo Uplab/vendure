@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ConfigurableOperationInput as ConfigurableOperationInputType } from '@vendure/common/lib/generated-types';
 import { Plus } from 'lucide-react';
 import { ConfigurableOperationInput } from './configurable-operation-input.js';
+import { getInitialConfigArgValue } from './configurable-operation-utils.js';
 
 /**
  * Props interface for ConfigurableOperationSelector component
@@ -103,7 +104,7 @@ export function ConfigurableOperationSelector({
             code: operation.code,
             arguments: operationDef.args.map(arg => ({
                 name: arg.name,
-                value: arg.defaultValue != null ? arg.defaultValue.toString() : '',
+                value: getInitialConfigArgValue(arg),
             })),
         });
     };
@@ -134,11 +135,9 @@ export function ConfigurableOperationSelector({
             )}
             <DropdownMenu>
                 {!value?.code && (
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="w-fit">
+                    <DropdownMenuTrigger render={<Button variant="outline" className="w-fit" />}>
                             <Plus />
                             <Trans>{buttonText}</Trans>
-                        </Button>
                     </DropdownMenuTrigger>
                 )}
                 <DropdownMenuContent className="w-96">

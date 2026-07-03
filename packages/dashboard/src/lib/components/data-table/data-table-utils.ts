@@ -37,17 +37,23 @@ export function getColumnVisibility(
 }
 
 /**
- * Ensures that the default column order always starts with `id`, `createdAt`, `deletedAt`
+ * Column ids that are always pinned to the start of the table and cannot be
+ * reordered by the user.
+ */
+export const pinnedLeadingColumns: string[] = ['id', 'createdAt', 'updatedAt'];
+
+/**
+ * Ensures that the default column order always starts with pinned leading columns
  */
 export function getStandardizedDefaultColumnOrder<T extends string | number | symbol>(
     defaultColumnOrder?: T[],
 ): T[] {
-    const standardFirstColumns = new Set(['id', 'createdAt', 'updatedAt']);
+    const pinnedLeadingSet = new Set<string>(pinnedLeadingColumns);
     if (!defaultColumnOrder) {
-        return [...standardFirstColumns] as T[];
+        return [...pinnedLeadingColumns] as T[];
     }
-    const rest = defaultColumnOrder.filter(c => !standardFirstColumns.has(c as string));
-    return [...standardFirstColumns, ...rest] as T[];
+    const rest = defaultColumnOrder.filter(c => !pinnedLeadingSet.has(c as string));
+    return [...pinnedLeadingColumns, ...rest] as T[];
 }
 
 /**
@@ -128,22 +134,6 @@ function isDroppingIntoExpandedTarget<T extends HierarchicalItem>(context: DragC
 }
 
 /**
- * Checks if dragging down into an expanded item's children area
- */
-function isDroppingIntoExpandedPreviousChildren<T extends HierarchicalItem>(
-    context: DragContext<T>,
-): boolean {
-    const { isDraggingDown, targetItem, previousItem, item, isPreviousExpanded } = context;
-    return (
-        isDraggingDown &&
-        previousItem !== null &&
-        targetItem?.id !== item.id &&
-        isPreviousExpanded &&
-        targetItem?.parentId === previousItem.id
-    );
-}
-
-/**
  * Checks if dragging up into an expanded item's children area
  */
 function isDroppingIntoExpandedPreviousWhenDraggingUp<T extends HierarchicalItem>(
@@ -171,10 +161,6 @@ function handleExpandedItemDrop<T extends HierarchicalItem>(context: DragContext
         return createFirstChildPosition(targetItem.id);
     }
 
-    if (previousItem && isDroppingIntoExpandedPreviousChildren(context)) {
-        return createFirstChildPosition(previousItem.id);
-    }
-
     if (previousItem && isDroppingIntoExpandedPreviousWhenDraggingUp(context)) {
         return createFirstChildPosition(previousItem.id);
     }
@@ -196,6 +182,7 @@ function calculateCrossParentPosition<T extends HierarchicalItem>(
     targetItem: T,
     sourceParentId: string,
     items: T[],
+    isDraggingDown: boolean,
 ): TargetPosition | null {
     const targetItemParentId = getItemParentId(targetItem);
 
@@ -203,9 +190,20 @@ function calculateCrossParentPosition<T extends HierarchicalItem>(
         return null;
     }
 
-    const targetSiblings = getItemSiblings(items, targetItemParentId);
-    const adjustedIndex = targetSiblings.findIndex(i => i.id === targetItem.id);
+    const visibleSiblings = getItemSiblings(items, targetItemParentId);
+    const targetIndex = visibleSiblings.findIndex(i => i.id === targetItem.id);
+    const isLastVisible = targetIndex === visibleSiblings.length - 1;
 
+    if (isDraggingDown && isLastVisible) {
+        // Dropping after the last visible sibling — use the parent's children
+        // count to ensure we always land at the actual end, even if the
+        // dashboard has stale or paginated data.
+        const parentItem = items.find(i => i.id === targetItemParentId);
+        const totalChildren = parentItem?.children?.length ?? visibleSiblings.length;
+        return { targetParentId: targetItemParentId, adjustedIndex: totalChildren };
+    }
+
+    const adjustedIndex = isDraggingDown ? targetIndex + 1 : targetIndex;
     return { targetParentId: targetItemParentId, adjustedIndex };
 }
 
@@ -227,8 +225,9 @@ function calculateDropAtEndPosition<T extends HierarchicalItem>(
         return null;
     }
 
-    const targetSiblings = getItemSiblings(items, previousItemParentId);
-    return { targetParentId: previousItemParentId, adjustedIndex: targetSiblings.length };
+    const parentItem = items.find(i => i.id === previousItemParentId);
+    const totalChildren = parentItem?.children?.length ?? getItemSiblings(items, previousItemParentId).length;
+    return { targetParentId: previousItemParentId, adjustedIndex: totalChildren };
 }
 
 /**
@@ -266,7 +265,12 @@ export function calculateDragTargetPosition<T extends HierarchicalItem>(params: 
 
     // Handle cross-parent drag operations
     if (targetItem?.id !== item.id) {
-        const crossParentPosition = calculateCrossParentPosition(targetItem, sourceParentId, items);
+        const crossParentPosition = calculateCrossParentPosition(
+            targetItem,
+            sourceParentId,
+            items,
+            context.isDraggingDown,
+        );
         if (crossParentPosition) {
             return crossParentPosition;
         }

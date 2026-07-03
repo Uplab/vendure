@@ -1,4 +1,4 @@
-import { VendureConfig } from '@vendure/core';
+import type { VendureConfig } from '@vendure/core';
 import fs from 'fs-extra';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -15,7 +15,9 @@ import { createPathTransformer } from './path-transformer.js';
 import { discoverPlugins } from './plugin-discovery.js';
 import { findTsConfigPaths } from './tsconfig-utils.js';
 
-const defaultPathAdapter: Required<PathAdapter> = {
+const defaultPathAdapter: Required<
+    Pick<PathAdapter, 'getCompiledConfigPath' | 'transformTsConfigPathMappings'>
+> = {
     getCompiledConfigPath: ({ outputPath, configFileName }) => path.join(outputPath, configFileName),
     transformTsConfigPathMappings: ({ patterns }) => patterns,
 };
@@ -39,11 +41,41 @@ export interface CompileResult {
     pluginInfo: PluginInfo[];
 }
 
+const compileLocks = new Map<string, Promise<void>>();
+let packageJsonWriteId = 0;
+
 /**
  * Compiles TypeScript files and discovers Vendure plugins in both the compiled output
  * and in node_modules.
  */
 export async function compile(options: CompilerOptions): Promise<CompileResult> {
+    return withCompileLock(path.resolve(options.outputPath), () => compileInternal(options));
+}
+
+async function withCompileLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
+    // Serialize every compile for the same output path; callers that need
+    // last-one-wins behavior should debounce before calling compile().
+    const previous = compileLocks.get(key) ?? Promise.resolve();
+    let release!: () => void;
+    const current = new Promise<void>(resolve => {
+        release = resolve;
+    });
+    const queued = previous.catch(() => undefined).then(() => current);
+
+    compileLocks.set(key, queued);
+    await previous.catch(() => undefined);
+
+    try {
+        return await fn();
+    } finally {
+        release();
+        if (compileLocks.get(key) === queued) {
+            compileLocks.delete(key);
+        }
+    }
+}
+
+async function compileInternal(options: CompilerOptions): Promise<CompileResult> {
     const { vendureConfigPath, outputPath, pathAdapter, logger = noopLogger, pluginPackageScanner } = options;
     const getCompiledConfigPath =
         pathAdapter?.getCompiledConfigPath ?? defaultPathAdapter.getCompiledConfigPath;
@@ -60,6 +92,7 @@ export async function compile(options: CompilerOptions): Promise<CompileResult> 
         outputPath,
         logger,
         module: options.module ?? 'commonjs',
+        sourceRoot: pathAdapter?.sourceRoot,
     });
     logger.info(`TypeScript compilation completed in ${Date.now() - compileStart}ms`);
 
@@ -89,11 +122,7 @@ export async function compile(options: CompilerOptions): Promise<CompileResult> 
         }),
     ).href.replace(/\.ts$/, '.js');
 
-    // Create package.json with type commonjs
-    await fs.writeFile(
-        path.join(outputPath, 'package.json'),
-        JSON.stringify({ type: options.module === 'esm' ? 'module' : 'commonjs', private: true }, null, 2),
-    );
+    await writePackageJson(outputPath, options.module);
 
     // Find the exported config symbol
     const sourceFile = ts.createSourceFile(
@@ -137,6 +166,20 @@ export async function compile(options: CompilerOptions): Promise<CompileResult> 
     return { vendureConfig: config, exportedSymbolName, pluginInfo: plugins };
 }
 
+async function writePackageJson(outputPath: string, module?: 'commonjs' | 'esm'): Promise<void> {
+    const packageJsonPath = path.join(outputPath, 'package.json');
+    const tempPackageJsonPath = path.join(
+        outputPath,
+        `.package-${process.pid}-${Date.now()}-${packageJsonWriteId++}.json`,
+    );
+
+    await fs.writeFile(
+        tempPackageJsonPath,
+        JSON.stringify({ type: module === 'esm' ? 'module' : 'commonjs', private: true }, null, 2),
+    );
+    await fs.rename(tempPackageJsonPath, packageJsonPath);
+}
+
 /**
  * Compiles TypeScript files to JavaScript using per-file transpilation.
  *
@@ -154,11 +197,13 @@ async function compileTypeScript({
     outputPath,
     logger,
     module,
+    sourceRoot: customSourceRoot,
 }: {
     inputPath: string;
     outputPath: string;
     logger: Logger;
     module: 'commonjs' | 'esm';
+    sourceRoot?: string;
 }): Promise<void> {
     await fs.ensureDir(outputPath);
 
@@ -190,14 +235,12 @@ async function compileTypeScript({
         });
     }
 
-    // 3. Use the config file's directory as the source root.
-    // This matches ts.createProgram's behaviour when given a single root file,
-    // and preserves the public getCompiledConfigPath API contract where
-    // configFileName is the basename at the output root. Files outside this
-    // directory (e.g. via path aliases to sibling dirs) get ../prefixed output
-    // paths, which is correct — those files are npm packages or pre-built libs
-    // that are resolved at runtime, not from the output directory.
-    const sourceRoot = path.dirname(inputPath);
+    // 3. Determine the source root for computing output directory structure.
+    // Compiled files preserve their directory structure relative to this root.
+    // In monorepos, set pathAdapter.sourceRoot to the workspace root so that
+    // e.g. apps/server/src/config.ts → {output}/apps/server/src/config.js.
+    // Defaults to the config file's directory, placing it at the output root.
+    const sourceRoot = customSourceRoot ?? path.dirname(inputPath);
 
     // 4. Transpile each file individually
     // Note: emitDecoratorMetadata with transpileModule emits `Object` for all

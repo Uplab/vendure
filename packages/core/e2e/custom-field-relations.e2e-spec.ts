@@ -1,3 +1,5 @@
+// this file relies on defintions that are only available at runtime, therefore we still use gql here.
+
 import {
     assertFound,
     Asset,
@@ -31,8 +33,7 @@ import { testSuccessfulPaymentMethod } from './fixtures/test-payment-methods';
 import { TestPlugin1636_1664 } from './fixtures/test-plugins/issue-1636-1664/issue-1636-1664-plugin';
 import { PluginIssue2453 } from './fixtures/test-plugins/issue-2453/plugin-issue2453';
 import { TestCustomEntity, WithCustomEntity } from './fixtures/test-plugins/with-custom-entity';
-import { AddItemToOrderMutationVariables } from './graphql/generated-e2e-shop-types';
-import { ADD_ITEM_TO_ORDER } from './graphql/shop-definitions';
+import { addItemToOrderDocument } from './graphql/shop-definitions';
 import { sortById } from './utils/test-order-utils';
 
 const entitiesWithCustomFields: Array<keyof CustomFields> = [
@@ -145,6 +146,7 @@ describe('Custom field relations', () => {
             'id',
             'createdAt',
             'updatedAt',
+            'languageCode',
             'name',
             'type',
             'fileSize',
@@ -754,15 +756,12 @@ describe('Custom field relations', () => {
             let orderId: string;
 
             beforeAll(async () => {
-                const { addItemToOrder } = await shopClient.query<any, AddItemToOrderMutationVariables>(
-                    ADD_ITEM_TO_ORDER,
-                    {
-                        productVariantId: 'T_1',
-                        quantity: 1,
-                    },
-                );
+                const { addItemToOrder } = await shopClient.query(addItemToOrderDocument, {
+                    productVariantId: 'T_1',
+                    quantity: 1,
+                });
 
-                orderId = addItemToOrder.id;
+                orderId = (addItemToOrder as any).id;
             });
 
             it('shop setOrderCustomFields', async () => {
@@ -1408,6 +1407,24 @@ describe('Custom field relations', () => {
                 `);
                 expect(asset.customFields.single.id).toBe('T_2');
                 expect(asset.customFields.multi.length).toEqual(2);
+            });
+
+            it('updating primitive and relation custom fields on Asset in the same mutation persists both', async () => {
+                const { updateAsset } = await adminClient.query(gql`
+                    mutation {
+                        updateAsset(
+                            input: {
+                                id: "T_1"
+                                customFields: { primitive: "updated-on-asset", singleId: "T_2" }
+                            }
+                        ) {
+                            id
+                            ${customFieldsSelection}
+                        }
+                    }
+                `);
+                expect(updateAsset.customFields.single).toEqual({ id: 'T_2' });
+                expect(updateAsset.customFields.primitive).toBe('updated-on-asset');
             });
 
             // https://github.com/vendurehq/vendure/issues/1636
