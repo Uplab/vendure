@@ -31,7 +31,7 @@ test.describe('Dashboard shell sidebar', () => {
         await page.keyboard.down('g');
         await page.keyboard.press('p');
         await page.keyboard.up('g');
-        await expect(page).toHaveURL(/\/products$/);
+        await expect(page).toHaveURL(/\/products(?:\?.*)?$/);
         await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
     });
 

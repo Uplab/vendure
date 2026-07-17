@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
     AssetListOptions,
-    AssetVisibility,
     AssignAssetsToChannelInput,
     CreateAssetInput,
     DeletionResponse,
@@ -30,7 +29,7 @@ import { Instrument } from '../../common';
 import { isGraphQlErrorResult } from '../../common/error/error-result';
 import { EntityNotFoundError, ForbiddenError, InternalServerError } from '../../common/error/errors';
 import { MimeTypeError } from '../../common/error/generated-graphql-admin-errors';
-import { ChannelAware } from '../../common/types/common-types';
+import { AssetVisibility, ChannelAware } from '../../common/types/common-types';
 import { Translated } from '../../common/types/locale-types';
 import { idsAreEqual } from '../../common/utils';
 import { ConfigService } from '../../config/config.service';

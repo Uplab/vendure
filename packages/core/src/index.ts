@@ -1,7 +1,6 @@
 export {
     AdjustmentType,
     AssetType,
-    AssetVisibility,
     CurrencyCode,
     LanguageCode,
     Permission,
