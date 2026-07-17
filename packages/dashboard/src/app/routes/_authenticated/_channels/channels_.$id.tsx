@@ -31,21 +31,6 @@ import { channelDetailDocument, createChannelDocument, updateChannelDocument } f
 
 const pageId = 'channel-detail';
 
-function ChannelAppearance({ channelId }: { channelId: string }) {
-    const { canEdit, isAvailable } = useChannelColors();
-    if (!canEdit || !isAvailable) {
-        return null;
-    }
-    return (
-        <PageBlock column="side" blockId="appearance" title={<Trans>Appearance</Trans>}>
-            <p className="mb-4 text-sm text-muted-foreground">
-                <Trans>Choose the shared marker color used for this channel.</Trans>
-            </p>
-            <ChannelColorPicker channelId={channelId} />
-        </PageBlock>
-    );
-}
-
 export const Route = createFileRoute('/_authenticated/_channels/channels_/$id')({
     component: ChannelDetailPage,
     loader: detailPageRouteLoader({
@@ -67,6 +52,7 @@ function ChannelDetailPage() {
     const creatingNewEntity = params.id === NEW_ENTITY_PATH;
     const { t } = useLingui();
     const { refreshChannels } = useChannel();
+    const { canEdit: canEditChannelColors, isAvailable: channelColorsAvailable } = useChannelColors();
 
     const { form, submitHandler, entity, isPending, resetForm } = useDetailPage({
         pageId,
@@ -258,7 +244,14 @@ function ChannelDetailPage() {
                         />
                     </DetailFormGrid>
                 </PageBlock>
-                {!creatingNewEntity && entity ? <ChannelAppearance channelId={entity.id} /> : null}
+                {!creatingNewEntity && entity && canEditChannelColors && channelColorsAvailable ? (
+                    <PageBlock column="side" blockId="appearance" title={<Trans>Appearance</Trans>}>
+                        <p className="mb-4 text-sm text-muted-foreground">
+                            <Trans>Choose the shared marker color used for this channel.</Trans>
+                        </p>
+                        <ChannelColorPicker channelId={entity.id} />
+                    </PageBlock>
+                ) : null}
                 <CustomFieldsPageBlock column="main" entityType="Channel" control={form.control} />
             </PageLayout>
         </Page>
