@@ -44,7 +44,6 @@ function escapeRegexChars(str: string): string {
 
 const HOVER_OPEN_DELAY = 150;
 const HOVER_CLOSE_DELAY = 250;
-const NAVIGATION_CHORD_TIMEOUT = 1_500;
 
 function ShortcutBadge({ shortcut }: { shortcut?: string }) {
     return shortcut ? (
@@ -220,16 +219,13 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
         [topSections, bottomSections],
     );
     const [navigationChordActive, setNavigationChordActive] = React.useState(false);
-    const chordTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+    const navigationChordActiveRef = React.useRef(false);
     const previousSidebarOpenRef = React.useRef(open);
     const previousTopSectionsRef = React.useRef<Set<string>>(new Set());
     const previousBottomSectionRef = React.useRef<string | null>(null);
 
     const cancelNavigationChord = React.useCallback(() => {
-        if (chordTimerRef.current) {
-            clearTimeout(chordTimerRef.current);
-            chordTimerRef.current = null;
-        }
+        navigationChordActiveRef.current = false;
         setNavigationChordActive(false);
         setOpen(previousSidebarOpenRef.current);
         setOpenTopSectionIds(previousTopSectionsRef.current);
@@ -240,6 +236,7 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
         previousSidebarOpenRef.current = open;
         previousTopSectionsRef.current = new Set(openTopSectionIds);
         previousBottomSectionRef.current = openBottomSectionId;
+        navigationChordActiveRef.current = true;
         setNavigationChordActive(true);
         setOpen(true);
 
@@ -251,20 +248,10 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
         setOpenTopSectionIds(
             new Set(shortcutSections.filter(item => item.placement === 'top').map(item => item.id)),
         );
-        setOpenBottomSectionId(
-            shortcutSections.find(item => item.placement === 'bottom')?.id ?? openBottomSectionId,
-        );
-        chordTimerRef.current = setTimeout(cancelNavigationChord, NAVIGATION_CHORD_TIMEOUT);
-    }, [
-        bottomSections,
-        cancelNavigationChord,
-        open,
-        openBottomSectionId,
-        openTopSectionIds,
-        setOpen,
-        shortcutMap,
-        topSections,
-    ]);
+        // Keep the less frequently used administration navigation out of the way while
+        // showing keytips. Its previous state is restored when the chord is cancelled.
+        setOpenBottomSectionId(null);
+    }, [bottomSections, open, openBottomSectionId, openTopSectionIds, setOpen, shortcutMap, topSections]);
 
     React.useEffect(() => {
         if (isMobile) {
@@ -281,12 +268,14 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
                 return;
             }
             const key = event.key.toLowerCase();
-            if (!navigationChordActive && key === 'g') {
+            if (key === 'g') {
                 event.preventDefault();
-                startNavigationChord();
+                if (!navigationChordActiveRef.current && !event.repeat) {
+                    startNavigationChord();
+                }
                 return;
             }
-            if (!navigationChordActive) {
+            if (!navigationChordActiveRef.current) {
                 return;
             }
             if (key === 'escape') {
@@ -301,23 +290,22 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
                 router.navigate({ to: destination.url });
             }
         };
+        const onKeyUp = (event: KeyboardEvent) => {
+            if (event.key.toLowerCase() === 'g' && navigationChordActiveRef.current) {
+                event.preventDefault();
+                cancelNavigationChord();
+            }
+        };
         window.addEventListener('keydown', onKeyDown);
-        const onBlur = () => navigationChordActive && cancelNavigationChord();
+        window.addEventListener('keyup', onKeyUp);
+        const onBlur = () => navigationChordActiveRef.current && cancelNavigationChord();
         window.addEventListener('blur', onBlur);
         return () => {
             window.removeEventListener('keydown', onKeyDown);
+            window.removeEventListener('keyup', onKeyUp);
             window.removeEventListener('blur', onBlur);
         };
-    }, [cancelNavigationChord, isMobile, navigationChordActive, router, shortcutMap, startNavigationChord]);
-
-    React.useEffect(
-        () => () => {
-            if (chordTimerRef.current) {
-                clearTimeout(chordTimerRef.current);
-            }
-        },
-        [],
-    );
+    }, [cancelNavigationChord, isMobile, router, shortcutMap, startNavigationChord]);
 
     // Handle top section open/close (only one section open at a time)
     const handleTopSectionToggle = (sectionId: string, isOpen: boolean) => {

@@ -15,20 +15,46 @@ test.describe('Dashboard shell sidebar', () => {
         await page.locator('[data-sidebar="trigger"]').first().click();
         await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
 
-        await page.keyboard.press('g');
+        await page.keyboard.down('g');
         await expect(sidebar).toHaveAttribute('data-state', 'expanded');
         await expect(sidebar.getByText('P', { exact: true })).toBeVisible();
-        await page.keyboard.press('Escape');
+        await page.keyboard.up('g');
         await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
 
-        await page.keyboard.press('g');
+        await page.keyboard.down('g');
         await expect(sidebar).toHaveAttribute('data-state', 'expanded');
-        await expect(sidebar).toHaveAttribute('data-state', 'collapsed', { timeout: 2_000 });
+        await page.waitForTimeout(1_750);
+        await expect(sidebar).toHaveAttribute('data-state', 'expanded');
+        await page.keyboard.up('g');
+        await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
 
-        await page.keyboard.press('g');
+        await page.keyboard.down('g');
         await page.keyboard.press('p');
+        await page.keyboard.up('g');
         await expect(page).toHaveURL(/\/products$/);
         await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
+    });
+
+    test('collapses administration while showing keytips and restores it afterwards', async ({ page }) => {
+        await page.goto('/global-settings');
+        const sidebar = page.locator('[data-slot="sidebar"]');
+        const globalSettings = sidebar.getByText('Global Settings', { exact: true });
+        await expect(globalSettings).toBeVisible();
+
+        await page.keyboard.down('g');
+        await expect(globalSettings).toBeHidden();
+        await expect(sidebar.getByText('P', { exact: true })).toBeVisible();
+
+        await page.keyboard.up('g');
+        await expect(globalSettings).toBeVisible();
+
+        await page.goto('/');
+        await expect(sidebar.getByText('Insights', { exact: true })).toBeVisible();
+        await page.keyboard.down('g');
+        await expect(sidebar.getByText('P', { exact: true })).toBeVisible();
+        await page.keyboard.press('s');
+        await page.keyboard.up('g');
+        await expect(page).toHaveURL(/\/global-settings$/);
     });
 
     test('does not trigger navigation while typing', async ({ page }) => {
