@@ -116,6 +116,18 @@ test.describe('Channels CRUD', () => {
         await dp.expectSuccessToast(/Successfully updated channel/);
     });
 
+    test('should hide channel color controls without DashboardPlugin', async ({ page }) => {
+        const lp = listPage(page);
+        await lp.goto();
+        await lp.expectLoaded();
+        await lp.clickEntity('Default channel');
+
+        await expect(page.getByText('Appearance')).toHaveCount(0);
+
+        await page.locator('[data-slot="sidebar"] [data-sidebar="menu-button"]').first().click();
+        await expect(page.getByRole('menuitem', { name: 'Customize channel colors' })).toHaveCount(0);
+    });
+
     test('should show updated channel in the list', async ({ page }) => {
         const lp = listPage(page);
         await lp.goto();

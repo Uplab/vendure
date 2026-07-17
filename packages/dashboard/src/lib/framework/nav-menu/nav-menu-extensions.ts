@@ -54,9 +54,15 @@ export interface NavMenuItem {
      * permission or permissions.
      */
     requiresPermission?: string | string[];
+    /**
+     * @description
+     * Optional second key for the global `G` navigation chord. This must be a
+     * unique lowercase alphanumeric character. Conflicting shortcuts are ignored.
+     */
+    shortcut?: string;
 }
 
-export interface NavMenuSection extends Omit<NavMenuItem, 'url'> {
+export interface NavMenuSection extends Omit<NavMenuItem, 'url' | 'shortcut'> {
     defaultOpen?: boolean;
     items?: NavMenuItem[];
 }

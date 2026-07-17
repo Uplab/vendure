@@ -70,7 +70,7 @@ export class AssetInterceptorPlugin implements ApolloServerPlugin {
     }
 
     private isAssetType(type: GraphQLNamedType): boolean {
-        const assetTypeNames = ['Asset', 'SearchResultAsset'];
+        const assetTypeNames = ['Asset', 'SearchResultAsset', 'AdministratorAvatar'];
         return assetTypeNames.includes(type.name);
     }
 }

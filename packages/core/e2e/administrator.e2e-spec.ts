@@ -22,13 +22,17 @@ import { FragmentOf } from './graphql/graphql-admin';
 import {
     attemptLoginDocument,
     createAdministratorDocument,
+    createRoleDocument,
     deleteAdministratorDocument,
+    getActiveAdministratorAvatarDocument,
     getActiveAdministratorDocument,
     getAdministratorDocument,
     getAdministratorsDocument,
+    getAssetListDocument,
     getCustomerListDocument,
     requestAdminPasswordResetDocument,
     resetAdminPasswordDocument,
+    setActiveAdministratorAvatarDocument,
     updateActiveAdministratorDocument,
     updateAdministratorDocument,
 } from './graphql/shared-definitions';
@@ -495,5 +499,78 @@ describe('Administrator resolver', () => {
         function waitForSendEmailFn() {
             return new Promise(resolve => setTimeout(resolve, 10));
         }
+    });
+
+    describe('active administrator avatar', () => {
+        async function loginAsCurrentSuperAdmin() {
+            await adminClient.asAnonymousUser();
+            const { login } = await adminClient.query(attemptLoginDocument, {
+                username: 'neo@metacortex.com',
+                password: 'superadmin',
+            });
+            if (!('identifier' in login)) {
+                await adminClient.query(attemptLoginDocument, {
+                    username: SUPER_ADMIN_USER_IDENTIFIER,
+                    password: 'superadmin',
+                });
+            }
+        }
+
+        it('allows the owner to upload, replace and remove private profile media', async () => {
+            await loginAsCurrentSuperAdmin();
+            const assetsBefore = await adminClient.query(getAssetListDocument, {});
+            const { createRole } = await adminClient.query(createRoleDocument, {
+                input: {
+                    code: 'profile-owner',
+                    description: 'No asset management permissions',
+                    permissions: [],
+                },
+            });
+            await adminClient.query(createAdministratorDocument, {
+                input: {
+                    emailAddress: 'profile-owner@example.com',
+                    firstName: 'Profile',
+                    lastName: 'Owner',
+                    password: 'profile-owner-password',
+                    roleIds: [createRole.id],
+                },
+            });
+
+            await adminClient.asAnonymousUser();
+            await adminClient.query(attemptLoginDocument, {
+                username: 'profile-owner@example.com',
+                password: 'profile-owner-password',
+            });
+
+            const firstUpload = await adminClient.fileUploadMutation({
+                mutation: setActiveAdministratorAvatarDocument,
+                filePaths: [path.join(__dirname, 'fixtures/assets/pps1.jpg')],
+                mapVariables: () => ({ file: null }),
+            });
+            expect(firstUpload.setActiveAdministratorAvatar.avatar).toMatchObject({
+                mimeType: 'image/jpeg',
+                width: expect.any(Number),
+                height: expect.any(Number),
+            });
+            expect(firstUpload.setActiveAdministratorAvatar.avatar.source).toMatch(/^test-url\//);
+            expect(firstUpload.setActiveAdministratorAvatar.avatar.preview).toMatch(/^test-url\//);
+
+            const secondUpload = await adminClient.fileUploadMutation({
+                mutation: setActiveAdministratorAvatarDocument,
+                filePaths: [path.join(__dirname, 'fixtures/assets/pps2.jpg')],
+                mapVariables: () => ({ file: null }),
+            });
+            expect(secondUpload.setActiveAdministratorAvatar.avatar.source).toContain('pps2.jpg');
+
+            const queried = await adminClient.query(getActiveAdministratorAvatarDocument);
+            expect(queried.activeAdministrator?.avatar?.source).toContain('pps2.jpg');
+
+            const removed = await adminClient.query(setActiveAdministratorAvatarDocument, { file: null });
+            expect(removed.setActiveAdministratorAvatar.avatar).toBeNull();
+
+            await loginAsCurrentSuperAdmin();
+            const assetsAfter = await adminClient.query(getAssetListDocument, {});
+            expect(assetsAfter.assets.totalItems).toBe(assetsBefore.assets.totalItems);
+        });
     });
 });

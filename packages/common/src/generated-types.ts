@@ -86,6 +86,7 @@ export enum AdjustmentType {
 
 export type Administrator = Node & {
   __typename?: 'Administrator';
+  avatar?: Maybe<AdministratorAvatar>;
   createdAt: Scalars['DateTime']['output'];
   customFields?: Maybe<Scalars['JSON']['output']>;
   emailAddress: Scalars['String']['output'];
@@ -94,6 +95,15 @@ export type Administrator = Node & {
   lastName: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   user: User;
+};
+
+export type AdministratorAvatar = {
+  __typename?: 'AdministratorAvatar';
+  height: Scalars['Int']['output'];
+  mimeType: Scalars['String']['output'];
+  preview: Scalars['String']['output'];
+  source: Scalars['String']['output'];
+  width: Scalars['Int']['output'];
 };
 
 export type AdministratorFilterParameter = {
@@ -3164,6 +3174,8 @@ export type Mutation = {
   rotateApiKey: RotateApiKeyResult;
   runPendingSearchIndexUpdates: Success;
   runScheduledTask: Success;
+  /** Upload, replace or remove the active Administrator's profile picture */
+  setActiveAdministratorAvatar: Administrator;
   setCustomerForDraftOrder: SetCustomerForDraftOrderResult;
   /** Sets the billing address for a draft Order */
   setDraftOrderBillingAddress: Order;
@@ -3913,6 +3925,11 @@ export type MutationRotateApiKeyArgs = {
 
 export type MutationRunScheduledTaskArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationSetActiveAdministratorAvatarArgs = {
+  file?: InputMaybe<Scalars['Upload']['input']>;
 };
 
 

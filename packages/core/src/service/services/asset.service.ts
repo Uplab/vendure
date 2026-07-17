@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
     AssetListOptions,
-    AssetType,
     AssignAssetsToChannelInput,
     CreateAssetInput,
     DeletionResponse,
@@ -17,10 +16,9 @@ import { notNullOrUndefined } from '@vendure/common/lib/shared-utils';
 import { unique } from '@vendure/common/lib/unique';
 import { ReadStream } from 'fs';
 import { IncomingMessage } from 'http';
-import { imageSize } from 'image-size';
 import mime from 'mime-types';
 import path from 'path';
-import { Readable, Stream } from 'stream';
+import { Readable } from 'stream';
 import { IsNull } from 'typeorm';
 import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
 import { camelCase } from 'typeorm/util/StringUtils';
@@ -33,9 +31,8 @@ import { ForbiddenError, InternalServerError } from '../../common/error/errors';
 import { MimeTypeError } from '../../common/error/generated-graphql-admin-errors';
 import { ChannelAware } from '../../common/types/common-types';
 import { Translated } from '../../common/types/locale-types';
-import { getAssetType, idsAreEqual } from '../../common/utils';
+import { idsAreEqual } from '../../common/utils';
 import { ConfigService } from '../../config/config.service';
-import { Logger } from '../../config/logger/vendure-logger';
 import { TransactionalConnection } from '../../connection/transactional-connection';
 import { AssetTranslation } from '../../entity/asset/asset-translation.entity';
 import { Asset } from '../../entity/asset/asset.entity';
@@ -49,6 +46,7 @@ import { AssetChannelEvent } from '../../event-bus/events/asset-channel-event';
 import { AssetEvent } from '../../event-bus/events/asset-event';
 import { CustomFieldRelationService } from '../helpers/custom-field-relation/custom-field-relation.service';
 import { ListQueryBuilder } from '../helpers/list-query-builder/list-query-builder';
+import { StoredMedia, StoredMediaService } from '../helpers/stored-media/stored-media.service';
 import { TranslatableSaver } from '../helpers/translatable-saver/translatable-saver';
 import { TranslatorService } from '../helpers/translator/translator.service';
 import { patchEntity } from '../helpers/utils/patch-entity';
@@ -83,74 +81,6 @@ export interface EntityAssetInput {
 }
 
 /**
- * Detects the MIME type of a buffer from its magic bytes. Returns `undefined` for content
- * with no recognisable signature (e.g. plain text, SVG). The `file-type` package is ESM-only,
- * so it is loaded via dynamic import (preserved by the NodeNext build).
- */
-async function detectMimeTypeFromContents(buffer: Buffer): Promise<string | undefined> {
-    const { fileTypeFromBuffer } = await import('file-type');
-    const result = await fileTypeFromBuffer(buffer);
-    return result?.mime;
-}
-
-/**
- * The number of leading bytes to inspect for magic-byte detection. Signatures live at the
- * start of a file and `file-type` samples only a small prefix, so peeking this much is
- * sufficient to identify the content type without buffering the whole upload.
- */
-const CONTENT_DETECTION_SAMPLE_BYTES = 4100;
-
-/**
- * Reads up to `byteCount` leading bytes from a stream for inspection so the uploaded content
- * can be validated before it is persisted. Returns the peeked bytes and whether the stream was
- * fully consumed in the process (`complete`):
- *
- * - If the stream ended within `byteCount` (a small file), the whole content is in `head` and
- *   the caller writes it directly — the stream cannot be replayed.
- * - Otherwise the peeked bytes are unshifted back onto the stream, so the caller can write the
- *   full original stream (preserving its error handling) without buffering it whole.
- *
- * The stream is read in paused mode because a `for await … break` would destroy it.
- */
-function peekStreamHead(stream: Readable, byteCount: number): Promise<{ head: Buffer; complete: boolean }> {
-    return new Promise((resolve, reject) => {
-        const chunks: Buffer[] = [];
-        let size = 0;
-        const cleanup = () => {
-            stream.removeListener('readable', onReadable);
-            stream.removeListener('end', onEnd);
-            stream.removeListener('error', onError);
-        };
-        const onEnd = () => {
-            cleanup();
-            resolve({ head: Buffer.concat(chunks), complete: true });
-        };
-        const onError = (err: Error) => {
-            cleanup();
-            reject(err);
-        };
-        const onReadable = () => {
-            let chunk: Buffer | null;
-            // eslint-disable-next-line no-cond-assign
-            while ((chunk = stream.read()) !== null) {
-                chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
-                size += chunks[chunks.length - 1].length;
-                if (size >= byteCount) {
-                    cleanup();
-                    const head = Buffer.concat(chunks);
-                    stream.unshift(head);
-                    resolve({ head, complete: false });
-                    return;
-                }
-            }
-        };
-        stream.on('readable', onReadable);
-        stream.on('end', onEnd);
-        stream.on('error', onError);
-    });
-}
-
-/**
  * @description
  * Contains methods relating to {@link Asset} entities.
  *
@@ -160,8 +90,6 @@ function peekStreamHead(stream: Readable, byteCount: number): Promise<{ head: Bu
 @Injectable()
 @Instrument()
 export class AssetService {
-    private permittedMimeTypes: Array<{ type: string; subtype: string }> = [];
-
     constructor(
         private connection: TransactionalConnection,
         private configService: ConfigService,
@@ -173,15 +101,8 @@ export class AssetService {
         private customFieldRelationService: CustomFieldRelationService,
         private readonly translatableSaver: TranslatableSaver,
         private readonly translator: TranslatorService,
-    ) {
-        this.permittedMimeTypes = this.configService.assetOptions.permittedFileTypes
-            .map(val => (/\.[\w]+/.test(val) ? mime.lookup(val) || undefined : val))
-            .filter(notNullOrUndefined)
-            .map(val => {
-                const [type, subtype] = val.split('/');
-                return { type, subtype };
-            });
-    }
+        private readonly storedMediaService: StoredMediaService,
+    ) {}
 
     findOne(
         ctx: RequestContext,
@@ -372,15 +293,18 @@ export class AssetService {
      * See the [Uploading Files docs](/developer-guide/uploading-files) for an example of usage.
      */
     async create(ctx: RequestContext, input: CreateAssetInput): Promise<Translated<Asset> | MimeTypeError> {
-        const { createReadStream, filename, mimetype } = await input.file;
-        const { stream, errorPromise } = this.makeStreamGuard(createReadStream);
-        const result = await Promise.race([
-            this.createAssetInternal(ctx, stream, filename, mimetype, input.customFields, input.translations),
-            errorPromise,
-        ]);
-        if (isGraphQlErrorResult(result)) {
-            return result;
+        const upload = await input.file;
+        const storedMedia = await this.storedMediaService.storeUpload(ctx, upload);
+        if (isGraphQlErrorResult(storedMedia)) {
+            return storedMedia;
         }
+        const result = await this.createAssetInternal(
+            ctx,
+            storedMedia,
+            upload.filename,
+            input.customFields,
+            input.translations,
+        );
         await this.customFieldRelationService.updateRelations(ctx, Asset, input, result);
         if (input.tags) {
             const tags = await this.tagService.valuesToTags(ctx, input.tags);
@@ -562,8 +486,7 @@ export class AssetService {
         const { assetImportStrategy } = this.configService.importExportOptions;
         const filePathFromArgs =
             maybeFilePathOrCtx instanceof RequestContext ? undefined : maybeFilePathOrCtx;
-        const filePath =
-            stream instanceof ReadStream ? stream.path : filePathFromArgs;
+        const filePath = stream instanceof ReadStream ? stream.path : filePathFromArgs;
         if (typeof filePath === 'string') {
             const filename = path.basename(filePath).split('?')[0];
             const mimetype = this.getMimeType(stream, filename);
@@ -573,10 +496,11 @@ export class AssetService {
                     : maybeCtx instanceof RequestContext
                       ? maybeCtx
                       : RequestContext.empty();
-            const result = await this.createAssetInternal(ctx, stream, filename, mimetype);
-            if (isGraphQlErrorResult(result)) {
-                return result;
+            const storedMedia = await this.storedMediaService.storeStream(ctx, stream, filename, mimetype);
+            if (isGraphQlErrorResult(storedMedia)) {
+                return storedMedia;
             }
+            const result = await this.createAssetInternal(ctx, storedMedia, filename);
             return this.translator.translate(result, ctx);
         } else {
             throw new InternalServerError('error.path-should-be-a-string-got-buffer');
@@ -604,12 +528,7 @@ export class AssetService {
             // after deletion (the .remove() method sets it to undefined)
             const deletedAsset = new Asset(asset);
             await this.connection.getRepository(ctx, Asset).remove(asset);
-            try {
-                await this.configService.assetOptions.assetStorageStrategy.deleteFile(asset.source);
-                await this.configService.assetOptions.assetStorageStrategy.deleteFile(asset.preview);
-            } catch (e: any) {
-                Logger.error('error.could-not-delete-asset-file', undefined, e.stack);
-            }
+            await this.storedMediaService.delete(asset);
             await this.eventBus.publish(new AssetEvent(ctx, deletedAsset, 'deleted', deletedAsset.id));
         }
         return {
@@ -629,102 +548,16 @@ export class AssetService {
         return !permissions.includes(false);
     }
 
-    /**
-     * Validates an upload against the permitted MIME types using three independently spoofable
-     * signals (see GHSA-88rq-mq4v-frmm): the declared Content-Type, the file extension, and the
-     * actual content (magic bytes). Returns a {@link MimeTypeError} if any signal identifies a
-     * non-permitted type, or `undefined` if the file is permitted.
-     */
-    private getPermittedMimeTypeError(
-        filename: string,
-        declaredMimeType: string,
-        contentMimeType: string | undefined,
-    ): MimeTypeError | undefined {
-        // 1. The declared Content-Type must be permitted (cheap, header-only check).
-        if (!this.validateMimeType(declaredMimeType)) {
-            return new MimeTypeError({ fileName: filename, mimeType: declaredMimeType });
-        }
-        // 2. The file extension must be permitted: the stored file keeps it, and it is what
-        // determines whether a downstream web server might execute the file (e.g. `.php`).
-        // `mime.lookup` returns `false` for unrecognised extensions, handled by the content check.
-        const extensionMimeType = mime.lookup(filename) || undefined;
-        if (extensionMimeType && !this.validateMimeType(extensionMimeType)) {
-            return new MimeTypeError({ fileName: filename, mimeType: extensionMimeType });
-        }
-        // 3. The actual content must not identify a non-permitted type. Text-based formats have no
-        // binary signature: plain text yields `undefined`, while XML-based formats such as SVG
-        // yield a generic `application/xml`/`text/xml` which is consistent with a permitted `*+xml`
-        // extension and so is not a mismatch.
-        if (contentMimeType && !this.validateMimeType(contentMimeType)) {
-            const contentIsGenericXml =
-                contentMimeType === 'application/xml' || contentMimeType === 'text/xml';
-            const extensionIsXmlBased = !!extensionMimeType && extensionMimeType.endsWith('+xml');
-            if (!(contentIsGenericXml && extensionIsXmlBased)) {
-                return new MimeTypeError({ fileName: filename, mimeType: contentMimeType });
-            }
-        }
-        // A file recognised neither by content nor by a permitted extension cannot be verified as
-        // a permitted type (e.g. a script with an unrecognised extension such as `.phtml`).
-        if (!contentMimeType && !extensionMimeType) {
-            return new MimeTypeError({ fileName: filename, mimeType: 'application/octet-stream' });
-        }
-        return undefined;
-    }
-
     private async createAssetInternal(
         ctx: RequestContext,
-        stream: Stream,
+        storedMedia: StoredMedia,
         filename: string,
-        mimetype: string,
         customFields?: { [key: string]: any },
         translations?: Array<{ languageCode: LanguageCode; name?: string | null; customFields?: any }>,
-    ): Promise<Asset | MimeTypeError> {
-        const { assetOptions } = this.configService;
-        // Inspect the leading bytes of the uploaded content (magic bytes) so the real content
-        // type can be validated, not just the spoofable declared Content-Type and extension. The
-        // stream is peeked rather than fully buffered so the file can still be written as a stream.
-        const { head, complete } = await peekStreamHead(stream as Readable, CONTENT_DETECTION_SAMPLE_BYTES);
-        const contentMimeType = await detectMimeTypeFromContents(head);
-        const mimeTypeError = this.getPermittedMimeTypeError(filename, mimetype, contentMimeType);
-        if (mimeTypeError) {
-            return mimeTypeError;
-        }
-
-        const { assetPreviewStrategy, assetStorageStrategy } = assetOptions;
-        const sourceFileName = await this.getSourceFileName(ctx, filename);
-        const previewFileName = await this.getPreviewFileName(ctx, sourceFileName);
-
-        // If the stream was fully consumed during the peek (a small file), `head` holds the
-        // whole content and the stream cannot be replayed; write the buffer directly.
-        // Otherwise the peeked bytes were unshifted back, so write the full stream.
-        const sourceFileIdentifier = complete
-            ? await assetStorageStrategy.writeFileFromBuffer(sourceFileName, head)
-            : await assetStorageStrategy.writeFileFromStream(sourceFileName, stream);
-        const sourceFile = await assetStorageStrategy.readFileToBuffer(sourceFileIdentifier);
-        let preview: Buffer;
-        try {
-            preview = await assetPreviewStrategy.generatePreviewImage(ctx, mimetype, sourceFile);
-        } catch (e: any) {
-            const message: string = typeof e.message === 'string' ? e.message : e.message.toString();
-            Logger.error(`Could not create Asset preview image: ${message}`, undefined, e.stack);
-            throw e;
-        }
-        const previewFileIdentifier = await assetStorageStrategy.writeFileFromBuffer(
-            previewFileName,
-            preview,
-        );
-        const type = getAssetType(mimetype);
-        const { width, height } = this.getDimensions(type === AssetType.IMAGE ? sourceFile : preview);
-
+    ): Promise<Asset> {
         // Save asset first
         const asset = new Asset({
-            type,
-            width,
-            height,
-            fileSize: sourceFile.byteLength,
-            mimeType: mimetype,
-            source: sourceFileIdentifier,
-            preview: previewFileIdentifier,
+            ...storedMedia,
             focalPoint: null,
             customFields,
         });
@@ -764,42 +597,6 @@ export class AssetService {
         // Return the asset with translations eagerly loaded
         savedAsset.translations = savedTranslations;
         return savedAsset;
-    }
-
-    private async getSourceFileName(ctx: RequestContext, fileName: string): Promise<string> {
-        const { assetOptions } = this.configService;
-        return this.generateUniqueName(fileName, (name, conflict) =>
-            assetOptions.assetNamingStrategy.generateSourceFileName(ctx, name, conflict),
-        );
-    }
-
-    private async getPreviewFileName(ctx: RequestContext, fileName: string): Promise<string> {
-        const { assetOptions } = this.configService;
-        return this.generateUniqueName(fileName, (name, conflict) =>
-            assetOptions.assetNamingStrategy.generatePreviewFileName(ctx, name, conflict),
-        );
-    }
-
-    private async generateUniqueName(
-        inputFileName: string,
-        generateNameFn: (fileName: string, conflictName?: string) => string,
-    ): Promise<string> {
-        const { assetOptions } = this.configService;
-        let outputFileName: string | undefined;
-        do {
-            outputFileName = generateNameFn(inputFileName, outputFileName);
-        } while (await assetOptions.assetStorageStrategy.fileExists(outputFileName));
-        return outputFileName;
-    }
-
-    private getDimensions(imageFile: Buffer): { width: number; height: number } {
-        try {
-            const { width, height } = imageSize(imageFile);
-            return { width: width ?? 0, height: height ?? 0 };
-        } catch (e: any) {
-            Logger.error('Could not determine Asset dimensions: ' + JSON.stringify(e));
-            return { width: 0, height: 0 };
-        }
     }
 
     private createOrderableAssets(
@@ -858,18 +655,6 @@ export class AssetService {
         }
     }
 
-    private validateMimeType(mimeType: string): boolean {
-        const [type, subtype] = mimeType.split('/');
-        const typeMatches = this.permittedMimeTypes.filter(t => t.type === type);
-
-        for (const match of typeMatches) {
-            if (match.subtype === subtype || match.subtype === '*') {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Find the entities which reference the given Asset as a featuredAsset.
      */
@@ -895,25 +680,5 @@ export class AssetService {
             },
         });
         return { products, variants, collections };
-    }
-
-    private makeStreamGuard(createReadStream: () => ReadStream): {
-        stream: ReadStream;
-        errorPromise: Promise<never>;
-    } {
-        let onReject: (err: unknown) => void;
-        const errorPromise = new Promise<never>((_, rej) => {
-            onReject = rej;
-        });
-
-        // `fs-capacitor`'s `createReadStream` can throw if its `WriteStream` has already been destroyed
-        // sync error so will bubble to consumer immediately
-        const stream = createReadStream();
-
-        stream.on('error', err => {
-            onReject(err);
-        });
-
-        return { stream, errorPromise };
     }
 }

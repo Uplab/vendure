@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import {
     DeletionResponse,
     MutationAssignRoleToAdministratorArgs,
@@ -24,6 +24,11 @@ import { Transaction } from '../../decorators/transaction.decorator';
 @Resolver('Administrator')
 export class AdministratorResolver {
     constructor(private administratorService: AdministratorService) {}
+
+    @ResolveField()
+    avatar(@Parent() administrator: Administrator) {
+        return administrator.avatar?.source ? administrator.avatar : null;
+    }
 
     @Query()
     @Allow(Permission.ReadAdministrator)
@@ -88,6 +93,22 @@ export class AdministratorResolver {
             if (administrator) {
                 return this.administratorService.update(ctx, { ...input, id: administrator.id });
             }
+        }
+    }
+
+    @Transaction()
+    @Mutation()
+    @Allow(Permission.Owner)
+    async setActiveAdministratorAvatar(
+        @Ctx() ctx: RequestContext,
+        @Args('file') file: any,
+    ): Promise<Administrator | undefined> {
+        if (!ctx.activeUserId) {
+            return;
+        }
+        const administrator = await this.administratorService.findOneByUserId(ctx, ctx.activeUserId);
+        if (administrator) {
+            return this.administratorService.setAvatar(ctx, administrator.id, file ?? null);
         }
     }
 

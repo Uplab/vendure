@@ -1,4 +1,5 @@
 import { ChannelCodeLabel } from '@/vdb/components/shared/channel-code-label.js';
+import { ChannelColorPicker } from '@/vdb/components/shared/channel-color-picker.js';
 import { CurrencySelector } from '@/vdb/components/shared/currency-selector.js';
 import { ErrorPage } from '@/vdb/components/shared/error-page.js';
 import { FormFieldWrapper } from '@/vdb/components/shared/form-field-wrapper.js';
@@ -9,7 +10,9 @@ import { Button } from '@/vdb/components/ui/button.js';
 import { Input } from '@/vdb/components/ui/input.js';
 import { Switch } from '@/vdb/components/ui/switch.js';
 import { DEFAULT_CHANNEL_CODE, NEW_ENTITY_PATH } from '@/vdb/constants.js';
-import {    CustomFieldsPageBlock,
+import { ActionBarItem } from '@/vdb/framework/layout-engine/action-bar-item-wrapper.js';
+import {
+    CustomFieldsPageBlock,
     DetailFormGrid,
     Page,
     PageActionBar,
@@ -17,9 +20,9 @@ import {    CustomFieldsPageBlock,
     PageLayout,
     PageTitle,
 } from '@/vdb/framework/layout-engine/page-layout.js';
-import { ActionBarItem } from '@/vdb/framework/layout-engine/action-bar-item-wrapper.js';
 import { detailPageRouteLoader } from '@/vdb/framework/page/detail-page-route-loader.js';
 import { useDetailPage } from '@/vdb/framework/page/use-detail-page.js';
+import { useChannelColors } from '@/vdb/hooks/use-channel-colors.js';
 import { useChannel } from '@/vdb/hooks/use-channel.js';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -27,6 +30,21 @@ import { toast } from 'sonner';
 import { channelDetailDocument, createChannelDocument, updateChannelDocument } from './channels.graphql.js';
 
 const pageId = 'channel-detail';
+
+function ChannelAppearance({ channelId }: { channelId: string }) {
+    const { canEdit, isAvailable } = useChannelColors();
+    if (!canEdit || !isAvailable) {
+        return null;
+    }
+    return (
+        <PageBlock column="side" blockId="appearance" title={<Trans>Appearance</Trans>}>
+            <p className="mb-4 text-sm text-muted-foreground">
+                <Trans>Choose the shared marker color used for this channel.</Trans>
+            </p>
+            <ChannelColorPicker channelId={channelId} />
+        </PageBlock>
+    );
+}
 
 export const Route = createFileRoute('/_authenticated/_channels/channels_/$id')({
     component: ChannelDetailPage,
@@ -240,6 +258,7 @@ function ChannelDetailPage() {
                         />
                     </DetailFormGrid>
                 </PageBlock>
+                {!creatingNewEntity && entity ? <ChannelAppearance channelId={entity.id} /> : null}
                 <CustomFieldsPageBlock column="main" entityType="Channel" control={form.control} />
             </PageLayout>
         </Page>

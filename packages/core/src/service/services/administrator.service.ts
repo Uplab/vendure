@@ -21,6 +21,7 @@ import { ListQueryOptions } from '../../common/types/common-types';
 import { assertFound, idsAreEqual, normalizeEmailAddress } from '../../common/utils';
 import { ConfigService } from '../../config';
 import { TransactionalConnection } from '../../connection/transactional-connection';
+import { AdministratorAvatar } from '../../entity/administrator/administrator-avatar';
 import { Administrator } from '../../entity/administrator/administrator.entity';
 import { NativeAuthenticationMethod } from '../../entity/authentication-method/native-authentication-method.entity';
 import { Role } from '../../entity/role/role.entity';
@@ -34,6 +35,7 @@ import { CustomFieldRelationService } from '../helpers/custom-field-relation/cus
 import { ListQueryBuilder } from '../helpers/list-query-builder/list-query-builder';
 import { PasswordCipher } from '../helpers/password-cipher/password-cipher';
 import { RequestContextService } from '../helpers/request-context/request-context.service';
+import { StoredMediaService, StoredMediaUpload } from '../helpers/stored-media/stored-media.service';
 import { checkSuperadminCredentials } from '../helpers/utils/check-superadmin-credentials';
 import { getChannelPermissions } from '../helpers/utils/get-user-channels-permissions';
 import { patchEntity } from '../helpers/utils/patch-entity';
@@ -58,9 +60,56 @@ export class AdministratorService {
         private userService: UserService,
         private roleService: RoleService,
         private customFieldRelationService: CustomFieldRelationService,
+        private storedMediaService: StoredMediaService,
         private eventBus: EventBus,
         private requestContextService: RequestContextService,
     ) {}
+
+    /**
+     * Replaces or removes profile-owned media for an Administrator. The new files are
+     * persisted before the old files are deleted so a failed upload never destroys the
+     * currently-visible avatar.
+     */
+    async setAvatar(
+        ctx: RequestContext,
+        administratorId: ID,
+        upload: Promise<StoredMediaUpload> | StoredMediaUpload | null,
+    ): Promise<Administrator> {
+        const administrator = await this.findOne(ctx, administratorId);
+        if (!administrator) {
+            throw new EntityNotFoundError('Administrator', administratorId);
+        }
+        const previousAvatar = administrator.avatar;
+
+        if (upload == null) {
+            administrator.avatar = null;
+            await this.connection.getRepository(ctx, Administrator).save(administrator, { reload: false });
+            if (previousAvatar) {
+                await this.storedMediaService.delete(previousAvatar);
+            }
+            return administrator;
+        }
+
+        const storedMedia = await this.storedMediaService.storeUpload(ctx, upload, { imageOnly: true });
+        if (isGraphQlErrorResult(storedMedia)) {
+            throw new UserInputError('error.mime-type-not-permitted', {
+                fileName: storedMedia.fileName,
+                mimeType: storedMedia.mimeType,
+            });
+        }
+        const avatar = new AdministratorAvatar(storedMedia);
+        administrator.avatar = avatar;
+        try {
+            await this.connection.getRepository(ctx, Administrator).save(administrator, { reload: false });
+        } catch (error) {
+            await this.storedMediaService.delete(avatar);
+            throw error;
+        }
+        if (previousAvatar) {
+            await this.storedMediaService.delete(previousAvatar);
+        }
+        return administrator;
+    }
 
     /** @internal */
     async initAdministrators() {

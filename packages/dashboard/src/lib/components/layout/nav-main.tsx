@@ -23,6 +23,7 @@ import { Link, useRouter, useRouterState } from '@tanstack/react-router';
 import { ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import { NavItemWrapper } from './nav-item-wrapper.js';
+import { buildShortcutMap, isEditableTarget } from './navigation-shortcuts.js';
 
 // Utility to sort items & sections by the optional `order` prop (ascending) and then alphabetically by title
 function sortByOrder<T extends { order?: number; title: string }>(a: T, b: T) {
@@ -43,6 +44,15 @@ function escapeRegexChars(str: string): string {
 
 const HOVER_OPEN_DELAY = 150;
 const HOVER_CLOSE_DELAY = 250;
+const NAVIGATION_CHORD_TIMEOUT = 1_500;
+
+function ShortcutBadge({ shortcut }: { shortcut?: string }) {
+    return shortcut ? (
+        <kbd className="ms-auto inline-flex min-w-5 items-center justify-center rounded border bg-background px-1 font-mono text-[10px] text-muted-foreground shadow-xs">
+            {shortcut.toUpperCase()}
+        </kbd>
+    ) : null;
+}
 
 function CollapsedSectionMenu({
     item,
@@ -54,16 +64,16 @@ function CollapsedSectionMenu({
     const { i18n } = useLingui();
     return (
         <HoverCard>
-            <HoverCardTrigger delay={HOVER_OPEN_DELAY} render={<SidebarMenuButton isActive={item.items?.some(subItem => isPathActive(subItem.url))} />}>
-                    {item.icon && <item.icon />}
-                    <span>{i18n.t(item.title)}</span>
-            </HoverCardTrigger>
-            <HoverCardContent
-                side="right"
-                align="start"
-                sideOffset={4}
-                className="w-auto min-w-[8rem] p-1"
+            <HoverCardTrigger
+                delay={HOVER_OPEN_DELAY}
+                render={
+                    <SidebarMenuButton isActive={item.items?.some(subItem => isPathActive(subItem.url))} />
+                }
             >
+                {item.icon && <item.icon />}
+                <span>{i18n.t(item.title)}</span>
+            </HoverCardTrigger>
+            <HoverCardContent side="right" align="start" sideOffset={4} className="w-auto min-w-[8rem] p-1">
                 <p className="px-2 py-1.5 text-sm font-semibold" data-testid="sidebar-hover-title">
                     {i18n.t(item.title)}
                 </p>
@@ -96,7 +106,7 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
     const routerState = useRouterState();
     const { hasPermissions } = usePermissions();
     const { i18n } = useLingui();
-    const { state: sidebarState, isMobile, setOpenMobile } = useSidebar();
+    const { state: sidebarState, isMobile, setOpenMobile, open, setOpen } = useSidebar();
     const isCollapsed = sidebarState === 'collapsed' && !isMobile;
     const currentPath = routerState.location.pathname;
     const basePath = router.basepath || '';
@@ -205,6 +215,109 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
 
     const topSections = React.useMemo(() => getSortedSections('top'), [getSortedSections]);
     const bottomSections = React.useMemo(() => getSortedSections('bottom'), [getSortedSections]);
+    const shortcutMap = React.useMemo(
+        () => buildShortcutMap([...topSections, ...bottomSections]),
+        [topSections, bottomSections],
+    );
+    const [navigationChordActive, setNavigationChordActive] = React.useState(false);
+    const chordTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+    const previousSidebarOpenRef = React.useRef(open);
+    const previousTopSectionsRef = React.useRef<Set<string>>(new Set());
+    const previousBottomSectionRef = React.useRef<string | null>(null);
+
+    const cancelNavigationChord = React.useCallback(() => {
+        if (chordTimerRef.current) {
+            clearTimeout(chordTimerRef.current);
+            chordTimerRef.current = null;
+        }
+        setNavigationChordActive(false);
+        setOpen(previousSidebarOpenRef.current);
+        setOpenTopSectionIds(previousTopSectionsRef.current);
+        setOpenBottomSectionId(previousBottomSectionRef.current);
+    }, [setOpen]);
+
+    const startNavigationChord = React.useCallback(() => {
+        previousSidebarOpenRef.current = open;
+        previousTopSectionsRef.current = new Set(openTopSectionIds);
+        previousBottomSectionRef.current = openBottomSectionId;
+        setNavigationChordActive(true);
+        setOpen(true);
+
+        const shortcutSections = [...topSections, ...bottomSections].filter(
+            (item): item is NavMenuSection =>
+                'items' in item &&
+                item.items?.some(child => shortcutMap.get(child.shortcut ?? '') === child) === true,
+        );
+        setOpenTopSectionIds(
+            new Set(shortcutSections.filter(item => item.placement === 'top').map(item => item.id)),
+        );
+        setOpenBottomSectionId(
+            shortcutSections.find(item => item.placement === 'bottom')?.id ?? openBottomSectionId,
+        );
+        chordTimerRef.current = setTimeout(cancelNavigationChord, NAVIGATION_CHORD_TIMEOUT);
+    }, [
+        bottomSections,
+        cancelNavigationChord,
+        open,
+        openBottomSectionId,
+        openTopSectionIds,
+        setOpen,
+        shortcutMap,
+        topSections,
+    ]);
+
+    React.useEffect(() => {
+        if (isMobile) {
+            return;
+        }
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (
+                event.defaultPrevented ||
+                event.metaKey ||
+                event.ctrlKey ||
+                event.altKey ||
+                isEditableTarget(event.target)
+            ) {
+                return;
+            }
+            const key = event.key.toLowerCase();
+            if (!navigationChordActive && key === 'g') {
+                event.preventDefault();
+                startNavigationChord();
+                return;
+            }
+            if (!navigationChordActive) {
+                return;
+            }
+            if (key === 'escape') {
+                event.preventDefault();
+                cancelNavigationChord();
+                return;
+            }
+            const destination = shortcutMap.get(key);
+            if (destination) {
+                event.preventDefault();
+                cancelNavigationChord();
+                router.navigate({ to: destination.url });
+            }
+        };
+        window.addEventListener('keydown', onKeyDown);
+        const onBlur = () => navigationChordActive && cancelNavigationChord();
+        window.addEventListener('blur', onBlur);
+        return () => {
+            window.removeEventListener('keydown', onKeyDown);
+            window.removeEventListener('blur', onBlur);
+        };
+    }, [cancelNavigationChord, isMobile, navigationChordActive, router, shortcutMap, startNavigationChord]);
+
+    React.useEffect(
+        () => () => {
+            if (chordTimerRef.current) {
+                clearTimeout(chordTimerRef.current);
+            }
+        },
+        [],
+    );
 
     // Handle top section open/close (only one section open at a time)
     const handleTopSectionToggle = (sectionId: string, isOpen: boolean) => {
@@ -261,8 +374,9 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
                             render={<Link to={item.url} />}
                             isActive={isPathActive(item.url)}
                         >
-                                {item.icon && <item.icon />}
-                                <span>{i18n.t(item.title)}</span>
+                            {item.icon && <item.icon />}
+                            <span>{i18n.t(item.title)}</span>
+                            {navigationChordActive ? <ShortcutBadge shortcut={item.shortcut} /> : null}
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </NavItemWrapper>
@@ -288,9 +402,9 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
                 >
                     <SidebarMenuItem>
                         <CollapsibleTrigger render={<SidebarMenuButton tooltip={i18n.t(item.title)} />}>
-                                {item.icon && <item.icon />}
-                                <span>{i18n.t(item.title)}</span>
-                                <ChevronRight className="ms-auto transition-transform duration-200 rtl:rotate-180 group-data-open/collapsible:rotate-90" />
+                            {item.icon && <item.icon />}
+                            <span>{i18n.t(item.title)}</span>
+                            <ChevronRight className="ms-auto transition-transform duration-200 rtl:rotate-180 group-data-open/collapsible:rotate-90" />
                         </CollapsibleTrigger>
                         <CollapsibleContent>
                             <SidebarMenuSub>
@@ -306,7 +420,10 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
                                                 render={<Link to={subItem.url} />}
                                                 isActive={isPathActive(subItem.url)}
                                             >
-                                                    <span>{i18n.t(subItem.title)}</span>
+                                                <span>{i18n.t(subItem.title)}</span>
+                                                {navigationChordActive ? (
+                                                    <ShortcutBadge shortcut={subItem.shortcut} />
+                                                ) : null}
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>
                                     </NavItemWrapper>
@@ -319,10 +436,11 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
         );
     };
 
-
-
     return (
         <>
+            <span className="sr-only" aria-live="polite">
+                {navigationChordActive ? 'Navigation shortcuts available. Press a highlighted key.' : ''}
+            </span>
             {/* Top sections */}
             <SidebarGroup>
                 <SidebarMenu>
@@ -338,11 +456,7 @@ export function NavMain({ items }: Readonly<{ items: Array<NavMenuSection | NavM
                     <SidebarGroupLabel>Administration</SidebarGroupLabel>
                     <SidebarMenu>
                         {bottomSections.map(item =>
-                            renderSection(
-                                item,
-                                openBottomSectionId === item.id,
-                                handleBottomSectionToggle,
-                            ),
+                            renderSection(item, openBottomSectionId === item.id, handleBottomSectionToggle),
                         )}
                     </SidebarMenu>
                 </SidebarGroup>

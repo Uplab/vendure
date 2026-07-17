@@ -6,6 +6,7 @@ import { HasCustomFields } from '../../config/custom-field/custom-field-types';
 import { VendureEntity } from '../base/base.entity';
 import { CustomAdministratorFields } from '../custom-entity-fields';
 import { User } from '../user/user.entity';
+import { AdministratorAvatar } from './administrator-avatar';
 
 /**
  * @description
@@ -30,6 +31,13 @@ export class Administrator extends VendureEntity implements SoftDeletable, HasCu
 
     @Column()
     emailAddress: string;
+
+    /**
+     * Dedicated profile media owned by this Administrator. It intentionally does not
+     * create an Asset record and therefore never appears in the catalog asset library.
+     */
+    @Column(type => AdministratorAvatar)
+    avatar: AdministratorAvatar | null;
 
     @OneToOne(type => User)
     @JoinColumn()
