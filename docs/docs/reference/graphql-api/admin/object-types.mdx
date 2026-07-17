@@ -109,6 +109,7 @@ generated: true
     ID: '/reference/graphql-api/admin/object-types#id',
     DateTime: '/reference/graphql-api/admin/object-types#datetime',
     String: '/reference/graphql-api/admin/object-types#string',
+    Asset: '/reference/graphql-api/admin/object-types#asset',
     User: '/reference/graphql-api/admin/object-types#user',
     JSON: '/reference/graphql-api/admin/object-types#json',
   }}
@@ -120,6 +121,7 @@ generated: true
   firstName: String!
   lastName: String!
   emailAddress: String!
+  avatar: Asset
   user: User!
   customFields: JSON
 }`}
@@ -306,6 +308,7 @@ type AlreadyRefundedError {
     LanguageCode: '/reference/graphql-api/admin/enums#languagecode',
     String: '/reference/graphql-api/admin/object-types#string',
     AssetType: '/reference/graphql-api/admin/enums#assettype',
+    AssetVisibility: '/reference/graphql-api/admin/enums#assetvisibility',
     Int: '/reference/graphql-api/admin/object-types#int',
     Coordinate: '/reference/graphql-api/admin/object-types#coordinate',
     Tag: '/reference/graphql-api/admin/object-types#tag',
@@ -320,6 +323,7 @@ type AlreadyRefundedError {
   languageCode: LanguageCode!
   name: String!
   type: AssetType!
+  visibility: AssetVisibility!
   fileSize: Int!
   mimeType: String!
   width: Int!
