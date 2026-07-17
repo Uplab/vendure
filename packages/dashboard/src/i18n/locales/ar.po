@@ -35,7 +35,7 @@ msgstr "عرض التغييرات"
 msgid "Tracking code"
 msgstr "رمز التتبع"
 
-#: src/lib/components/data-table/data-table.tsx:713
+#: src/lib/components/data-table/data-table.tsx:772
 #: src/lib/components/data-table/use-generated-columns.tsx:226
 msgid "Select all rows"
 msgstr "تحديد جميع الصفوف"
@@ -162,7 +162,7 @@ msgstr "تم الحذف بنجاح"
 #~ msgid "Remove from current channel"
 #~ msgstr "إزالة من القناة الحالية"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:25
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:22
 msgid "Deleted {selectionLength} assets"
 msgstr "تم حذف {selectionLength} ملف"
 
@@ -174,14 +174,16 @@ msgstr "تم تحديث معدل الضريبة بنجاح"
 msgid "Enter custom reason..."
 msgstr "أدخل سببًا مخصصًا..."
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:751
+#: src/lib/components/shared/asset/asset-gallery.tsx:1100
 msgid "Type"
 msgstr "النوع"
 
+#. placeholder {0}: asset.name
 #. placeholder {0}: entityName.toLowerCase()
 #. placeholder {0}: group.name
 #: src/app/routes/_authenticated/_products/components/product-option-select.tsx:57
 #: src/lib/components/data-input/default-relation-input.tsx:671
+#: src/lib/components/shared/asset/asset-gallery.tsx:976
 msgid "Select {0}"
 msgstr "تحديد {0}"
 
@@ -212,7 +214,7 @@ msgstr "الحالي"
 msgid "No fulfillments"
 msgstr "لا توجد تنفيذات"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:250
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:236
 msgid "When this is enabled, the prices entered in the product catalog will be included in the tax for the default tax zone."
 msgstr "عند تمكين هذا، ستكون الأسعار المدخلة في كتالوج المنتجات شاملة للضريبة للمنطقة الضريبية الافتراضية."
 
@@ -241,7 +243,7 @@ msgstr "التحديث التلقائي: {0}"
 msgid "Deleted {deleted} {entityName}"
 msgstr "تم حذف {deleted} {entityName}"
 
-#: src/lib/components/data-table/data-table.tsx:602
+#: src/lib/components/data-table/data-table.tsx:660
 msgid "There are no items to display yet."
 msgstr "لا توجد عناصر للعرض بعد."
 
@@ -280,7 +282,7 @@ msgstr "الانتقال إلى لوحة التحكم"
 msgid "{fulfilled, plural, one {Successfully cancelled {fulfilled} job} other {Successfully cancelled {fulfilled} jobs}}"
 msgstr "{fulfilled, plural, one {تم إلغاء مهمة واحدة بنجاح} two {تم إلغاء مهمتين بنجاح} few {تم إلغاء {fulfilled} مهام بنجاح} many {تم إلغاء {fulfilled} مهمة بنجاح} other {تم إلغاء {fulfilled} مهمة بنجاح}}"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:170
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:156
 msgid "Seller"
 msgstr "البائع"
 
@@ -341,6 +343,16 @@ msgstr "هل أنت متأكد من حذف هذا الشكل؟"
 #~ msgid "All resources are up and running"
 #~ msgstr "جميع الموارد تعمل بشكل جيد"
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:1015
+#: src/lib/components/shared/asset/asset-gallery.tsx:1159
+msgid "Open"
+msgstr ""
+
+#. placeholder {0}: asset.name
+#: src/lib/components/shared/asset/asset-gallery.tsx:989
+msgid "Toggle selection for {0}"
+msgstr ""
+
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:87
 msgid "Failed to create administrator"
 msgstr "فشل في إنشاء المسؤول"
@@ -353,6 +365,10 @@ msgstr "لا"
 #: src/app/routes/_authenticated/_product-variants/product-variants_.$id.tsx:176
 msgid "Successfully updated product variant"
 msgstr "تم تحديث شكل المنتج بنجاح"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:859
+msgid "Upload images, videos, or files to start building your asset library."
+msgstr ""
 
 #: src/app/common/delete-bulk-action.tsx:114
 msgid "Failed to delete {failed} {entityName}: {allErrors}"
@@ -410,6 +426,7 @@ msgstr "لا توجد أدوات لإضافتها"
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:290
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:203
 #: src/app/routes/_authenticated/_profile/profile.tsx:78
+#: src/lib/components/shared/asset/asset-gallery.tsx:334
 #: src/lib/components/shared/asset/asset-preview.tsx:127
 msgid "Unknown error"
 msgstr "خطأ غير معروف"
@@ -449,8 +466,8 @@ msgctxt "date-range"
 msgid "Last 7 days"
 msgstr "آخر 7 أيام"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:108
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:114
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:94
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:100
 msgid "Failed to create channel"
 msgstr "فشل إنشاء القناة"
 
@@ -463,7 +480,7 @@ msgstr "وضع التطوير"
 msgid "New Role"
 msgstr "دور جديد"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:28
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:25
 msgid "Failed to delete assets: {message}"
 msgstr "فشل حذف الملفات: {message}"
 
@@ -544,6 +561,10 @@ msgstr "مجموعة جديدة"
 msgid "Insights"
 msgstr "الرؤى"
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:333
+msgid "Failed to upload assets"
+msgstr ""
+
 #: src/app/routes/_authenticated/_system/scheduled-tasks.tsx:226
 msgid "Run"
 msgstr "تشغيل"
@@ -588,7 +609,7 @@ msgstr "المسؤولون"
 #~ msgstr "السعر الإجمالي: <0/>"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:82
-#: src/lib/components/data-table/data-table.tsx:718
+#: src/lib/components/data-table/data-table.tsx:777
 msgid "Go to next page"
 msgstr "الانتقال إلى الصفحة التالية"
 
@@ -609,7 +630,7 @@ msgid "Search options..."
 msgstr "البحث في الخيارات..."
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:39
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:86
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:85
 msgid "Order Count"
 msgstr "عدد الطلبات"
 
@@ -708,7 +729,7 @@ msgstr "نقل المجموعات"
 msgid "Roles"
 msgstr "الأدوار"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:395
+#: src/lib/components/shared/asset/asset-gallery.tsx:568
 msgid "Grid view"
 msgstr "عرض شبكي"
 
@@ -728,7 +749,7 @@ msgstr "تم تحويل العرض العام إلى عرض شخصي بنجاح"
 msgid "Fulfillment transitioned"
 msgstr "تم نقل التنفيذ"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:42
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:41
 msgid "Are you sure you want to delete {selectionLength} assets?"
 msgstr "هل أنت متأكد من حذف {selectionLength} ملف؟"
 
@@ -736,7 +757,7 @@ msgstr "هل أنت متأكد من حذف {selectionLength} ملف؟"
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:398
+#: src/lib/components/shared/asset/asset-gallery.tsx:571
 msgid "List view"
 msgstr "عرض قائمة"
 
@@ -784,7 +805,7 @@ msgstr "تحديد عنوان"
 msgid "Payment eligibility checker"
 msgstr "فاحص أهلية الدفع"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:232
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:218
 msgid "Default tax zone"
 msgstr "المنطقة الضريبية الافتراضية"
 
@@ -815,11 +836,11 @@ msgstr "تصفية..."
 msgid "New facet value"
 msgstr "قيمة خاصية جديدة"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:42
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:250
 msgid "Choose the shared marker color used for this channel."
 msgstr ""
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:101
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:87
 msgid "Successfully updated channel"
 msgstr "تم تحديث القناة بنجاح"
 
@@ -831,7 +852,7 @@ msgstr "عرض أقل"
 msgid "Short date"
 msgstr "تاريخ قصير"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:190
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:176
 msgid "Available currencies"
 msgstr "العملات المتاحة"
 
@@ -875,7 +896,6 @@ msgstr "إكمال المسودة"
 
 #: src/app/routes/_authenticated/_administrators/administrators.tsx:47
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:165
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:152
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:192
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:104
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:104
@@ -894,7 +914,7 @@ msgstr "إكمال المسودة"
 #: src/app/routes/_authenticated/_tax-categories/tax-categories_.$id.tsx:106
 #: src/app/routes/_authenticated/_tax-rates/tax-rates_.$id.tsx:113
 #: src/app/routes/_authenticated/_zones/zones_.$id.tsx:93
-#: src/lib/components/shared/asset/asset-gallery.tsx:750
+#: src/lib/components/shared/asset/asset-gallery.tsx:1088
 msgid "Name"
 msgstr "الاسم"
 
@@ -934,7 +954,7 @@ msgstr "تم إنشاء التنفيذ"
 msgid "Found {0} eligible shipping method{1}"
 msgstr "تم العثور على {0} طريقة شحن مؤهلة"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:753
+#: src/lib/components/shared/asset/asset-gallery.tsx:1132
 #: src/lib/components/shared/asset/asset-properties.tsx:39
 msgid "Dimensions"
 msgstr "الأبعاد"
@@ -960,7 +980,7 @@ msgstr "إضافة عمود بعد"
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:421
 #: src/app/routes/_authenticated/_promotions/promotions_.$id.tsx:241
 #: src/app/routes/_authenticated/_system/scheduled-tasks.tsx:209
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:82
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:97
 #: src/lib/components/data-table/use-generated-columns.tsx:262
 msgid "Actions"
 msgstr "الإجراءات"
@@ -1031,7 +1051,7 @@ msgstr "خطأ في تحميل سجل الطلب: {0}"
 msgid "Shipping address set for order"
 msgstr "تم تعيين عنوان الشحن للطلب"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:173
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:218
 #: src/lib/components/shared/asset/asset-preview.tsx:153
 msgid "Focal Point"
 msgstr "نقطة التركيز"
@@ -1115,7 +1135,7 @@ msgstr "سيتم تنفيذ المهمة المجدولة"
 msgid "New stock location"
 msgstr "موقع مخزون جديد"
 
-#: src/lib/components/data-table/data-table.tsx:714
+#: src/lib/components/data-table/data-table.tsx:773
 #: src/lib/components/data-table/use-generated-columns.tsx:238
 msgid "Select row"
 msgstr "تحديد الصف"
@@ -1216,7 +1236,7 @@ msgstr "طلب مسودة"
 msgid "Enter your email address and we will send you a link to reset your password"
 msgstr "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:40
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:248
 msgid "Appearance"
 msgstr ""
 
@@ -1275,8 +1295,9 @@ msgstr "فتح في علامة تبويب جديدة"
 msgid "Failed to update promotion"
 msgstr "فشل تحديث العرض الترويجي"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:368
-#: src/lib/components/shared/asset/asset-gallery.tsx:380
+#: src/lib/components/shared/asset/asset-gallery.tsx:106
+#: src/lib/components/shared/asset/asset-gallery.tsx:526
+#: src/lib/components/shared/asset/asset-gallery.tsx:543
 msgid "Images"
 msgstr "الصور"
 
@@ -1289,7 +1310,7 @@ msgstr "مفاتيح API"
 msgid "Search {name}..."
 msgstr "بحث {name}..."
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:110
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:150
 msgid "Edit asset"
 msgstr "تحرير الملف"
 
@@ -1381,7 +1402,7 @@ msgstr "المتبقي:"
 msgid "No duplicator found with code \"{duplicatorCode}\" for {entityName}s"
 msgstr "لم يتم العثور على أداة نسخ بالرمز \"{duplicatorCode}\" لـ {entityName}"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:248
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:234
 msgid "Prices include tax for default tax zone"
 msgstr "الأسعار تشمل الضريبة للمنطقة الضريبية الافتراضية"
 
@@ -1403,7 +1424,7 @@ msgid "No items selected"
 msgstr "لم يتم تحديد عناصر"
 
 #. placeholder {0}: selected.length
-#: src/lib/components/shared/asset/asset-gallery.tsx:476
+#: src/lib/components/shared/asset/asset-gallery.tsx:681
 msgid ", {0} selected"
 msgstr "، {0} محدد"
 
@@ -1504,8 +1525,8 @@ msgstr "{productCount, plural, one {تُستخدم مجموعة الخيارات
 msgid "My Saved Views"
 msgstr "عروضي المحفوظة"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:57
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:129
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:42
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:115
 msgid "New channel"
 msgstr "قناة جديدة"
 
@@ -1596,7 +1617,7 @@ msgstr "تم تحديث العرض الترويجي بنجاح"
 msgid "{rejected, plural, one {Failed to cancel {rejected} job} other {Failed to cancel {rejected} jobs}}"
 msgstr "{rejected, plural, one {فشل إلغاء مهمة واحدة} two {فشل إلغاء مهمتين} few {فشل إلغاء {rejected} مهام} many {فشل إلغاء {rejected} مهمة} other {فشل إلغاء {rejected} مهمة}}"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:103
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:102
 msgid "We couldn't load these metrics"
 msgstr "تعذّر علينا تحميل هذه المقاييس"
 
@@ -1609,8 +1630,12 @@ msgstr "حدد قناة"
 msgid "Display language"
 msgstr "لغة العرض"
 
-#: src/lib/components/shared/channel-color-picker.tsx:11
+#: src/lib/components/shared/channel-color-picker.tsx:16
 msgid "Color 2"
+msgstr ""
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:194
+msgid "The source file remains unchanged. Keep the original extension or omit it."
 msgstr ""
 
 #: src/app/routes/_authenticated/_orders/components/order-detail-shared.tsx:282
@@ -1639,7 +1664,7 @@ msgstr "قبل"
 msgid "Failed to set customer for order: {0}"
 msgstr "فشل تعيين العميل للطلب: {0}"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:752
+#: src/lib/components/shared/asset/asset-gallery.tsx:1109
 msgid "Size"
 msgstr "الحجم"
 
@@ -1651,6 +1676,10 @@ msgstr "لم يتم العثور على ترجمة لـ {0}"
 #: src/app/routes/_authenticated/_customers/customers.tsx:103
 msgid "New Customer"
 msgstr "عميل جديد"
+
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:76
+msgid "Filter assets by tags"
+msgstr ""
 
 #: src/lib/framework/dashboard-widget/latest-orders-widget/index.tsx:54
 msgid "Latest Orders"
@@ -1670,7 +1699,7 @@ msgid "Use as the default billing address"
 msgstr "استخدام كعنوان فوترة افتراضي"
 
 #: src/app/common/delete-bulk-action.tsx:139
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:41
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:40
 #: src/lib/components/data-table/use-generated-columns.tsx:419
 #: src/lib/components/data-table/use-generated-columns.tsx:449
 #: src/lib/components/data-table/views-sheet.tsx:270
@@ -1700,7 +1729,7 @@ msgstr "فشل إنشاء البلد"
 msgid "Countries"
 msgstr "البلدان"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:97
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:96
 msgid "Loading metrics…"
 msgstr "جارٍ تحميل المقاييس…"
 
@@ -1767,7 +1796,7 @@ msgstr "تم تحديث العنوان بنجاح"
 
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:226
 #: src/app/routes/_authenticated/_orders/components/fulfillment-details.tsx:141
-#: src/lib/components/shared/asset/asset-gallery.tsx:754
+#: src/lib/components/shared/asset/asset-gallery.tsx:1116
 #: src/lib/framework/layout-engine/page-layout.tsx:746
 msgid "Created"
 msgstr "تم الإنشاء"
@@ -1907,7 +1936,7 @@ msgstr "حذف المتغير"
 msgid "No modifications made"
 msgstr "لم يتم إجراء تعديلات"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:240
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:226
 msgid "Default shipping zone"
 msgstr "منطقة الشحن الافتراضية"
 
@@ -2026,8 +2055,8 @@ msgstr "تم تسوية الاسترداد بنجاح"
 
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:106
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:155
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:115
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:140
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:155
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:126
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:171
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:84
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:94
@@ -2115,8 +2144,8 @@ msgstr "يبدأ في"
 msgid "Duplicate"
 msgstr "نسخ"
 
-#: src/lib/components/data-table/data-table.tsx:590
-#: src/lib/components/data-table/data-table.tsx:601
+#: src/lib/components/data-table/data-table.tsx:648
+#: src/lib/components/data-table/data-table.tsx:659
 #: src/lib/components/shared/customer-group-selector.tsx:60
 msgid "No results"
 msgstr "لا توجد نتائج"
@@ -2125,7 +2154,7 @@ msgstr "لا توجد نتائج"
 msgid "Column settings"
 msgstr "إعدادات الأعمدة"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:150
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:136
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:110
 #: src/app/routes/_authenticated/_facets/facets_.$facetId.values_.$id.tsx:127
 #: src/app/routes/_authenticated/_facets/facets_.$id.tsx:127
@@ -2163,7 +2192,7 @@ msgstr "هل أنت متأكد من حذف هذا العنوان؟"
 msgid "Failed to assign option group"
 msgstr "فشل في تعيين مجموعة الخيارات"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:89
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:103
 msgid "Failed to update asset"
 msgstr "فشل تحديث الملف"
 
@@ -2234,7 +2263,7 @@ msgstr "اختبار طريقة الشحن"
 msgid "Facet Values"
 msgstr "قيم الخصائص"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:85
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:99
 msgid "Successfully updated asset"
 msgstr "تم تحديث الملف بنجاح"
 
@@ -2596,7 +2625,7 @@ msgstr "قائمة القيم"
 msgid "fieldName.zone"
 msgstr "المنطقة"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:126
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:125
 msgid "No metrics for this period"
 msgstr "لا توجد مقاييس لهذه الفترة"
 
@@ -2636,6 +2665,10 @@ msgstr "فشل تعيين عنوان الشحن للطلب: {0}"
 #: src/app/routes/_authenticated/_system/job-queue.tsx:228
 msgid "Cancel Job"
 msgstr "إلغاء المهمة"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:854
+msgid "No assets yet"
+msgstr ""
 
 #: src/app/routes/_authenticated/_promotions/promotions_.$id.tsx:194
 msgid "Ends at"
@@ -2700,12 +2733,12 @@ msgid "Save View"
 msgstr "حفظ العرض"
 
 #. placeholder {0}: selectedIds.size
+#. placeholder {0}: selectedTags.length
 #. placeholder {0}: selectedValues.size
-#. placeholder {0}: selection.length
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:76
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:48
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:91
 #: src/lib/components/data-table/data-table-facet-value-faceted-filter.tsx:137
 #: src/lib/components/data-table/data-table-faceted-filter.tsx:139
-#: src/lib/components/shared/asset/asset-bulk-actions.tsx:80
 #: src/lib/components/shared/configurable-operation-arg-summary.tsx:67
 msgid "{0} selected"
 msgstr "{0} محدد"
@@ -2855,7 +2888,7 @@ msgstr "فئة ضريبية جديدة"
 #~ msgid "No stock locations available on current channel"
 #~ msgstr "لا توجد مواقع مخزون متاحة على القناة الحالية"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:101
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:87
 msgid "Successfully created channel"
 msgstr "تم إنشاء القناة بنجاح"
 
@@ -2903,7 +2936,7 @@ msgstr "تمت إزالة {successCount} خاصية من القناة بنجاح
 msgid "New Product"
 msgstr "منتج جديد"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:40
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:54
 msgid "New asset"
 msgstr "ملف جديد"
 
@@ -2919,9 +2952,9 @@ msgstr "إعادة حساب الشحن"
 #~ msgid "Select which options should apply to the existing variant \"{0}\""
 #~ msgstr "حدد الخيارات التي يجب تطبيقها على الشكل الموجود \"{0}\""
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:39
-#: src/app/routes/_authenticated/_assets/assets.tsx:17
-#: src/app/routes/_authenticated/_assets/assets.tsx:40
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:53
+#: src/app/routes/_authenticated/_assets/assets.tsx:19
+#: src/app/routes/_authenticated/_assets/assets.tsx:45
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:248
 #: src/app/routes/_authenticated/_product-variants/product-variants_.$id.tsx:777
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:380
@@ -2977,8 +3010,8 @@ msgstr "الخصم"
 msgid "Top Products"
 msgstr "أفضل المنتجات"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:367
-#: src/lib/components/shared/asset/asset-gallery.tsx:379
+#: src/lib/components/shared/asset/asset-gallery.tsx:525
+#: src/lib/components/shared/asset/asset-gallery.tsx:542
 msgid "All types"
 msgstr "جميع الأنواع"
 
@@ -3109,6 +3142,13 @@ msgstr ""
 msgid "Select an option"
 msgstr "حدد خيارًا"
 
+#. placeholder {0}: asset.name
+#. placeholder {0}: row.original.name
+#: src/lib/components/shared/asset/asset-gallery.tsx:1012
+#: src/lib/components/shared/asset/asset-gallery.tsx:1156
+msgid "Open {0}"
+msgstr ""
+
 #: src/lib/components/data-table/views-sheet.tsx:251
 msgid "Copy to Personal"
 msgstr "نسخ إلى الشخصي"
@@ -3124,7 +3164,7 @@ msgstr "حذف العرض العام"
 
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:106
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:155
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:140
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:126
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:171
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:84
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:94
@@ -3410,7 +3450,7 @@ msgstr "فشل حذف العرض"
 msgid "Are you sure you want to navigate away from this page? Any unsaved changes will be lost."
 msgstr "هل أنت متأكد من مغادرة هذه الصفحة؟ سيتم فقدان أي تغييرات غير محفوظة."
 
-#: src/lib/components/shared/channel-color-picker.tsx:10
+#: src/lib/components/shared/channel-color-picker.tsx:15
 msgid "Color 1"
 msgstr ""
 
@@ -3433,6 +3473,10 @@ msgstr "الأعمدة"
 #: src/lib/components/shared/rich-text-editor/rich-text-editor.tsx:163
 msgid "Failed to upload image"
 msgstr "فشل رفع الصورة"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:854
+msgid "No assets match these filters"
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:146
 msgid "Option value name"
@@ -3467,7 +3511,7 @@ msgstr "الولاية/المحافظة"
 msgid "Failed to update option group"
 msgstr "فشل في تحديث مجموعة الخيارات"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:201
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:187
 msgid "Channel defaults"
 msgstr "الإعدادات الافتراضية للقناة"
 
@@ -3510,7 +3554,7 @@ msgstr "فشل تعديل الطلب"
 msgid "Includes tax at {taxRate}%"
 msgstr "يشمل ضريبة بنسبة {taxRate}%"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:82
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:81
 msgid "Order metrics"
 msgstr "مقاييس الطلبات"
 
@@ -3573,10 +3617,9 @@ msgstr "إدارة العروض العامة"
 msgid "Processing..."
 msgstr "جاري المعالجة..."
 
-#. placeholder {0}: totalItems === 1 ? 'asset' : 'assets'
 #: src/lib/components/shared/asset/asset-gallery.tsx:472
-msgid "{totalItems} {0} found"
-msgstr "تم العثور على {totalItems} {0}"
+#~ msgid "{totalItems} {0} found"
+#~ msgstr "تم العثور على {totalItems} {0}"
 
 #: src/lib/components/date-range-picker.tsx:122
 msgid "Select date range"
@@ -3619,9 +3662,13 @@ msgstr "تم إنشاء البائع بنجاح"
 msgid "Failed to update profile picture"
 msgstr ""
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:906
+msgid "We couldn't load assets"
+msgstr ""
+
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:58
 #: src/lib/framework/dashboard-widget/low-stock-widget/index.tsx:80
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:105
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:104
 #: src/lib/framework/dashboard-widget/top-products-widget/index.tsx:122
 msgid "Try again"
 msgstr "حاول مرة أخرى"
@@ -3659,12 +3706,12 @@ msgstr "ملاحظة"
 msgid "Bold"
 msgstr "غامق"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:178
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:164
 #: src/app/routes/_authenticated/_global-settings/global-settings.tsx:112
 msgid "Available languages"
 msgstr "اللغات المتاحة"
 
-#: src/lib/components/shared/channel-color-picker.tsx:12
+#: src/lib/components/shared/channel-color-picker.tsx:17
 msgid "Color 3"
 msgstr ""
 
@@ -3687,11 +3734,11 @@ msgstr "غير موجود"
 msgid "Facet values"
 msgstr "قيم الخصائص"
 
-#: src/lib/components/data-table/data-table.tsx:312
+#: src/lib/components/data-table/data-table.tsx:370
 msgid "Failed to reorder items"
 msgstr "فشل في إعادة ترتيب العناصر"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:91
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:101
 msgid "Total Orders"
 msgstr "إجمالي الطلبات"
 
@@ -3740,6 +3787,10 @@ msgstr "تم تفويض الدفع"
 #: src/app/routes/_authenticated/_roles/roles_.$id.tsx:62
 msgid "Successfully updated role"
 msgstr "تم تحديث الدور بنجاح"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:135
+msgid "The display name can omit the extension or keep {sourceExtensionLabel}. It cannot use a different file extension."
+msgstr ""
 
 #: src/lib/components/shared/customer-address-form.tsx:184
 msgid "Select a country"
@@ -3837,7 +3888,7 @@ msgstr "لم يتم العثور على مدققات"
 msgid "Settle payment"
 msgstr "تسوية الدفع"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:56
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:41
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:24
 #: src/app/routes/_authenticated/_option-groups/option-groups_.$id.tsx:210
@@ -3856,7 +3907,7 @@ msgstr "تم استرداد الشحن"
 msgid "Failed to create option in group \"{0}\""
 msgstr ""
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:376
+#: src/lib/components/shared/asset/asset-gallery.tsx:539
 msgid "Asset type"
 msgstr "نوع الملف"
 
@@ -4083,7 +4134,7 @@ msgstr "عرض غير محفوظ"
 msgid "Cannot remove from active channel"
 msgstr "لا يمكن الإزالة من القناة النشطة"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:179
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:225
 #: src/lib/components/shared/asset/asset-preview.tsx:162
 msgid "Not set"
 msgstr "غير معين"
@@ -4192,7 +4243,7 @@ msgstr "البحث في المسؤولين..."
 msgid "Created by"
 msgstr "أنشأه"
 
-#: src/lib/components/data-table/data-table.tsx:591
+#: src/lib/components/data-table/data-table.tsx:649
 msgid "No items match your current filters. Try clearing them to see more."
 msgstr "لا توجد عناصر تطابق عوامل التصفية الحالية. جرّب مسحها لرؤية المزيد."
 
@@ -4389,6 +4440,7 @@ msgstr "في"
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:80
 #: src/lib/components/data-table/add-filter-menu.tsx:47
 msgid "Filter"
 msgstr "تصفية"
@@ -4406,8 +4458,8 @@ msgid "Loading customers…"
 msgstr "جارٍ تحميل العملاء…"
 
 #: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:104
-msgid "Filter by tags"
-msgstr "تصفية حسب العلامات"
+#~ msgid "Filter by tags"
+#~ msgstr "تصفية حسب العلامات"
 
 #: src/lib/components/login/login-form.tsx:74
 msgid "Sign in to access the admin dashboard"
@@ -4420,6 +4472,10 @@ msgstr "سجل الدخول للوصول إلى لوحة تحكم المسؤول
 #: src/lib/components/data-table/filters/data-table-boolean-filter.tsx:57
 msgid "False"
 msgstr "خطأ"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:138
+msgid "Asset name extension does not match the source file"
+msgstr ""
 
 #: src/lib/components/layout/nav-user.tsx:121
 msgctxt "theme"
@@ -4482,12 +4538,12 @@ msgstr "اختيار حجم الجدول"
 msgid "Failed to update payment state"
 msgstr "فشل تحديث حالة الدفع"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:86
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:96
 msgid "Your orders summary"
 msgstr "ملخص طلباتك"
 
 #: src/app/routes/_authenticated/_profile/profile.tsx:184
-#: src/lib/components/shared/asset/asset-gallery.tsx:406
+#: src/lib/components/shared/asset/asset-gallery.tsx:589
 msgid "Upload"
 msgstr "رفع"
 
@@ -4496,7 +4552,7 @@ msgid "Product with options"
 msgstr "منتج بخيارات"
 
 #. placeholder {0}: filteredTags.length
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:163
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:196
 msgid "Showing all {0} results"
 msgstr "عرض جميع النتائج {0}"
 
@@ -4621,7 +4677,7 @@ msgid "Manage my views"
 msgstr "إدارة طرق العرض الخاصة بي"
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:41
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:87
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:86
 msgid "Order Total"
 msgstr "إجمالي الطلب"
 
@@ -4638,7 +4694,9 @@ msgstr "الكمية"
 msgid "Inline code"
 msgstr "تعليمات برمجية مضمّنة"
 
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:45
 #: src/app/routes/_authenticated/_assets/components/asset-tags-editor.tsx:104
+#: src/lib/components/shared/asset/asset-gallery.tsx:1200
 msgid "Tags"
 msgstr "العلامات"
 
@@ -4749,7 +4807,7 @@ msgid "paymentState.Settled"
 msgstr "تم التسوية"
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:43
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:89
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:88
 msgid "Average Order Value"
 msgstr "متوسط قيمة الطلب"
 
@@ -4783,6 +4841,10 @@ msgstr "فشل إعادة تسمية العرض العام"
 #~ msgid "Insert a new hyperlink with URL and target options"
 #~ msgstr "إدراج رابط جديد بـ URL وخيارات الهدف"
 
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:192
+msgid "Display name"
+msgstr ""
+
 #: src/lib/components/shared/rich-text-editor/image-dialog.tsx:194
 msgid "Height"
 msgstr "الارتفاع"
@@ -4796,6 +4858,10 @@ msgstr "مطلوب استرداد بقيمة {formattedDiff}. حدد مبالغ 
 #: src/app/routes/_authenticated/_orders/components/refund-order-dialog.tsx:100
 msgid "Unit price"
 msgstr "سعر الوحدة"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:857
+msgid "Try changing your search, asset type, or selected tags."
+msgstr ""
 
 #: src/lib/components/login/forgot-password-form.tsx:87
 msgid "If an account exists for {submittedEmailAddress}, you will receive an email with a link to reset your password."
@@ -4830,7 +4896,7 @@ msgstr "إضافة مجموعات عملاء"
 msgid "Available Languages"
 msgstr "اللغات المتاحة"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:114
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:129
 msgid "Reset selection"
 msgstr "إعادة تعيين التحديد"
 
@@ -4882,7 +4948,7 @@ msgstr "المنتجات"
 msgid "Promotions"
 msgstr "العروض الترويجية"
 
-#: src/lib/components/shared/channel-color-picker.tsx:9
+#: src/lib/components/shared/channel-color-picker.tsx:14
 msgid "Neutral"
 msgstr ""
 
@@ -4897,6 +4963,10 @@ msgstr "البريد الإلكتروني القديم:"
 #: src/lib/components/data-table/views-sheet.tsx:144
 msgid "Save a view as \"Global\" to make it available to all users."
 msgstr "احفظ العرض كـ\"عام\" لإتاحته لجميع المستخدمين."
+
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:147
+msgid "Search tags..."
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/components/generate-missing-variants-dialog.tsx:154
 #: src/app/routes/_authenticated/_products/components/generate-variants-panel.tsx:90
@@ -4924,7 +4994,7 @@ msgstr "تدوير المفتاح"
 msgid "Hide password"
 msgstr "إخفاء كلمة المرور"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:71
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:86
 msgid "Bulk actions"
 msgstr "إجراءات جماعية"
 
@@ -4962,7 +5032,7 @@ msgstr "مسح الفلتر"
 msgid "Regions"
 msgstr "المناطق"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:445
+#: src/lib/components/shared/asset/asset-gallery.tsx:629
 msgid "Drop files here to upload"
 msgstr "أفلت الملفات هنا للتحميل"
 
@@ -4974,7 +5044,7 @@ msgstr "عرض البيانات الوصفية للدفع"
 msgid "Toggle all visible variants"
 msgstr "تبديل جميع المتغيرات المرئية"
 
-#: src/lib/components/shared/channel-color-picker.tsx:13
+#: src/lib/components/shared/channel-color-picker.tsx:18
 msgid "Color 4"
 msgstr ""
 
@@ -5259,8 +5329,8 @@ msgid "Failed to update order"
 msgstr "فشل تحديث الطلب"
 
 #: src/lib/components/shared/asset/asset-bulk-actions.tsx:84
-msgid "With selected..."
-msgstr "مع المحدد..."
+#~ msgid "With selected..."
+#~ msgstr "مع المحدد..."
 
 #: src/lib/components/login/reset-password-form.tsx:146
 msgid "Choose a new password for your account"
@@ -5333,7 +5403,7 @@ msgstr "الولاية / المحافظة"
 msgid "Enabled"
 msgstr "ممكّن"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:483
+#: src/lib/components/shared/asset/asset-gallery.tsx:688
 msgid "Items per page"
 msgstr "العناصر في الصفحة"
 
@@ -5399,6 +5469,10 @@ msgstr "أحدث طلباتك"
 #: src/lib/framework/defaults.ts:153
 msgid "Scheduled Tasks"
 msgstr "المهام المجدولة"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:139
+msgid "Use {sourceExtensionLabel} or remove the extension from the display name."
+msgstr ""
 
 #: src/lib/components/data-table/use-generated-columns.tsx:428
 msgid "Are you sure you want to delete this item? This action cannot be undone."
@@ -5530,7 +5604,7 @@ msgid "Failed to update variant"
 msgstr "فشل تحديث المتغير"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:69
-#: src/lib/components/data-table/data-table.tsx:717
+#: src/lib/components/data-table/data-table.tsx:776
 msgid "Go to previous page"
 msgstr "الانتقال إلى الصفحة السابقة"
 
@@ -5613,6 +5687,11 @@ msgstr "معدلات الضرائب"
 #: src/app/routes/_authenticated/_customer-groups/components/customer-group-members-bulk-actions.tsx:40
 msgid "Failed to remove customers from group"
 msgstr "فشل في إزالة العملاء من المجموعة"
+
+#. placeholder {0}: failedAssets.length
+#: src/lib/components/shared/asset/asset-gallery.tsx:325
+msgid "Failed to upload {0} assets"
+msgstr ""
 
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:56
 msgid "We couldn't load the latest customers"
@@ -5716,7 +5795,7 @@ msgstr "اللغة الافتراضية"
 msgid "Top Products Widget"
 msgstr "أداة أفضل المنتجات"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:159
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:145
 msgid "Token"
 msgstr "الرمز المميز"
 
@@ -5780,8 +5859,8 @@ msgid "Edit Note"
 msgstr "تحرير الملاحظة"
 
 #: src/lib/components/shared/asset/asset-gallery.tsx:635
-msgid "No assets found. Try adjusting your filters."
-msgstr "لم يتم العثور على ملفات. حاول تعديل عوامل التصفية."
+#~ msgid "No assets found. Try adjusting your filters."
+#~ msgstr "لم يتم العثور على ملفات. حاول تعديل عوامل التصفية."
 
 #: src/app/routes/_authenticated/_products/components/option-groups-editor.tsx:161
 msgid "Add Option"
@@ -5809,8 +5888,10 @@ msgstr "تم تحديث المسؤول بنجاح"
 
 #: src/lib/components/data-table/data-table-facet-value-faceted-filter.tsx:263
 #: src/lib/components/data-table/data-table-faceted-filter.tsx:225
-#: src/lib/components/data-table/data-table.tsx:594
-#: src/lib/components/shared/asset/asset-gallery.tsx:361
+#: src/lib/components/data-table/data-table.tsx:652
+#: src/lib/components/shared/asset/asset-gallery.tsx:504
+#: src/lib/components/shared/asset/asset-gallery.tsx:511
+#: src/lib/components/shared/asset/asset-gallery.tsx:866
 msgid "Clear filters"
 msgstr "مسح الفلاتر"
 
@@ -5825,7 +5906,7 @@ msgstr "التنفيذ #{0} من {1} إلى {2}"
 msgid "Failed to delete global view"
 msgstr "فشل حذف العرض العام"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:206
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:192
 msgid "Default language"
 msgstr "اللغة الافتراضية"
 
@@ -5839,8 +5920,13 @@ msgstr "الحالة"
 msgid "No options found"
 msgstr "لم يتم العثور على خيارات"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:370
-#: src/lib/components/shared/asset/asset-gallery.tsx:382
+#: src/lib/components/shared/asset/asset-gallery.tsx:871
+msgid "Upload assets"
+msgstr ""
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:110
+#: src/lib/components/shared/asset/asset-gallery.tsx:528
+#: src/lib/components/shared/asset/asset-gallery.tsx:545
 msgid "Binary"
 msgstr "ثنائي"
 
@@ -6114,8 +6200,9 @@ msgstr "أنشئ عرضك الترويجي الأول"
 msgid "Remove item"
 msgstr "إزالة العنصر"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:369
-#: src/lib/components/shared/asset/asset-gallery.tsx:381
+#: src/lib/components/shared/asset/asset-gallery.tsx:108
+#: src/lib/components/shared/asset/asset-gallery.tsx:527
+#: src/lib/components/shared/asset/asset-gallery.tsx:544
 msgid "Video"
 msgstr "فيديو"
 
@@ -6131,7 +6218,7 @@ msgstr "تعذرت إضافة المتغير. تأكد من تفعيل المن�
 #~ msgid "An unknown error occurred"
 #~ msgstr "حدث خطأ غير معروف"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:81
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:80
 msgid "Metrics"
 msgstr "المقاييس"
 
@@ -6197,8 +6284,7 @@ msgstr "حذف المسودة"
 msgid "Source"
 msgstr "المصدر"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:107
-#: src/lib/components/shared/asset/asset-bulk-actions.tsx:98
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:122
 msgid "No actions available"
 msgstr "لا توجد إجراءات متاحة"
 
@@ -6207,8 +6293,8 @@ msgstr "لا توجد إجراءات متاحة"
 msgid "Customize channel colors"
 msgstr ""
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:108
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:114
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:94
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:100
 msgid "Failed to update channel"
 msgstr "فشل تحديث القناة"
 
@@ -6234,8 +6320,13 @@ msgstr "تم تحديث الخاصية بنجاح"
 msgid "Strikethrough"
 msgstr "يتوسطه خط"
 
+#. placeholder {0}: createdAssets.length
+#: src/lib/components/shared/asset/asset-gallery.tsx:322
+msgid "Uploaded {0} assets"
+msgstr ""
+
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:92
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:127
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:126
 #: src/lib/framework/dashboard-widget/top-products-widget/index.tsx:154
 msgid "Try selecting a different date range."
 msgstr "جرّب تحديد نطاق تاريخ مختلف."
@@ -6265,7 +6356,7 @@ msgstr "طلب البائع"
 msgid "New facet"
 msgstr "خاصية جديدة"
 
-#: src/lib/components/shared/channel-color-picker.tsx:14
+#: src/lib/components/shared/channel-color-picker.tsx:19
 msgid "Color 5"
 msgstr ""
 
@@ -6278,13 +6369,13 @@ msgstr "هل أنت متأكد أنك تريد إزالة مجموعة الخي�
 msgid "Description (alt)"
 msgstr "الوصف (نص بديل)"
 
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:124
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:154
 #: src/app/routes/_authenticated/_assets/components/asset-tags-editor.tsx:164
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:99
 msgid "No tags found"
 msgstr "لم يتم العثور على علامات"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:219
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:205
 msgid "Default currency"
 msgstr "العملة الافتراضية"
 
@@ -6304,7 +6395,7 @@ msgstr "{cancellableCount, plural, one {هل أنت متأكد أنك تريد �
 msgid "Go to option group"
 msgstr ""
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:101
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:111
 msgid "Total Revenue"
 msgstr "إجمالي الإيرادات"
 
@@ -6410,7 +6501,7 @@ msgstr "النقل إلى المستوى الأعلى"
 msgid "Clear"
 msgstr "مسح"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:85
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:95
 msgid "Orders Summary"
 msgstr "ملخص الطلبات"
 
@@ -6418,7 +6509,8 @@ msgstr "ملخص الطلبات"
 msgid "Search stock locations..."
 msgstr "البحث في مواقع المخزون..."
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:349
+#: src/lib/components/shared/asset/asset-gallery.tsx:486
+#: src/lib/components/shared/asset/asset-gallery.tsx:1197
 msgid "Search assets..."
 msgstr "البحث في الملفات..."
 
@@ -6481,7 +6573,7 @@ msgstr "فشل إزالة الخاصية من القناة: {message}"
 #~ msgid "Set link"
 #~ msgstr "تعيين الرابط"
 
-#: src/lib/components/data-table/data-table.tsx:716
+#: src/lib/components/data-table/data-table.tsx:775
 msgid "Pagination"
 msgstr "ترقيم الصفحات"
 
@@ -6532,7 +6624,7 @@ msgid "View result"
 msgstr "عرض النتيجة"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:20
-#: src/lib/components/data-table/data-table.tsx:719
+#: src/lib/components/data-table/data-table.tsx:778
 msgid "Rows per page"
 msgstr "صفوف لكل صفحة"
 
@@ -6629,7 +6721,7 @@ msgid "Failed to create product variant"
 msgstr "فشل إنشاء شكل المنتج"
 
 #: src/lib/components/data-input/relation-selector.tsx:418
-#: src/lib/components/data-table/data-table.tsx:501
+#: src/lib/components/data-table/data-table.tsx:559
 msgid "Search..."
 msgstr "بحث..."
 
@@ -6713,9 +6805,8 @@ msgstr "الشروط المتاحة"
 msgid "Active filters"
 msgstr "عوامل التصفية النشطة"
 
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:176
 #: src/lib/components/data-table/data-table-active-filters-popover.tsx:54
-#: src/lib/components/data-table/data-table.tsx:577
+#: src/lib/components/data-table/data-table.tsx:635
 msgid "Clear all"
 msgstr "مسح الكل"
 
@@ -6757,7 +6848,7 @@ msgstr "إضافة دفع إلى الطلب"
 msgid "Create variants for the option combinations that don't exist yet. Combinations that already exist are shown for context and can't be edited."
 msgstr "أنشئ متغيرات لتركيبات الخيارات غير الموجودة بعد. التركيبات الموجودة بالفعل معروضة للتوضيح ولا يمكن تعديلها."
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:161
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:147
 msgid "The token is used to specify the channel when making API requests."
 msgstr "يُستخدم الرمز المميز لتحديد القناة عند إجراء طلبات API."
 
@@ -6811,6 +6902,10 @@ msgstr "طريقة الدفع مطلوبة"
 #: src/app/routes/_authenticated/_customers/customers_.$id.tsx:134
 msgid "Failed to add customer to group"
 msgstr "فشل إضافة العميل إلى المجموعة"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:675
+msgid "{totalItems, plural, one {{totalItems} asset found} other {{totalItems} assets found}}"
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:338
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:291

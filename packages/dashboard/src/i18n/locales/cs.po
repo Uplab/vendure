@@ -35,7 +35,7 @@ msgstr "Zobrazit změny"
 msgid "Tracking code"
 msgstr "Sledovací kód"
 
-#: src/lib/components/data-table/data-table.tsx:713
+#: src/lib/components/data-table/data-table.tsx:772
 #: src/lib/components/data-table/use-generated-columns.tsx:226
 msgid "Select all rows"
 msgstr "Vybrat všechny řádky"
@@ -162,7 +162,7 @@ msgstr "Úspěšně smazáno"
 #~ msgid "Remove from current channel"
 #~ msgstr "Odebrat z aktuálního kanálu"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:25
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:22
 msgid "Deleted {selectionLength} assets"
 msgstr "Smazáno {selectionLength} souborů"
 
@@ -174,14 +174,16 @@ msgstr "Daňová sazba úspěšně aktualizována"
 msgid "Enter custom reason..."
 msgstr "Zadejte vlastní důvod..."
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:751
+#: src/lib/components/shared/asset/asset-gallery.tsx:1100
 msgid "Type"
 msgstr "Typ"
 
+#. placeholder {0}: asset.name
 #. placeholder {0}: entityName.toLowerCase()
 #. placeholder {0}: group.name
 #: src/app/routes/_authenticated/_products/components/product-option-select.tsx:57
 #: src/lib/components/data-input/default-relation-input.tsx:671
+#: src/lib/components/shared/asset/asset-gallery.tsx:976
 msgid "Select {0}"
 msgstr "Vybrat {0}"
 
@@ -212,7 +214,7 @@ msgstr "Aktuální"
 msgid "No fulfillments"
 msgstr "Žádné expedice"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:250
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:236
 msgid "When this is enabled, the prices entered in the product catalog will be included in the tax for the default tax zone."
 msgstr "Když je toto povoleno, ceny zadané v katalogu produktů budou zahrnovat DPH pro výchozí daňovou zónu."
 
@@ -241,7 +243,7 @@ msgstr "Automatické obnovení: {0}"
 msgid "Deleted {deleted} {entityName}"
 msgstr "Smazáno {deleted} {entityName}"
 
-#: src/lib/components/data-table/data-table.tsx:602
+#: src/lib/components/data-table/data-table.tsx:660
 msgid "There are no items to display yet."
 msgstr "Zatím nejsou k dispozici žádné položky k zobrazení."
 
@@ -280,7 +282,7 @@ msgstr "Přejít na nástěnku"
 msgid "{fulfilled, plural, one {Successfully cancelled {fulfilled} job} other {Successfully cancelled {fulfilled} jobs}}"
 msgstr "{fulfilled, plural, one {Úspěšně zrušena {fulfilled} úloha} few {Úspěšně zrušeny {fulfilled} úlohy} other {Úspěšně zrušeno {fulfilled} úloh}}"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:170
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:156
 msgid "Seller"
 msgstr "Prodejce"
 
@@ -341,6 +343,16 @@ msgstr "Opravdu chcete smazat tuto variantu?"
 #~ msgid "All resources are up and running"
 #~ msgstr "Všechny zdroje jsou v provozu"
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:1015
+#: src/lib/components/shared/asset/asset-gallery.tsx:1159
+msgid "Open"
+msgstr ""
+
+#. placeholder {0}: asset.name
+#: src/lib/components/shared/asset/asset-gallery.tsx:989
+msgid "Toggle selection for {0}"
+msgstr ""
+
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:87
 msgid "Failed to create administrator"
 msgstr "Vytvoření administrátora se nezdařilo"
@@ -353,6 +365,10 @@ msgstr "Ne"
 #: src/app/routes/_authenticated/_product-variants/product-variants_.$id.tsx:176
 msgid "Successfully updated product variant"
 msgstr "Varianta produktu úspěšně aktualizována"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:859
+msgid "Upload images, videos, or files to start building your asset library."
+msgstr ""
 
 #: src/app/common/delete-bulk-action.tsx:114
 msgid "Failed to delete {failed} {entityName}: {allErrors}"
@@ -410,6 +426,7 @@ msgstr "Žádné widgety k přidání"
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:290
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:203
 #: src/app/routes/_authenticated/_profile/profile.tsx:78
+#: src/lib/components/shared/asset/asset-gallery.tsx:334
 #: src/lib/components/shared/asset/asset-preview.tsx:127
 msgid "Unknown error"
 msgstr "Neznámá chyba"
@@ -449,8 +466,8 @@ msgctxt "date-range"
 msgid "Last 7 days"
 msgstr "Posledních 7 dní"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:108
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:114
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:94
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:100
 msgid "Failed to create channel"
 msgstr "Nepodařilo se vytvořit kanál"
 
@@ -463,7 +480,7 @@ msgstr "Vývojový režim"
 msgid "New Role"
 msgstr "Nová role"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:28
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:25
 msgid "Failed to delete assets: {message}"
 msgstr "Nepodařilo se smazat soubory: {message}"
 
@@ -544,6 +561,10 @@ msgstr "Nová kolekce"
 msgid "Insights"
 msgstr "Přehledy"
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:333
+msgid "Failed to upload assets"
+msgstr ""
+
 #: src/app/routes/_authenticated/_system/scheduled-tasks.tsx:226
 msgid "Run"
 msgstr "Spustit"
@@ -588,7 +609,7 @@ msgstr "Správci"
 #~ msgstr "Hrubá cena: <0/>"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:82
-#: src/lib/components/data-table/data-table.tsx:718
+#: src/lib/components/data-table/data-table.tsx:777
 msgid "Go to next page"
 msgstr "Přejít na další stránku"
 
@@ -609,7 +630,7 @@ msgid "Search options..."
 msgstr "Hledat možnosti..."
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:39
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:86
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:85
 msgid "Order Count"
 msgstr "Počet objednávek"
 
@@ -708,7 +729,7 @@ msgstr "Přesunout kolekce"
 msgid "Roles"
 msgstr "Role"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:395
+#: src/lib/components/shared/asset/asset-gallery.tsx:568
 msgid "Grid view"
 msgstr "Zobrazení mřížky"
 
@@ -728,7 +749,7 @@ msgstr "Globální pohled úspěšně převeden na osobní pohled"
 msgid "Fulfillment transitioned"
 msgstr "Expedice převedena"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:42
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:41
 msgid "Are you sure you want to delete {selectionLength} assets?"
 msgstr "Opravdu chcete smazat {selectionLength} souborů?"
 
@@ -736,7 +757,7 @@ msgstr "Opravdu chcete smazat {selectionLength} souborů?"
 msgid "Sign in"
 msgstr "Přihlásit se"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:398
+#: src/lib/components/shared/asset/asset-gallery.tsx:571
 msgid "List view"
 msgstr "Zobrazení seznamu"
 
@@ -784,7 +805,7 @@ msgstr "Vybrat adresu"
 msgid "Payment eligibility checker"
 msgstr "Kontrola způsobilosti platby"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:232
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:218
 msgid "Default tax zone"
 msgstr "Výchozí daňová zóna"
 
@@ -815,11 +836,11 @@ msgstr "Filtrovat..."
 msgid "New facet value"
 msgstr "Nová hodnota vlastnosti"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:42
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:250
 msgid "Choose the shared marker color used for this channel."
 msgstr ""
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:101
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:87
 msgid "Successfully updated channel"
 msgstr "Kanál úspěšně aktualizován"
 
@@ -831,7 +852,7 @@ msgstr "Zobrazit méně"
 msgid "Short date"
 msgstr "Krátké datum"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:190
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:176
 msgid "Available currencies"
 msgstr "Dostupné měny"
 
@@ -875,7 +896,6 @@ msgstr "Dokončit koncept"
 
 #: src/app/routes/_authenticated/_administrators/administrators.tsx:47
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:165
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:152
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:192
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:104
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:104
@@ -894,7 +914,7 @@ msgstr "Dokončit koncept"
 #: src/app/routes/_authenticated/_tax-categories/tax-categories_.$id.tsx:106
 #: src/app/routes/_authenticated/_tax-rates/tax-rates_.$id.tsx:113
 #: src/app/routes/_authenticated/_zones/zones_.$id.tsx:93
-#: src/lib/components/shared/asset/asset-gallery.tsx:750
+#: src/lib/components/shared/asset/asset-gallery.tsx:1088
 msgid "Name"
 msgstr "Název"
 
@@ -934,7 +954,7 @@ msgstr "Expedice vytvořena"
 msgid "Found {0} eligible shipping method{1}"
 msgstr "Nalezeno {0} vhodných způsobů dopravy"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:753
+#: src/lib/components/shared/asset/asset-gallery.tsx:1132
 #: src/lib/components/shared/asset/asset-properties.tsx:39
 msgid "Dimensions"
 msgstr "Rozměry"
@@ -960,7 +980,7 @@ msgstr "Přidat sloupec za"
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:421
 #: src/app/routes/_authenticated/_promotions/promotions_.$id.tsx:241
 #: src/app/routes/_authenticated/_system/scheduled-tasks.tsx:209
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:82
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:97
 #: src/lib/components/data-table/use-generated-columns.tsx:262
 msgid "Actions"
 msgstr "Akce"
@@ -1031,7 +1051,7 @@ msgstr "Chyba při načítání historie objednávky: {0}"
 msgid "Shipping address set for order"
 msgstr "Dodací adresa nastavena pro objednávku"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:173
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:218
 #: src/lib/components/shared/asset/asset-preview.tsx:153
 msgid "Focal Point"
 msgstr "Ohniskový bod"
@@ -1115,7 +1135,7 @@ msgstr "Plánovaná úloha bude provedena"
 msgid "New stock location"
 msgstr "Nový sklad"
 
-#: src/lib/components/data-table/data-table.tsx:714
+#: src/lib/components/data-table/data-table.tsx:773
 #: src/lib/components/data-table/use-generated-columns.tsx:238
 msgid "Select row"
 msgstr "Vybrat řádek"
@@ -1216,7 +1236,7 @@ msgstr "Koncept objednávky"
 msgid "Enter your email address and we will send you a link to reset your password"
 msgstr "Zadejte svou e-mailovou adresu a my vám zašleme odkaz pro obnovení hesla"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:40
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:248
 msgid "Appearance"
 msgstr ""
 
@@ -1275,8 +1295,9 @@ msgstr "Otevřít na nové kartě"
 msgid "Failed to update promotion"
 msgstr "Nepodařilo se aktualizovat akci"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:368
-#: src/lib/components/shared/asset/asset-gallery.tsx:380
+#: src/lib/components/shared/asset/asset-gallery.tsx:106
+#: src/lib/components/shared/asset/asset-gallery.tsx:526
+#: src/lib/components/shared/asset/asset-gallery.tsx:543
 msgid "Images"
 msgstr "Obrázky"
 
@@ -1289,7 +1310,7 @@ msgstr "API Keys"
 msgid "Search {name}..."
 msgstr "Hledat {name}..."
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:110
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:150
 msgid "Edit asset"
 msgstr "Upravit soubor"
 
@@ -1381,7 +1402,7 @@ msgstr "Zbývá:"
 msgid "No duplicator found with code \"{duplicatorCode}\" for {entityName}s"
 msgstr "Nenalezen žádný duplikátor s kódem \"{duplicatorCode}\" pro {entityName}"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:248
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:234
 msgid "Prices include tax for default tax zone"
 msgstr "Ceny zahrnují DPH pro výchozí daňovou zónu"
 
@@ -1403,7 +1424,7 @@ msgid "No items selected"
 msgstr "Nejsou vybrány žádné položky"
 
 #. placeholder {0}: selected.length
-#: src/lib/components/shared/asset/asset-gallery.tsx:476
+#: src/lib/components/shared/asset/asset-gallery.tsx:681
 msgid ", {0} selected"
 msgstr ", {0} vybráno"
 
@@ -1504,8 +1525,8 @@ msgstr "{productCount, plural, one {Tato skupina voleb je používána jedním d
 msgid "My Saved Views"
 msgstr "Moje uložené pohledy"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:57
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:129
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:42
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:115
 msgid "New channel"
 msgstr "Nový kanál"
 
@@ -1596,7 +1617,7 @@ msgstr "Akce úspěšně aktualizována"
 msgid "{rejected, plural, one {Failed to cancel {rejected} job} other {Failed to cancel {rejected} jobs}}"
 msgstr "{rejected, plural, one {Nepodařilo se zrušit {rejected} úlohu} few {Nepodařilo se zrušit {rejected} úlohy} other {Nepodařilo se zrušit {rejected} úloh}}"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:103
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:102
 msgid "We couldn't load these metrics"
 msgstr "Nepodařilo se načíst tyto metriky"
 
@@ -1609,8 +1630,12 @@ msgstr "Vyberte kanál"
 msgid "Display language"
 msgstr "Jazyk rozhraní"
 
-#: src/lib/components/shared/channel-color-picker.tsx:11
+#: src/lib/components/shared/channel-color-picker.tsx:16
 msgid "Color 2"
+msgstr ""
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:194
+msgid "The source file remains unchanged. Keep the original extension or omit it."
 msgstr ""
 
 #: src/app/routes/_authenticated/_orders/components/order-detail-shared.tsx:282
@@ -1639,7 +1664,7 @@ msgstr "před"
 msgid "Failed to set customer for order: {0}"
 msgstr "Nepodařilo se nastavit zákazníka pro objednávku: {0}"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:752
+#: src/lib/components/shared/asset/asset-gallery.tsx:1109
 msgid "Size"
 msgstr "Velikost"
 
@@ -1651,6 +1676,10 @@ msgstr "Nenalezen žádný překlad pro {0}"
 #: src/app/routes/_authenticated/_customers/customers.tsx:103
 msgid "New Customer"
 msgstr "Nový zákazník"
+
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:76
+msgid "Filter assets by tags"
+msgstr ""
 
 #: src/lib/framework/dashboard-widget/latest-orders-widget/index.tsx:54
 msgid "Latest Orders"
@@ -1670,7 +1699,7 @@ msgid "Use as the default billing address"
 msgstr "Použít jako výchozí fakturační adresu"
 
 #: src/app/common/delete-bulk-action.tsx:139
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:41
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:40
 #: src/lib/components/data-table/use-generated-columns.tsx:419
 #: src/lib/components/data-table/use-generated-columns.tsx:449
 #: src/lib/components/data-table/views-sheet.tsx:270
@@ -1700,7 +1729,7 @@ msgstr "Nepodařilo se vytvořit zemi"
 msgid "Countries"
 msgstr "Země"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:97
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:96
 msgid "Loading metrics…"
 msgstr "Načítání metrik…"
 
@@ -1767,7 +1796,7 @@ msgstr "Adresa úspěšně aktualizována"
 
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:226
 #: src/app/routes/_authenticated/_orders/components/fulfillment-details.tsx:141
-#: src/lib/components/shared/asset/asset-gallery.tsx:754
+#: src/lib/components/shared/asset/asset-gallery.tsx:1116
 #: src/lib/framework/layout-engine/page-layout.tsx:746
 msgid "Created"
 msgstr "Vytvořeno"
@@ -1907,7 +1936,7 @@ msgstr "Smazat variantu"
 msgid "No modifications made"
 msgstr "Nebyly provedeny žádné úpravy"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:240
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:226
 msgid "Default shipping zone"
 msgstr "Výchozí dopravní zóna"
 
@@ -2026,8 +2055,8 @@ msgstr "Refund úspěšně vypořádán"
 
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:106
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:155
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:115
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:140
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:155
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:126
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:171
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:84
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:94
@@ -2115,8 +2144,8 @@ msgstr "Začíná"
 msgid "Duplicate"
 msgstr "Duplikovat"
 
-#: src/lib/components/data-table/data-table.tsx:590
-#: src/lib/components/data-table/data-table.tsx:601
+#: src/lib/components/data-table/data-table.tsx:648
+#: src/lib/components/data-table/data-table.tsx:659
 #: src/lib/components/shared/customer-group-selector.tsx:60
 msgid "No results"
 msgstr "Žádné výsledky"
@@ -2125,7 +2154,7 @@ msgstr "Žádné výsledky"
 msgid "Column settings"
 msgstr "Nastavení sloupců"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:150
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:136
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:110
 #: src/app/routes/_authenticated/_facets/facets_.$facetId.values_.$id.tsx:127
 #: src/app/routes/_authenticated/_facets/facets_.$id.tsx:127
@@ -2163,7 +2192,7 @@ msgstr "Opravdu chcete smazat tuto adresu?"
 msgid "Failed to assign option group"
 msgstr "Nepodařilo se přiřadit skupinu voleb"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:89
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:103
 msgid "Failed to update asset"
 msgstr "Nepodařilo se aktualizovat soubor"
 
@@ -2234,7 +2263,7 @@ msgstr "Testovat způsob dopravy"
 msgid "Facet Values"
 msgstr "Hodnoty vlastností"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:85
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:99
 msgid "Successfully updated asset"
 msgstr "Soubor úspěšně aktualizován"
 
@@ -2596,7 +2625,7 @@ msgstr "Seznam hodnot"
 msgid "fieldName.zone"
 msgstr "Zóna"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:126
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:125
 msgid "No metrics for this period"
 msgstr "Za toto období nejsou žádné metriky"
 
@@ -2636,6 +2665,10 @@ msgstr "Nepodařilo se nastavit doručovací adresu pro objednávku: {0}"
 #: src/app/routes/_authenticated/_system/job-queue.tsx:228
 msgid "Cancel Job"
 msgstr "Zrušit úlohu"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:854
+msgid "No assets yet"
+msgstr ""
 
 #: src/app/routes/_authenticated/_promotions/promotions_.$id.tsx:194
 msgid "Ends at"
@@ -2700,12 +2733,12 @@ msgid "Save View"
 msgstr "Uložit zobrazení"
 
 #. placeholder {0}: selectedIds.size
+#. placeholder {0}: selectedTags.length
 #. placeholder {0}: selectedValues.size
-#. placeholder {0}: selection.length
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:76
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:48
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:91
 #: src/lib/components/data-table/data-table-facet-value-faceted-filter.tsx:137
 #: src/lib/components/data-table/data-table-faceted-filter.tsx:139
-#: src/lib/components/shared/asset/asset-bulk-actions.tsx:80
 #: src/lib/components/shared/configurable-operation-arg-summary.tsx:67
 msgid "{0} selected"
 msgstr "{0} vybráno"
@@ -2855,7 +2888,7 @@ msgstr "Nová daňová kategorie"
 #~ msgid "No stock locations available on current channel"
 #~ msgstr "Na aktuálním kanále nejsou k dispozici žádné sklady"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:101
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:87
 msgid "Successfully created channel"
 msgstr "Kanál úspěšně vytvořen"
 
@@ -2903,7 +2936,7 @@ msgstr "Úspěšně odebráno {successCount} vlastností z kanálu"
 msgid "New Product"
 msgstr "Nový produkt"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:40
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:54
 msgid "New asset"
 msgstr "Nový soubor"
 
@@ -2919,9 +2952,9 @@ msgstr "Přepočítat dopravu"
 #~ msgid "Select which options should apply to the existing variant \"{0}\""
 #~ msgstr "Vyberte, které volby by se měly vztahovat na existující variantu \"{0}\""
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:39
-#: src/app/routes/_authenticated/_assets/assets.tsx:17
-#: src/app/routes/_authenticated/_assets/assets.tsx:40
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:53
+#: src/app/routes/_authenticated/_assets/assets.tsx:19
+#: src/app/routes/_authenticated/_assets/assets.tsx:45
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:248
 #: src/app/routes/_authenticated/_product-variants/product-variants_.$id.tsx:777
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:380
@@ -2977,8 +3010,8 @@ msgstr "Sleva"
 msgid "Top Products"
 msgstr "Nejprodávanější produkty"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:367
-#: src/lib/components/shared/asset/asset-gallery.tsx:379
+#: src/lib/components/shared/asset/asset-gallery.tsx:525
+#: src/lib/components/shared/asset/asset-gallery.tsx:542
 msgid "All types"
 msgstr "Všechny typy"
 
@@ -3109,6 +3142,13 @@ msgstr ""
 msgid "Select an option"
 msgstr "Vyberte volbu"
 
+#. placeholder {0}: asset.name
+#. placeholder {0}: row.original.name
+#: src/lib/components/shared/asset/asset-gallery.tsx:1012
+#: src/lib/components/shared/asset/asset-gallery.tsx:1156
+msgid "Open {0}"
+msgstr ""
+
 #: src/lib/components/data-table/views-sheet.tsx:251
 msgid "Copy to Personal"
 msgstr "Zkopírovat do osobních"
@@ -3124,7 +3164,7 @@ msgstr "Smazat globální pohled"
 
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:106
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:155
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:140
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:126
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:171
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:84
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:94
@@ -3410,7 +3450,7 @@ msgstr "Nepodařilo se smazat pohled"
 msgid "Are you sure you want to navigate away from this page? Any unsaved changes will be lost."
 msgstr "Opravdu chcete opustit tuto stránku? Všechny neuložené změny budou ztraceny."
 
-#: src/lib/components/shared/channel-color-picker.tsx:10
+#: src/lib/components/shared/channel-color-picker.tsx:15
 msgid "Color 1"
 msgstr ""
 
@@ -3433,6 +3473,10 @@ msgstr "Sloupce"
 #: src/lib/components/shared/rich-text-editor/rich-text-editor.tsx:163
 msgid "Failed to upload image"
 msgstr "Nepodařilo se nahrát obrázek"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:854
+msgid "No assets match these filters"
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:146
 msgid "Option value name"
@@ -3467,7 +3511,7 @@ msgstr "Stát/Kraj"
 msgid "Failed to update option group"
 msgstr "Nepodařilo se aktualizovat skupinu voleb"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:201
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:187
 msgid "Channel defaults"
 msgstr "Výchozí nastavení kanálu"
 
@@ -3510,7 +3554,7 @@ msgstr "Nepodařilo se upravit objednávku"
 msgid "Includes tax at {taxRate}%"
 msgstr "Včetně daně {taxRate}%"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:82
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:81
 msgid "Order metrics"
 msgstr "Metriky objednávek"
 
@@ -3573,10 +3617,9 @@ msgstr "Spravovat globální pohledy"
 msgid "Processing..."
 msgstr "Zpracování..."
 
-#. placeholder {0}: totalItems === 1 ? 'asset' : 'assets'
 #: src/lib/components/shared/asset/asset-gallery.tsx:472
-msgid "{totalItems} {0} found"
-msgstr "Nalezeno {totalItems} {0}"
+#~ msgid "{totalItems} {0} found"
+#~ msgstr "Nalezeno {totalItems} {0}"
 
 #: src/lib/components/date-range-picker.tsx:122
 msgid "Select date range"
@@ -3619,9 +3662,13 @@ msgstr "Prodejce úspěšně vytvořen"
 msgid "Failed to update profile picture"
 msgstr ""
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:906
+msgid "We couldn't load assets"
+msgstr ""
+
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:58
 #: src/lib/framework/dashboard-widget/low-stock-widget/index.tsx:80
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:105
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:104
 #: src/lib/framework/dashboard-widget/top-products-widget/index.tsx:122
 msgid "Try again"
 msgstr "Zkusit znovu"
@@ -3659,12 +3706,12 @@ msgstr "Poznámka"
 msgid "Bold"
 msgstr "Tučné"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:178
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:164
 #: src/app/routes/_authenticated/_global-settings/global-settings.tsx:112
 msgid "Available languages"
 msgstr "Dostupné jazyky"
 
-#: src/lib/components/shared/channel-color-picker.tsx:12
+#: src/lib/components/shared/channel-color-picker.tsx:17
 msgid "Color 3"
 msgstr ""
 
@@ -3687,11 +3734,11 @@ msgstr "Nenalezeno"
 msgid "Facet values"
 msgstr "Hodnoty vlastností"
 
-#: src/lib/components/data-table/data-table.tsx:312
+#: src/lib/components/data-table/data-table.tsx:370
 msgid "Failed to reorder items"
 msgstr "Nepodařilo se přeuspořádat položky"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:91
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:101
 msgid "Total Orders"
 msgstr "Celkem objednávek"
 
@@ -3740,6 +3787,10 @@ msgstr "Platba autorizována"
 #: src/app/routes/_authenticated/_roles/roles_.$id.tsx:62
 msgid "Successfully updated role"
 msgstr "Role úspěšně aktualizována"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:135
+msgid "The display name can omit the extension or keep {sourceExtensionLabel}. It cannot use a different file extension."
+msgstr ""
 
 #: src/lib/components/shared/customer-address-form.tsx:184
 msgid "Select a country"
@@ -3837,7 +3888,7 @@ msgstr "Nebyly nalezeny žádné kontroly"
 msgid "Settle payment"
 msgstr "Vypořádat platbu"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:56
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:41
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:24
 #: src/app/routes/_authenticated/_option-groups/option-groups_.$id.tsx:210
@@ -3856,7 +3907,7 @@ msgstr "Doprava vrácena"
 msgid "Failed to create option in group \"{0}\""
 msgstr ""
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:376
+#: src/lib/components/shared/asset/asset-gallery.tsx:539
 msgid "Asset type"
 msgstr "Typ souboru"
 
@@ -4083,7 +4134,7 @@ msgstr "Neuložené zobrazení"
 msgid "Cannot remove from active channel"
 msgstr "Nelze odstranit z aktivního kanálu"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:179
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:225
 #: src/lib/components/shared/asset/asset-preview.tsx:162
 msgid "Not set"
 msgstr "Nenastaveno"
@@ -4192,7 +4243,7 @@ msgstr "Hledat správce..."
 msgid "Created by"
 msgstr "Vytvořil"
 
-#: src/lib/components/data-table/data-table.tsx:591
+#: src/lib/components/data-table/data-table.tsx:649
 msgid "No items match your current filters. Try clearing them to see more."
 msgstr "Aktuálním filtrům neodpovídají žádné položky. Zkuste je vymazat, abyste viděli více."
 
@@ -4389,6 +4440,7 @@ msgstr "je v"
 msgid "Email"
 msgstr "E-mail"
 
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:80
 #: src/lib/components/data-table/add-filter-menu.tsx:47
 msgid "Filter"
 msgstr "Filtr"
@@ -4406,8 +4458,8 @@ msgid "Loading customers…"
 msgstr "Načítání zákazníků…"
 
 #: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:104
-msgid "Filter by tags"
-msgstr "Filtrovat podle štítků"
+#~ msgid "Filter by tags"
+#~ msgstr "Filtrovat podle štítků"
 
 #: src/lib/components/login/login-form.tsx:74
 msgid "Sign in to access the admin dashboard"
@@ -4420,6 +4472,10 @@ msgstr "Přihlaste se pro přístup k administrátorskému panelu"
 #: src/lib/components/data-table/filters/data-table-boolean-filter.tsx:57
 msgid "False"
 msgstr "Nepravda"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:138
+msgid "Asset name extension does not match the source file"
+msgstr ""
 
 #: src/lib/components/layout/nav-user.tsx:121
 msgctxt "theme"
@@ -4482,12 +4538,12 @@ msgstr "Vyberte velikost tabulky"
 msgid "Failed to update payment state"
 msgstr "Nepodařilo se aktualizovat stav platby"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:86
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:96
 msgid "Your orders summary"
 msgstr "Přehled vašich objednávek"
 
 #: src/app/routes/_authenticated/_profile/profile.tsx:184
-#: src/lib/components/shared/asset/asset-gallery.tsx:406
+#: src/lib/components/shared/asset/asset-gallery.tsx:589
 msgid "Upload"
 msgstr "Nahrát"
 
@@ -4496,7 +4552,7 @@ msgid "Product with options"
 msgstr "Produkt s volbami"
 
 #. placeholder {0}: filteredTags.length
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:163
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:196
 msgid "Showing all {0} results"
 msgstr "Zobrazeno všech {0} výsledků"
 
@@ -4621,7 +4677,7 @@ msgid "Manage my views"
 msgstr "Spravovat moje zobrazení"
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:41
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:87
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:86
 msgid "Order Total"
 msgstr "Celkem objednávka"
 
@@ -4638,7 +4694,9 @@ msgstr "Množství"
 msgid "Inline code"
 msgstr "Řádkový kód"
 
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:45
 #: src/app/routes/_authenticated/_assets/components/asset-tags-editor.tsx:104
+#: src/lib/components/shared/asset/asset-gallery.tsx:1200
 msgid "Tags"
 msgstr "Štítky"
 
@@ -4749,7 +4807,7 @@ msgid "paymentState.Settled"
 msgstr "Vypořádána"
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:43
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:89
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:88
 msgid "Average Order Value"
 msgstr "Průměrná hodnota objednávky"
 
@@ -4783,6 +4841,10 @@ msgstr "Nepodařilo se přejmenovat globální pohled"
 #~ msgid "Insert a new hyperlink with URL and target options"
 #~ msgstr "Vložit nový hypertextový odkaz s URL a možnostmi cíle"
 
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:192
+msgid "Display name"
+msgstr ""
+
 #: src/lib/components/shared/rich-text-editor/image-dialog.tsx:194
 msgid "Height"
 msgstr "Výška"
@@ -4796,6 +4858,10 @@ msgstr "Je vyžadován refund ve výši {formattedDiff}. Vyberte částky plateb
 #: src/app/routes/_authenticated/_orders/components/refund-order-dialog.tsx:100
 msgid "Unit price"
 msgstr "Jednotková cena"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:857
+msgid "Try changing your search, asset type, or selected tags."
+msgstr ""
 
 #: src/lib/components/login/forgot-password-form.tsx:87
 msgid "If an account exists for {submittedEmailAddress}, you will receive an email with a link to reset your password."
@@ -4830,7 +4896,7 @@ msgstr "Přidat skupiny zákazníků"
 msgid "Available Languages"
 msgstr "Dostupné jazyky"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:114
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:129
 msgid "Reset selection"
 msgstr "Resetovat výběr"
 
@@ -4882,7 +4948,7 @@ msgstr "Produkty"
 msgid "Promotions"
 msgstr "Akce"
 
-#: src/lib/components/shared/channel-color-picker.tsx:9
+#: src/lib/components/shared/channel-color-picker.tsx:14
 msgid "Neutral"
 msgstr ""
 
@@ -4897,6 +4963,10 @@ msgstr "Starý e-mail:"
 #: src/lib/components/data-table/views-sheet.tsx:144
 msgid "Save a view as \"Global\" to make it available to all users."
 msgstr "Uložte pohled jako \"Globální\", aby byl dostupný všem uživatelům."
+
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:147
+msgid "Search tags..."
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/components/generate-missing-variants-dialog.tsx:154
 #: src/app/routes/_authenticated/_products/components/generate-variants-panel.tsx:90
@@ -4924,7 +4994,7 @@ msgstr "Rotace klíče"
 msgid "Hide password"
 msgstr "Skrýt heslo"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:71
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:86
 msgid "Bulk actions"
 msgstr "Hromadné akce"
 
@@ -4962,7 +5032,7 @@ msgstr "Vymazat filtr"
 msgid "Regions"
 msgstr "Regiony"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:445
+#: src/lib/components/shared/asset/asset-gallery.tsx:629
 msgid "Drop files here to upload"
 msgstr "Přetáhněte sem soubory pro nahrání"
 
@@ -4974,7 +5044,7 @@ msgstr "Zobrazit metadata platby"
 msgid "Toggle all visible variants"
 msgstr "Přepnout všechny viditelné varianty"
 
-#: src/lib/components/shared/channel-color-picker.tsx:13
+#: src/lib/components/shared/channel-color-picker.tsx:18
 msgid "Color 4"
 msgstr ""
 
@@ -5259,8 +5329,8 @@ msgid "Failed to update order"
 msgstr "Nepodařilo se aktualizovat objednávku"
 
 #: src/lib/components/shared/asset/asset-bulk-actions.tsx:84
-msgid "With selected..."
-msgstr "S vybranými..."
+#~ msgid "With selected..."
+#~ msgstr "S vybranými..."
 
 #: src/lib/components/login/reset-password-form.tsx:146
 msgid "Choose a new password for your account"
@@ -5333,7 +5403,7 @@ msgstr "Stát / Kraj"
 msgid "Enabled"
 msgstr "Povoleno"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:483
+#: src/lib/components/shared/asset/asset-gallery.tsx:688
 msgid "Items per page"
 msgstr "Položek na stránku"
 
@@ -5399,6 +5469,10 @@ msgstr "Vaše poslední objednávky"
 #: src/lib/framework/defaults.ts:153
 msgid "Scheduled Tasks"
 msgstr "Plánované úlohy"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:139
+msgid "Use {sourceExtensionLabel} or remove the extension from the display name."
+msgstr ""
 
 #: src/lib/components/data-table/use-generated-columns.tsx:428
 msgid "Are you sure you want to delete this item? This action cannot be undone."
@@ -5530,7 +5604,7 @@ msgid "Failed to update variant"
 msgstr "Nepodařilo se aktualizovat variantu"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:69
-#: src/lib/components/data-table/data-table.tsx:717
+#: src/lib/components/data-table/data-table.tsx:776
 msgid "Go to previous page"
 msgstr "Přejít na předchozí stránku"
 
@@ -5613,6 +5687,11 @@ msgstr "Daňové sazby"
 #: src/app/routes/_authenticated/_customer-groups/components/customer-group-members-bulk-actions.tsx:40
 msgid "Failed to remove customers from group"
 msgstr "Nepodařilo se odebrat zákazníky ze skupiny"
+
+#. placeholder {0}: failedAssets.length
+#: src/lib/components/shared/asset/asset-gallery.tsx:325
+msgid "Failed to upload {0} assets"
+msgstr ""
 
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:56
 msgid "We couldn't load the latest customers"
@@ -5716,7 +5795,7 @@ msgstr "Výchozí jazyk"
 msgid "Top Products Widget"
 msgstr "Widget nejprodávanějších produktů"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:159
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:145
 msgid "Token"
 msgstr "Token"
 
@@ -5780,8 +5859,8 @@ msgid "Edit Note"
 msgstr "Upravit poznámku"
 
 #: src/lib/components/shared/asset/asset-gallery.tsx:635
-msgid "No assets found. Try adjusting your filters."
-msgstr "Nebyly nalezeny žádné soubory. Zkuste upravit filtry."
+#~ msgid "No assets found. Try adjusting your filters."
+#~ msgstr "Nebyly nalezeny žádné soubory. Zkuste upravit filtry."
 
 #: src/app/routes/_authenticated/_products/components/option-groups-editor.tsx:161
 msgid "Add Option"
@@ -5809,8 +5888,10 @@ msgstr "Administrátor byl úspěšně aktualizován"
 
 #: src/lib/components/data-table/data-table-facet-value-faceted-filter.tsx:263
 #: src/lib/components/data-table/data-table-faceted-filter.tsx:225
-#: src/lib/components/data-table/data-table.tsx:594
-#: src/lib/components/shared/asset/asset-gallery.tsx:361
+#: src/lib/components/data-table/data-table.tsx:652
+#: src/lib/components/shared/asset/asset-gallery.tsx:504
+#: src/lib/components/shared/asset/asset-gallery.tsx:511
+#: src/lib/components/shared/asset/asset-gallery.tsx:866
 msgid "Clear filters"
 msgstr "Vymazat filtry"
 
@@ -5825,7 +5906,7 @@ msgstr "Expedice #{0} z {1} na {2}"
 msgid "Failed to delete global view"
 msgstr "Nepodařilo se smazat globální pohled"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:206
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:192
 msgid "Default language"
 msgstr "Výchozí jazyk"
 
@@ -5839,8 +5920,13 @@ msgstr "Stav"
 msgid "No options found"
 msgstr "Nebyly nalezeny žádné možnosti"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:370
-#: src/lib/components/shared/asset/asset-gallery.tsx:382
+#: src/lib/components/shared/asset/asset-gallery.tsx:871
+msgid "Upload assets"
+msgstr ""
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:110
+#: src/lib/components/shared/asset/asset-gallery.tsx:528
+#: src/lib/components/shared/asset/asset-gallery.tsx:545
 msgid "Binary"
 msgstr "Binární"
 
@@ -6114,8 +6200,9 @@ msgstr "Vytvořte svou první akci"
 msgid "Remove item"
 msgstr "Odebrat položku"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:369
-#: src/lib/components/shared/asset/asset-gallery.tsx:381
+#: src/lib/components/shared/asset/asset-gallery.tsx:108
+#: src/lib/components/shared/asset/asset-gallery.tsx:527
+#: src/lib/components/shared/asset/asset-gallery.tsx:544
 msgid "Video"
 msgstr "Video"
 
@@ -6131,7 +6218,7 @@ msgstr "Variantu nelze přidat. Ujistěte se, že nadřazený produkt je povolen
 #~ msgid "An unknown error occurred"
 #~ msgstr "Došlo k neznámé chybě"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:81
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:80
 msgid "Metrics"
 msgstr "Metriky"
 
@@ -6197,8 +6284,7 @@ msgstr "Smazat koncept"
 msgid "Source"
 msgstr "Zdroj"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:107
-#: src/lib/components/shared/asset/asset-bulk-actions.tsx:98
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:122
 msgid "No actions available"
 msgstr "Žádné akce k dispozici"
 
@@ -6207,8 +6293,8 @@ msgstr "Žádné akce k dispozici"
 msgid "Customize channel colors"
 msgstr ""
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:108
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:114
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:94
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:100
 msgid "Failed to update channel"
 msgstr "Nepodařilo se aktualizovat kanál"
 
@@ -6234,8 +6320,13 @@ msgstr "Vlastnost úspěšně aktualizována"
 msgid "Strikethrough"
 msgstr "Přeškrtnuté"
 
+#. placeholder {0}: createdAssets.length
+#: src/lib/components/shared/asset/asset-gallery.tsx:322
+msgid "Uploaded {0} assets"
+msgstr ""
+
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:92
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:127
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:126
 #: src/lib/framework/dashboard-widget/top-products-widget/index.tsx:154
 msgid "Try selecting a different date range."
 msgstr "Zkuste vybrat jiné časové období."
@@ -6265,7 +6356,7 @@ msgstr "Objednávka prodejce"
 msgid "New facet"
 msgstr "Nová vlastnost"
 
-#: src/lib/components/shared/channel-color-picker.tsx:14
+#: src/lib/components/shared/channel-color-picker.tsx:19
 msgid "Color 5"
 msgstr ""
 
@@ -6278,13 +6369,13 @@ msgstr "Opravdu chcete odebrat tuto skupinu možností z produktu?"
 msgid "Description (alt)"
 msgstr "Popis (alt)"
 
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:124
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:154
 #: src/app/routes/_authenticated/_assets/components/asset-tags-editor.tsx:164
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:99
 msgid "No tags found"
 msgstr "Nenalezeny žádné štítky"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:219
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:205
 msgid "Default currency"
 msgstr "Výchozí měna"
 
@@ -6304,7 +6395,7 @@ msgstr "{cancellableCount, plural, one {Opravdu chcete zrušit {cancellableCount
 msgid "Go to option group"
 msgstr ""
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:101
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:111
 msgid "Total Revenue"
 msgstr "Celkové tržby"
 
@@ -6410,7 +6501,7 @@ msgstr "Přesunout na nejvyšší úroveň"
 msgid "Clear"
 msgstr "Vymazat"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:85
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:95
 msgid "Orders Summary"
 msgstr "Přehled objednávek"
 
@@ -6418,7 +6509,8 @@ msgstr "Přehled objednávek"
 msgid "Search stock locations..."
 msgstr "Hledat sklady..."
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:349
+#: src/lib/components/shared/asset/asset-gallery.tsx:486
+#: src/lib/components/shared/asset/asset-gallery.tsx:1197
 msgid "Search assets..."
 msgstr "Hledat soubory..."
 
@@ -6481,7 +6573,7 @@ msgstr "Nepodařilo se odebrat vlastnost z kanálu: {message}"
 #~ msgid "Set link"
 #~ msgstr "Nastavit odkaz"
 
-#: src/lib/components/data-table/data-table.tsx:716
+#: src/lib/components/data-table/data-table.tsx:775
 msgid "Pagination"
 msgstr "Stránkování"
 
@@ -6532,7 +6624,7 @@ msgid "View result"
 msgstr "Zobrazit výsledek"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:20
-#: src/lib/components/data-table/data-table.tsx:719
+#: src/lib/components/data-table/data-table.tsx:778
 msgid "Rows per page"
 msgstr "Řádků na stránku"
 
@@ -6629,7 +6721,7 @@ msgid "Failed to create product variant"
 msgstr "Nepodařilo se vytvořit variantu produktu"
 
 #: src/lib/components/data-input/relation-selector.tsx:418
-#: src/lib/components/data-table/data-table.tsx:501
+#: src/lib/components/data-table/data-table.tsx:559
 msgid "Search..."
 msgstr "Hledat..."
 
@@ -6713,9 +6805,8 @@ msgstr "Dostupné podmínky"
 msgid "Active filters"
 msgstr "Aktivní filtry"
 
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:176
 #: src/lib/components/data-table/data-table-active-filters-popover.tsx:54
-#: src/lib/components/data-table/data-table.tsx:577
+#: src/lib/components/data-table/data-table.tsx:635
 msgid "Clear all"
 msgstr "Vymazat vše"
 
@@ -6757,7 +6848,7 @@ msgstr "Přidat platbu k objednávce"
 msgid "Create variants for the option combinations that don't exist yet. Combinations that already exist are shown for context and can't be edited."
 msgstr "Vytvořte varianty pro kombinace možností, které ještě neexistují. Již existující kombinace jsou zobrazeny pro kontext a nelze je upravovat."
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:161
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:147
 msgid "The token is used to specify the channel when making API requests."
 msgstr "Token se používá k určení kanálu při provádění API požadavků."
 
@@ -6811,6 +6902,10 @@ msgstr "Způsob platby je povinný"
 #: src/app/routes/_authenticated/_customers/customers_.$id.tsx:134
 msgid "Failed to add customer to group"
 msgstr "Nepodařilo se přidat zákazníka do skupiny"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:675
+msgid "{totalItems, plural, one {{totalItems} asset found} other {{totalItems} assets found}}"
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:338
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:291

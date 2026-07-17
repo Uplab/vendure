@@ -35,7 +35,7 @@ msgstr "查看更改"
 msgid "Tracking code"
 msgstr "跟踪代码"
 
-#: src/lib/components/data-table/data-table.tsx:713
+#: src/lib/components/data-table/data-table.tsx:772
 #: src/lib/components/data-table/use-generated-columns.tsx:226
 msgid "Select all rows"
 msgstr "选择所有行"
@@ -162,7 +162,7 @@ msgstr "成功删除"
 #~ msgid "Remove from current channel"
 #~ msgstr "从当前渠道中删除"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:25
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:22
 msgid "Deleted {selectionLength} assets"
 msgstr "已删除 {selectionLength} 个资源"
 
@@ -174,14 +174,16 @@ msgstr "已成功更新税率"
 msgid "Enter custom reason..."
 msgstr "输入自定义原因..."
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:751
+#: src/lib/components/shared/asset/asset-gallery.tsx:1100
 msgid "Type"
 msgstr "类型"
 
+#. placeholder {0}: asset.name
 #. placeholder {0}: entityName.toLowerCase()
 #. placeholder {0}: group.name
 #: src/app/routes/_authenticated/_products/components/product-option-select.tsx:57
 #: src/lib/components/data-input/default-relation-input.tsx:671
+#: src/lib/components/shared/asset/asset-gallery.tsx:976
 msgid "Select {0}"
 msgstr "选择 {0}"
 
@@ -212,7 +214,7 @@ msgstr "当前"
 msgid "No fulfillments"
 msgstr "无履行"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:250
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:236
 msgid "When this is enabled, the prices entered in the product catalog will be included in the tax for the default tax zone."
 msgstr "启用后，商品目录中输入的价格将包含默认税务区域的税费。"
 
@@ -241,7 +243,7 @@ msgstr "自动刷新：{0}"
 msgid "Deleted {deleted} {entityName}"
 msgstr "已删除 {deleted} {entityName}"
 
-#: src/lib/components/data-table/data-table.tsx:602
+#: src/lib/components/data-table/data-table.tsx:660
 msgid "There are no items to display yet."
 msgstr "暂无可显示的项目。"
 
@@ -280,7 +282,7 @@ msgstr "前往仪表盘"
 msgid "{fulfilled, plural, one {Successfully cancelled {fulfilled} job} other {Successfully cancelled {fulfilled} jobs}}"
 msgstr "{fulfilled, plural, other {成功取消 {fulfilled} 个任务}}"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:170
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:156
 msgid "Seller"
 msgstr "卖家"
 
@@ -341,6 +343,16 @@ msgstr "确定要删除此变体吗？"
 #~ msgid "All resources are up and running"
 #~ msgstr "所有资源正在运行"
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:1015
+#: src/lib/components/shared/asset/asset-gallery.tsx:1159
+msgid "Open"
+msgstr ""
+
+#. placeholder {0}: asset.name
+#: src/lib/components/shared/asset/asset-gallery.tsx:989
+msgid "Toggle selection for {0}"
+msgstr ""
+
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:87
 msgid "Failed to create administrator"
 msgstr "创建管理员失败"
@@ -353,6 +365,10 @@ msgstr "否"
 #: src/app/routes/_authenticated/_product-variants/product-variants_.$id.tsx:176
 msgid "Successfully updated product variant"
 msgstr "已成功更新商品变体"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:859
+msgid "Upload images, videos, or files to start building your asset library."
+msgstr ""
 
 #: src/app/common/delete-bulk-action.tsx:114
 msgid "Failed to delete {failed} {entityName}: {allErrors}"
@@ -410,6 +426,7 @@ msgstr "没有可添加的小部件"
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:290
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:203
 #: src/app/routes/_authenticated/_profile/profile.tsx:78
+#: src/lib/components/shared/asset/asset-gallery.tsx:334
 #: src/lib/components/shared/asset/asset-preview.tsx:127
 msgid "Unknown error"
 msgstr "未知错误"
@@ -449,8 +466,8 @@ msgctxt "date-range"
 msgid "Last 7 days"
 msgstr "过去7天"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:108
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:114
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:94
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:100
 msgid "Failed to create channel"
 msgstr "创建渠道失败"
 
@@ -463,7 +480,7 @@ msgstr "开发者模式"
 msgid "New Role"
 msgstr "新角色"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:28
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:25
 msgid "Failed to delete assets: {message}"
 msgstr "删除资源失败：{message}"
 
@@ -544,6 +561,10 @@ msgstr "新集合"
 msgid "Insights"
 msgstr "洞察"
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:333
+msgid "Failed to upload assets"
+msgstr ""
+
 #: src/app/routes/_authenticated/_system/scheduled-tasks.tsx:226
 msgid "Run"
 msgstr "运行"
@@ -588,7 +609,7 @@ msgstr "管理员"
 #~ msgstr "总价：<0/>"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:82
-#: src/lib/components/data-table/data-table.tsx:718
+#: src/lib/components/data-table/data-table.tsx:777
 msgid "Go to next page"
 msgstr "转到下一页"
 
@@ -609,7 +630,7 @@ msgid "Search options..."
 msgstr "搜索选项..."
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:39
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:86
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:85
 msgid "Order Count"
 msgstr "订单数量"
 
@@ -708,7 +729,7 @@ msgstr "移动集合"
 msgid "Roles"
 msgstr "角色"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:395
+#: src/lib/components/shared/asset/asset-gallery.tsx:568
 msgid "Grid view"
 msgstr "网格视图"
 
@@ -728,7 +749,7 @@ msgstr "全局视图已成功转换为个人视图"
 msgid "Fulfillment transitioned"
 msgstr "履行已转换"
 
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:42
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:41
 msgid "Are you sure you want to delete {selectionLength} assets?"
 msgstr "确定要删除 {selectionLength} 个资源吗？"
 
@@ -736,7 +757,7 @@ msgstr "确定要删除 {selectionLength} 个资源吗？"
 msgid "Sign in"
 msgstr "登录"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:398
+#: src/lib/components/shared/asset/asset-gallery.tsx:571
 msgid "List view"
 msgstr "列表视图"
 
@@ -784,7 +805,7 @@ msgstr "选择地址"
 msgid "Payment eligibility checker"
 msgstr "支付资格检查器"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:232
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:218
 msgid "Default tax zone"
 msgstr "默认税务区域"
 
@@ -815,11 +836,11 @@ msgstr "筛选..."
 msgid "New facet value"
 msgstr "新属性值"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:42
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:250
 msgid "Choose the shared marker color used for this channel."
 msgstr ""
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:101
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:87
 msgid "Successfully updated channel"
 msgstr "已成功更新渠道"
 
@@ -831,7 +852,7 @@ msgstr "显示更少"
 msgid "Short date"
 msgstr "短日期"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:190
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:176
 msgid "Available currencies"
 msgstr "可用货币"
 
@@ -875,7 +896,6 @@ msgstr "完成草稿"
 
 #: src/app/routes/_authenticated/_administrators/administrators.tsx:47
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:165
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:152
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:192
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:104
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:104
@@ -894,7 +914,7 @@ msgstr "完成草稿"
 #: src/app/routes/_authenticated/_tax-categories/tax-categories_.$id.tsx:106
 #: src/app/routes/_authenticated/_tax-rates/tax-rates_.$id.tsx:113
 #: src/app/routes/_authenticated/_zones/zones_.$id.tsx:93
-#: src/lib/components/shared/asset/asset-gallery.tsx:750
+#: src/lib/components/shared/asset/asset-gallery.tsx:1088
 msgid "Name"
 msgstr "名称"
 
@@ -934,7 +954,7 @@ msgstr "履行已创建"
 msgid "Found {0} eligible shipping method{1}"
 msgstr "找到 {0} 个符合条件的配送方式"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:753
+#: src/lib/components/shared/asset/asset-gallery.tsx:1132
 #: src/lib/components/shared/asset/asset-properties.tsx:39
 msgid "Dimensions"
 msgstr "尺寸"
@@ -960,7 +980,7 @@ msgstr "在后面添加列"
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:421
 #: src/app/routes/_authenticated/_promotions/promotions_.$id.tsx:241
 #: src/app/routes/_authenticated/_system/scheduled-tasks.tsx:209
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:82
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:97
 #: src/lib/components/data-table/use-generated-columns.tsx:262
 msgid "Actions"
 msgstr "操作"
@@ -1031,7 +1051,7 @@ msgstr "加载订单历史出错：{0}"
 msgid "Shipping address set for order"
 msgstr "订单已设置配送地址"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:173
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:218
 #: src/lib/components/shared/asset/asset-preview.tsx:153
 msgid "Focal Point"
 msgstr "焦点"
@@ -1115,7 +1135,7 @@ msgstr "将执行计划任务"
 msgid "New stock location"
 msgstr "新库存位置"
 
-#: src/lib/components/data-table/data-table.tsx:714
+#: src/lib/components/data-table/data-table.tsx:773
 #: src/lib/components/data-table/use-generated-columns.tsx:238
 msgid "Select row"
 msgstr "选择行"
@@ -1216,7 +1236,7 @@ msgstr "草稿订单"
 msgid "Enter your email address and we will send you a link to reset your password"
 msgstr "输入您的电子邮件地址，我们将向您发送重置密码的链接"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:40
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:248
 msgid "Appearance"
 msgstr ""
 
@@ -1275,8 +1295,9 @@ msgstr "在新标签页中打开"
 msgid "Failed to update promotion"
 msgstr "更新促销失败"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:368
-#: src/lib/components/shared/asset/asset-gallery.tsx:380
+#: src/lib/components/shared/asset/asset-gallery.tsx:106
+#: src/lib/components/shared/asset/asset-gallery.tsx:526
+#: src/lib/components/shared/asset/asset-gallery.tsx:543
 msgid "Images"
 msgstr "图片"
 
@@ -1289,7 +1310,7 @@ msgstr "API Keys"
 msgid "Search {name}..."
 msgstr "搜索 {name}..."
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:110
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:150
 msgid "Edit asset"
 msgstr "编辑资源"
 
@@ -1381,7 +1402,7 @@ msgstr "剩余："
 msgid "No duplicator found with code \"{duplicatorCode}\" for {entityName}s"
 msgstr "未找到代码为\"{duplicatorCode}\"的 {entityName} 复制器"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:248
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:234
 msgid "Prices include tax for default tax zone"
 msgstr "价格包含默认税务区域的税费"
 
@@ -1403,7 +1424,7 @@ msgid "No items selected"
 msgstr "未选择项目"
 
 #. placeholder {0}: selected.length
-#: src/lib/components/shared/asset/asset-gallery.tsx:476
+#: src/lib/components/shared/asset/asset-gallery.tsx:681
 msgid ", {0} selected"
 msgstr "，已选择 {0} 项"
 
@@ -1504,8 +1525,8 @@ msgstr "{productCount, plural, one {此选项组被另一个产品使用。更�
 msgid "My Saved Views"
 msgstr "我的保存视图"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:57
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:129
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:42
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:115
 msgid "New channel"
 msgstr "新渠道"
 
@@ -1596,7 +1617,7 @@ msgstr "已成功更新促销"
 msgid "{rejected, plural, one {Failed to cancel {rejected} job} other {Failed to cancel {rejected} jobs}}"
 msgstr "{rejected, plural, other {取消 {rejected} 个任务失败}}"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:103
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:102
 msgid "We couldn't load these metrics"
 msgstr "无法加载这些指标"
 
@@ -1609,8 +1630,12 @@ msgstr "选择一个渠道"
 msgid "Display language"
 msgstr "显示语言"
 
-#: src/lib/components/shared/channel-color-picker.tsx:11
+#: src/lib/components/shared/channel-color-picker.tsx:16
 msgid "Color 2"
+msgstr ""
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:194
+msgid "The source file remains unchanged. Keep the original extension or omit it."
 msgstr ""
 
 #: src/app/routes/_authenticated/_orders/components/order-detail-shared.tsx:282
@@ -1639,7 +1664,7 @@ msgstr "之前"
 msgid "Failed to set customer for order: {0}"
 msgstr "为订单设置客户失败：{0}"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:752
+#: src/lib/components/shared/asset/asset-gallery.tsx:1109
 msgid "Size"
 msgstr "大小"
 
@@ -1651,6 +1676,10 @@ msgstr "未找到 {0} 的翻译"
 #: src/app/routes/_authenticated/_customers/customers.tsx:103
 msgid "New Customer"
 msgstr "新客户"
+
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:76
+msgid "Filter assets by tags"
+msgstr ""
 
 #: src/lib/framework/dashboard-widget/latest-orders-widget/index.tsx:54
 msgid "Latest Orders"
@@ -1670,7 +1699,7 @@ msgid "Use as the default billing address"
 msgstr "用作默认账单地址"
 
 #: src/app/common/delete-bulk-action.tsx:139
-#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:41
+#: src/app/routes/_authenticated/_assets/components/asset-bulk-actions.tsx:40
 #: src/lib/components/data-table/use-generated-columns.tsx:419
 #: src/lib/components/data-table/use-generated-columns.tsx:449
 #: src/lib/components/data-table/views-sheet.tsx:270
@@ -1700,7 +1729,7 @@ msgstr "创建国家失败"
 msgid "Countries"
 msgstr "国家"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:97
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:96
 msgid "Loading metrics…"
 msgstr "正在加载指标…"
 
@@ -1767,7 +1796,7 @@ msgstr "地址已成功更新"
 
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:226
 #: src/app/routes/_authenticated/_orders/components/fulfillment-details.tsx:141
-#: src/lib/components/shared/asset/asset-gallery.tsx:754
+#: src/lib/components/shared/asset/asset-gallery.tsx:1116
 #: src/lib/framework/layout-engine/page-layout.tsx:746
 msgid "Created"
 msgstr "已创建"
@@ -1907,7 +1936,7 @@ msgstr "删除变体"
 msgid "No modifications made"
 msgstr "未进行修改"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:240
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:226
 msgid "Default shipping zone"
 msgstr "默认配送区域"
 
@@ -2026,8 +2055,8 @@ msgstr "退款已成功完成"
 
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:106
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:155
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:115
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:140
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:155
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:126
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:171
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:84
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:94
@@ -2115,8 +2144,8 @@ msgstr "开始于"
 msgid "Duplicate"
 msgstr "复制"
 
-#: src/lib/components/data-table/data-table.tsx:590
-#: src/lib/components/data-table/data-table.tsx:601
+#: src/lib/components/data-table/data-table.tsx:648
+#: src/lib/components/data-table/data-table.tsx:659
 #: src/lib/components/shared/customer-group-selector.tsx:60
 msgid "No results"
 msgstr "无结果"
@@ -2125,7 +2154,7 @@ msgstr "无结果"
 msgid "Column settings"
 msgstr "列设置"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:150
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:136
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:110
 #: src/app/routes/_authenticated/_facets/facets_.$facetId.values_.$id.tsx:127
 #: src/app/routes/_authenticated/_facets/facets_.$id.tsx:127
@@ -2163,7 +2192,7 @@ msgstr "确定要删除此地址吗？"
 msgid "Failed to assign option group"
 msgstr "分配选项组失败"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:89
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:103
 msgid "Failed to update asset"
 msgstr "更新资源失败"
 
@@ -2234,7 +2263,7 @@ msgstr "测试配送方式"
 msgid "Facet Values"
 msgstr "属性值"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:85
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:99
 msgid "Successfully updated asset"
 msgstr "已成功更新资源"
 
@@ -2596,7 +2625,7 @@ msgstr "值列表"
 msgid "fieldName.zone"
 msgstr "区域"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:126
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:125
 msgid "No metrics for this period"
 msgstr "此时间段内没有指标"
 
@@ -2636,6 +2665,10 @@ msgstr "设置订单配送地址失败：{0}"
 #: src/app/routes/_authenticated/_system/job-queue.tsx:228
 msgid "Cancel Job"
 msgstr "取消作业"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:854
+msgid "No assets yet"
+msgstr ""
 
 #: src/app/routes/_authenticated/_promotions/promotions_.$id.tsx:194
 msgid "Ends at"
@@ -2700,12 +2733,12 @@ msgid "Save View"
 msgstr "保存视图"
 
 #. placeholder {0}: selectedIds.size
+#. placeholder {0}: selectedTags.length
 #. placeholder {0}: selectedValues.size
-#. placeholder {0}: selection.length
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:76
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:48
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:91
 #: src/lib/components/data-table/data-table-facet-value-faceted-filter.tsx:137
 #: src/lib/components/data-table/data-table-faceted-filter.tsx:139
-#: src/lib/components/shared/asset/asset-bulk-actions.tsx:80
 #: src/lib/components/shared/configurable-operation-arg-summary.tsx:67
 msgid "{0} selected"
 msgstr "已选择 {0} 个"
@@ -2855,7 +2888,7 @@ msgstr "新税务类别"
 #~ msgid "No stock locations available on current channel"
 #~ msgstr "当前渠道无可用库存位置"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:101
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:87
 msgid "Successfully created channel"
 msgstr "已成功创建渠道"
 
@@ -2903,7 +2936,7 @@ msgstr "已成功从渠道中删除 {successCount} 个属性"
 msgid "New Product"
 msgstr "新商品"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:40
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:54
 msgid "New asset"
 msgstr "新资源"
 
@@ -2919,9 +2952,9 @@ msgstr "重新计算运费"
 #~ msgid "Select which options should apply to the existing variant \"{0}\""
 #~ msgstr "选择应用于现有变体\"{0}\"的选项"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:39
-#: src/app/routes/_authenticated/_assets/assets.tsx:17
-#: src/app/routes/_authenticated/_assets/assets.tsx:40
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:53
+#: src/app/routes/_authenticated/_assets/assets.tsx:19
+#: src/app/routes/_authenticated/_assets/assets.tsx:45
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:248
 #: src/app/routes/_authenticated/_product-variants/product-variants_.$id.tsx:777
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:380
@@ -2977,8 +3010,8 @@ msgstr "折扣"
 msgid "Top Products"
 msgstr "热销商品"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:367
-#: src/lib/components/shared/asset/asset-gallery.tsx:379
+#: src/lib/components/shared/asset/asset-gallery.tsx:525
+#: src/lib/components/shared/asset/asset-gallery.tsx:542
 msgid "All types"
 msgstr "所有类型"
 
@@ -3109,6 +3142,13 @@ msgstr ""
 msgid "Select an option"
 msgstr "选择一个选项"
 
+#. placeholder {0}: asset.name
+#. placeholder {0}: row.original.name
+#: src/lib/components/shared/asset/asset-gallery.tsx:1012
+#: src/lib/components/shared/asset/asset-gallery.tsx:1156
+msgid "Open {0}"
+msgstr ""
+
 #: src/lib/components/data-table/views-sheet.tsx:251
 msgid "Copy to Personal"
 msgstr "复制到个人"
@@ -3124,7 +3164,7 @@ msgstr "删除全局视图"
 
 #: src/app/routes/_authenticated/_administrators/administrators_.$id.tsx:106
 #: src/app/routes/_authenticated/_api-keys/api-keys_.$id.tsx:155
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:140
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:126
 #: src/app/routes/_authenticated/_collections/collections_.$id.tsx:171
 #: src/app/routes/_authenticated/_countries/countries_.$id.tsx:84
 #: src/app/routes/_authenticated/_customer-groups/customer-groups_.$id.tsx:94
@@ -3410,7 +3450,7 @@ msgstr "删除视图失败"
 msgid "Are you sure you want to navigate away from this page? Any unsaved changes will be lost."
 msgstr "确定要离开此页面吗？任何未保存的更改都将丢失。"
 
-#: src/lib/components/shared/channel-color-picker.tsx:10
+#: src/lib/components/shared/channel-color-picker.tsx:15
 msgid "Color 1"
 msgstr ""
 
@@ -3433,6 +3473,10 @@ msgstr "列"
 #: src/lib/components/shared/rich-text-editor/rich-text-editor.tsx:163
 msgid "Failed to upload image"
 msgstr "图片上传失败"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:854
+msgid "No assets match these filters"
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:146
 msgid "Option value name"
@@ -3467,7 +3511,7 @@ msgstr "州/省"
 msgid "Failed to update option group"
 msgstr "更新选项组失败"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:201
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:187
 msgid "Channel defaults"
 msgstr "渠道默认值"
 
@@ -3510,7 +3554,7 @@ msgstr "修改订单失败"
 msgid "Includes tax at {taxRate}%"
 msgstr "含 {taxRate}% 税"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:82
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:81
 msgid "Order metrics"
 msgstr "订单指标"
 
@@ -3573,10 +3617,9 @@ msgstr "管理全局视图"
 msgid "Processing..."
 msgstr "处理中..."
 
-#. placeholder {0}: totalItems === 1 ? 'asset' : 'assets'
 #: src/lib/components/shared/asset/asset-gallery.tsx:472
-msgid "{totalItems} {0} found"
-msgstr "找到 {totalItems} 个{0}"
+#~ msgid "{totalItems} {0} found"
+#~ msgstr "找到 {totalItems} 个{0}"
 
 #: src/lib/components/date-range-picker.tsx:122
 msgid "Select date range"
@@ -3619,9 +3662,13 @@ msgstr "已成功创建卖家"
 msgid "Failed to update profile picture"
 msgstr ""
 
+#: src/lib/components/shared/asset/asset-gallery.tsx:906
+msgid "We couldn't load assets"
+msgstr ""
+
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:58
 #: src/lib/framework/dashboard-widget/low-stock-widget/index.tsx:80
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:105
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:104
 #: src/lib/framework/dashboard-widget/top-products-widget/index.tsx:122
 msgid "Try again"
 msgstr "重试"
@@ -3659,12 +3706,12 @@ msgstr "备注"
 msgid "Bold"
 msgstr "加粗"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:178
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:164
 #: src/app/routes/_authenticated/_global-settings/global-settings.tsx:112
 msgid "Available languages"
 msgstr "可用语言"
 
-#: src/lib/components/shared/channel-color-picker.tsx:12
+#: src/lib/components/shared/channel-color-picker.tsx:17
 msgid "Color 3"
 msgstr ""
 
@@ -3687,11 +3734,11 @@ msgstr "未找到"
 msgid "Facet values"
 msgstr "属性值"
 
-#: src/lib/components/data-table/data-table.tsx:312
+#: src/lib/components/data-table/data-table.tsx:370
 msgid "Failed to reorder items"
 msgstr "重新排序商品失败"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:91
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:101
 msgid "Total Orders"
 msgstr "订单总数"
 
@@ -3740,6 +3787,10 @@ msgstr "支付已授权"
 #: src/app/routes/_authenticated/_roles/roles_.$id.tsx:62
 msgid "Successfully updated role"
 msgstr "已成功更新角色"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:135
+msgid "The display name can omit the extension or keep {sourceExtensionLabel}. It cannot use a different file extension."
+msgstr ""
 
 #: src/lib/components/shared/customer-address-form.tsx:184
 msgid "Select a country"
@@ -3837,7 +3888,7 @@ msgstr "未找到检查器"
 msgid "Settle payment"
 msgstr "完成支付"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:56
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:41
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:24
 #: src/app/routes/_authenticated/_option-groups/option-groups_.$id.tsx:210
@@ -3856,7 +3907,7 @@ msgstr "运费已退款"
 msgid "Failed to create option in group \"{0}\""
 msgstr ""
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:376
+#: src/lib/components/shared/asset/asset-gallery.tsx:539
 msgid "Asset type"
 msgstr "资源类型"
 
@@ -4083,7 +4134,7 @@ msgstr "未保存的视图"
 msgid "Cannot remove from active channel"
 msgstr "无法从活动渠道中移除"
 
-#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:179
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:225
 #: src/lib/components/shared/asset/asset-preview.tsx:162
 msgid "Not set"
 msgstr "未设置"
@@ -4192,7 +4243,7 @@ msgstr "搜索管理员..."
 msgid "Created by"
 msgstr "创建者"
 
-#: src/lib/components/data-table/data-table.tsx:591
+#: src/lib/components/data-table/data-table.tsx:649
 msgid "No items match your current filters. Try clearing them to see more."
 msgstr "没有符合当前筛选条件的项目。请尝试清除筛选条件以查看更多。"
 
@@ -4389,6 +4440,7 @@ msgstr "在"
 msgid "Email"
 msgstr "电子邮件"
 
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:80
 #: src/lib/components/data-table/add-filter-menu.tsx:47
 msgid "Filter"
 msgstr "筛选"
@@ -4406,8 +4458,8 @@ msgid "Loading customers…"
 msgstr "正在加载客户…"
 
 #: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:104
-msgid "Filter by tags"
-msgstr "按标签筛选"
+#~ msgid "Filter by tags"
+#~ msgstr "按标签筛选"
 
 #: src/lib/components/login/login-form.tsx:74
 msgid "Sign in to access the admin dashboard"
@@ -4420,6 +4472,10 @@ msgstr "登录以访问管理仪表板"
 #: src/lib/components/data-table/filters/data-table-boolean-filter.tsx:57
 msgid "False"
 msgstr "否"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:138
+msgid "Asset name extension does not match the source file"
+msgstr ""
 
 #: src/lib/components/layout/nav-user.tsx:121
 msgctxt "theme"
@@ -4482,12 +4538,12 @@ msgstr "选择表格大小"
 msgid "Failed to update payment state"
 msgstr "更新支付状态失败"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:86
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:96
 msgid "Your orders summary"
 msgstr "您的订单摘要"
 
 #: src/app/routes/_authenticated/_profile/profile.tsx:184
-#: src/lib/components/shared/asset/asset-gallery.tsx:406
+#: src/lib/components/shared/asset/asset-gallery.tsx:589
 msgid "Upload"
 msgstr "上传"
 
@@ -4496,7 +4552,7 @@ msgid "Product with options"
 msgstr "带选项的产品"
 
 #. placeholder {0}: filteredTags.length
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:163
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:196
 msgid "Showing all {0} results"
 msgstr "显示所有 {0} 个结果"
 
@@ -4621,7 +4677,7 @@ msgid "Manage my views"
 msgstr "管理我的视图"
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:41
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:87
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:86
 msgid "Order Total"
 msgstr "订单总额"
 
@@ -4638,7 +4694,9 @@ msgstr "数量"
 msgid "Inline code"
 msgstr "行内代码"
 
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:45
 #: src/app/routes/_authenticated/_assets/components/asset-tags-editor.tsx:104
+#: src/lib/components/shared/asset/asset-gallery.tsx:1200
 msgid "Tags"
 msgstr "标签"
 
@@ -4749,7 +4807,7 @@ msgid "paymentState.Settled"
 msgstr "已结算"
 
 #: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:43
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:89
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:88
 msgid "Average Order Value"
 msgstr "平均订单价值"
 
@@ -4783,6 +4841,10 @@ msgstr "重命名全局视图失败"
 #~ msgid "Insert a new hyperlink with URL and target options"
 #~ msgstr "插入带有 URL 和目标选项的新超链接"
 
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:192
+msgid "Display name"
+msgstr ""
+
 #: src/lib/components/shared/rich-text-editor/image-dialog.tsx:194
 msgid "Height"
 msgstr "高度"
@@ -4796,6 +4858,10 @@ msgstr "需要退款 {formattedDiff}。选择付款金额并输入备注以继�
 #: src/app/routes/_authenticated/_orders/components/refund-order-dialog.tsx:100
 msgid "Unit price"
 msgstr "单价"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:857
+msgid "Try changing your search, asset type, or selected tags."
+msgstr ""
 
 #: src/lib/components/login/forgot-password-form.tsx:87
 msgid "If an account exists for {submittedEmailAddress}, you will receive an email with a link to reset your password."
@@ -4830,7 +4896,7 @@ msgstr "添加客户组"
 msgid "Available Languages"
 msgstr "可用语言"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:114
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:129
 msgid "Reset selection"
 msgstr "重置选择"
 
@@ -4882,7 +4948,7 @@ msgstr "商品"
 msgid "Promotions"
 msgstr "促销"
 
-#: src/lib/components/shared/channel-color-picker.tsx:9
+#: src/lib/components/shared/channel-color-picker.tsx:14
 msgid "Neutral"
 msgstr ""
 
@@ -4897,6 +4963,10 @@ msgstr "旧电子邮件："
 #: src/lib/components/data-table/views-sheet.tsx:144
 msgid "Save a view as \"Global\" to make it available to all users."
 msgstr "将视图保存为\"全局\"以使其对所有用户可用。"
+
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:147
+msgid "Search tags..."
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/components/generate-missing-variants-dialog.tsx:154
 #: src/app/routes/_authenticated/_products/components/generate-variants-panel.tsx:90
@@ -4924,7 +4994,7 @@ msgstr "轮换密钥"
 msgid "Hide password"
 msgstr "隐藏密码"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:71
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:86
 msgid "Bulk actions"
 msgstr "批量操作"
 
@@ -4962,7 +5032,7 @@ msgstr "清除筛选器"
 msgid "Regions"
 msgstr "地区"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:445
+#: src/lib/components/shared/asset/asset-gallery.tsx:629
 msgid "Drop files here to upload"
 msgstr "将文件拖放到此处上传"
 
@@ -4974,7 +5044,7 @@ msgstr "查看支付元数据"
 msgid "Toggle all visible variants"
 msgstr "切换所有可见变体"
 
-#: src/lib/components/shared/channel-color-picker.tsx:13
+#: src/lib/components/shared/channel-color-picker.tsx:18
 msgid "Color 4"
 msgstr ""
 
@@ -5259,8 +5329,8 @@ msgid "Failed to update order"
 msgstr "更新订单失败"
 
 #: src/lib/components/shared/asset/asset-bulk-actions.tsx:84
-msgid "With selected..."
-msgstr "对所选..."
+#~ msgid "With selected..."
+#~ msgstr "对所选..."
 
 #: src/lib/components/login/reset-password-form.tsx:146
 msgid "Choose a new password for your account"
@@ -5333,7 +5403,7 @@ msgstr "州/省"
 msgid "Enabled"
 msgstr "已启用"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:483
+#: src/lib/components/shared/asset/asset-gallery.tsx:688
 msgid "Items per page"
 msgstr "每页条数"
 
@@ -5399,6 +5469,10 @@ msgstr "您的最新订单"
 #: src/lib/framework/defaults.ts:153
 msgid "Scheduled Tasks"
 msgstr "计划任务"
+
+#: src/app/routes/_authenticated/_assets/assets_.$id.tsx:139
+msgid "Use {sourceExtensionLabel} or remove the extension from the display name."
+msgstr ""
 
 #: src/lib/components/data-table/use-generated-columns.tsx:428
 msgid "Are you sure you want to delete this item? This action cannot be undone."
@@ -5530,7 +5604,7 @@ msgid "Failed to update variant"
 msgstr "更新变体失败"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:69
-#: src/lib/components/data-table/data-table.tsx:717
+#: src/lib/components/data-table/data-table.tsx:776
 msgid "Go to previous page"
 msgstr "转到上一页"
 
@@ -5613,6 +5687,11 @@ msgstr "税率"
 #: src/app/routes/_authenticated/_customer-groups/components/customer-group-members-bulk-actions.tsx:40
 msgid "Failed to remove customers from group"
 msgstr "从组中移除客户失败"
+
+#. placeholder {0}: failedAssets.length
+#: src/lib/components/shared/asset/asset-gallery.tsx:325
+msgid "Failed to upload {0} assets"
+msgstr ""
 
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:56
 msgid "We couldn't load the latest customers"
@@ -5716,7 +5795,7 @@ msgstr "默认语言"
 msgid "Top Products Widget"
 msgstr "热销商品小部件"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:159
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:145
 msgid "Token"
 msgstr "令牌"
 
@@ -5780,8 +5859,8 @@ msgid "Edit Note"
 msgstr "编辑备注"
 
 #: src/lib/components/shared/asset/asset-gallery.tsx:635
-msgid "No assets found. Try adjusting your filters."
-msgstr "未找到资源。请尝试调整筛选条件。"
+#~ msgid "No assets found. Try adjusting your filters."
+#~ msgstr "未找到资源。请尝试调整筛选条件。"
 
 #: src/app/routes/_authenticated/_products/components/option-groups-editor.tsx:161
 msgid "Add Option"
@@ -5809,8 +5888,10 @@ msgstr "成功更新管理员"
 
 #: src/lib/components/data-table/data-table-facet-value-faceted-filter.tsx:263
 #: src/lib/components/data-table/data-table-faceted-filter.tsx:225
-#: src/lib/components/data-table/data-table.tsx:594
-#: src/lib/components/shared/asset/asset-gallery.tsx:361
+#: src/lib/components/data-table/data-table.tsx:652
+#: src/lib/components/shared/asset/asset-gallery.tsx:504
+#: src/lib/components/shared/asset/asset-gallery.tsx:511
+#: src/lib/components/shared/asset/asset-gallery.tsx:866
 msgid "Clear filters"
 msgstr "清除筛选器"
 
@@ -5825,7 +5906,7 @@ msgstr "履行 #{0}，从 {1} 到 {2}"
 msgid "Failed to delete global view"
 msgstr "删除全局视图失败"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:206
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:192
 msgid "Default language"
 msgstr "默认语言"
 
@@ -5839,8 +5920,13 @@ msgstr "状态"
 msgid "No options found"
 msgstr "未找到选项"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:370
-#: src/lib/components/shared/asset/asset-gallery.tsx:382
+#: src/lib/components/shared/asset/asset-gallery.tsx:871
+msgid "Upload assets"
+msgstr ""
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:110
+#: src/lib/components/shared/asset/asset-gallery.tsx:528
+#: src/lib/components/shared/asset/asset-gallery.tsx:545
 msgid "Binary"
 msgstr "二进制"
 
@@ -6114,8 +6200,9 @@ msgstr "创建您的第一个促销"
 msgid "Remove item"
 msgstr "删除项目"
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:369
-#: src/lib/components/shared/asset/asset-gallery.tsx:381
+#: src/lib/components/shared/asset/asset-gallery.tsx:108
+#: src/lib/components/shared/asset/asset-gallery.tsx:527
+#: src/lib/components/shared/asset/asset-gallery.tsx:544
 msgid "Video"
 msgstr "视频"
 
@@ -6131,7 +6218,7 @@ msgstr "无法添加变体。请确保父产品已启用。"
 #~ msgid "An unknown error occurred"
 #~ msgstr "发生未知错误"
 
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:81
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:80
 msgid "Metrics"
 msgstr "指标"
 
@@ -6197,8 +6284,7 @@ msgstr "删除草稿"
 msgid "Source"
 msgstr "来源"
 
-#: src/lib/components/data-table/data-table-bulk-actions.tsx:107
-#: src/lib/components/shared/asset/asset-bulk-actions.tsx:98
+#: src/lib/components/data-table/data-table-bulk-actions.tsx:122
 msgid "No actions available"
 msgstr "无可用操作"
 
@@ -6207,8 +6293,8 @@ msgstr "无可用操作"
 msgid "Customize channel colors"
 msgstr ""
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:108
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:114
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:94
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:100
 msgid "Failed to update channel"
 msgstr "更新渠道失败"
 
@@ -6234,8 +6320,13 @@ msgstr "已成功更新属性"
 msgid "Strikethrough"
 msgstr "删除线"
 
+#. placeholder {0}: createdAssets.length
+#: src/lib/components/shared/asset/asset-gallery.tsx:322
+msgid "Uploaded {0} assets"
+msgstr ""
+
 #: src/lib/framework/dashboard-widget/latest-customers-widget/index.tsx:92
-#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:127
+#: src/lib/framework/dashboard-widget/metrics-widget/index.tsx:126
 #: src/lib/framework/dashboard-widget/top-products-widget/index.tsx:154
 msgid "Try selecting a different date range."
 msgstr "请尝试选择其他日期范围。"
@@ -6265,7 +6356,7 @@ msgstr "卖家订单"
 msgid "New facet"
 msgstr "新属性"
 
-#: src/lib/components/shared/channel-color-picker.tsx:14
+#: src/lib/components/shared/channel-color-picker.tsx:19
 msgid "Color 5"
 msgstr ""
 
@@ -6278,13 +6369,13 @@ msgstr "您确定要从产品中移除此选项组吗？"
 msgid "Description (alt)"
 msgstr "描述（替代文本）"
 
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:124
+#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:154
 #: src/app/routes/_authenticated/_assets/components/asset-tags-editor.tsx:164
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:99
 msgid "No tags found"
 msgstr "未找到标签"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:219
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:205
 msgid "Default currency"
 msgstr "默认货币"
 
@@ -6304,7 +6395,7 @@ msgstr "{cancellableCount, plural, one {确定要取消 {cancellableCount} 个�
 msgid "Go to option group"
 msgstr ""
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:101
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:111
 msgid "Total Revenue"
 msgstr "总收入"
 
@@ -6410,7 +6501,7 @@ msgstr "移动到顶层"
 msgid "Clear"
 msgstr "清除"
 
-#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:85
+#: src/lib/framework/dashboard-widget/orders-summary/index.tsx:95
 msgid "Orders Summary"
 msgstr "订单摘要"
 
@@ -6418,7 +6509,8 @@ msgstr "订单摘要"
 msgid "Search stock locations..."
 msgstr "搜索库存位置..."
 
-#: src/lib/components/shared/asset/asset-gallery.tsx:349
+#: src/lib/components/shared/asset/asset-gallery.tsx:486
+#: src/lib/components/shared/asset/asset-gallery.tsx:1197
 msgid "Search assets..."
 msgstr "搜索资源..."
 
@@ -6481,7 +6573,7 @@ msgstr "从渠道中删除属性失败：{message}"
 #~ msgid "Set link"
 #~ msgstr "设置链接"
 
-#: src/lib/components/data-table/data-table.tsx:716
+#: src/lib/components/data-table/data-table.tsx:775
 msgid "Pagination"
 msgstr "分页"
 
@@ -6532,7 +6624,7 @@ msgid "View result"
 msgstr "查看结果"
 
 #: src/lib/components/data-table/data-table-pagination.tsx:20
-#: src/lib/components/data-table/data-table.tsx:719
+#: src/lib/components/data-table/data-table.tsx:778
 msgid "Rows per page"
 msgstr "每页行数"
 
@@ -6629,7 +6721,7 @@ msgid "Failed to create product variant"
 msgstr "创建商品变体失败"
 
 #: src/lib/components/data-input/relation-selector.tsx:418
-#: src/lib/components/data-table/data-table.tsx:501
+#: src/lib/components/data-table/data-table.tsx:559
 msgid "Search..."
 msgstr "搜索..."
 
@@ -6713,9 +6805,8 @@ msgstr "可用条件"
 msgid "Active filters"
 msgstr "活动筛选条件"
 
-#: src/app/routes/_authenticated/_assets/components/asset-tag-filter.tsx:176
 #: src/lib/components/data-table/data-table-active-filters-popover.tsx:54
-#: src/lib/components/data-table/data-table.tsx:577
+#: src/lib/components/data-table/data-table.tsx:635
 msgid "Clear all"
 msgstr "全部清除"
 
@@ -6757,7 +6848,7 @@ msgstr "向订单添加支付"
 msgid "Create variants for the option combinations that don't exist yet. Combinations that already exist are shown for context and can't be edited."
 msgstr "为尚不存在的选项组合创建变体。已存在的组合仅供参考显示，无法编辑。"
 
-#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:161
+#: src/app/routes/_authenticated/_channels/channels_.$id.tsx:147
 msgid "The token is used to specify the channel when making API requests."
 msgstr "在进行 API 请求时使用令牌来指定渠道。"
 
@@ -6811,6 +6902,10 @@ msgstr "支付方式为必填项"
 #: src/app/routes/_authenticated/_customers/customers_.$id.tsx:134
 msgid "Failed to add customer to group"
 msgstr "将客户添加到组失败"
+
+#: src/lib/components/shared/asset/asset-gallery.tsx:675
+msgid "{totalItems, plural, one {{totalItems} asset found} other {{totalItems} assets found}}"
+msgstr ""
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx:338
 #: src/app/routes/_authenticated/_products/products_.$id.tsx:291
