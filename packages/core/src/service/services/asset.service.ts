@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
     AssetListOptions,
+    AssetVisibility,
     AssignAssetsToChannelInput,
     CreateAssetInput,
     DeletionResponse,
@@ -27,7 +28,7 @@ import { RequestContext } from '../../api/common/request-context';
 import { RelationPaths } from '../../api/decorators/relations.decorator';
 import { Instrument } from '../../common';
 import { isGraphQlErrorResult } from '../../common/error/error-result';
-import { ForbiddenError, InternalServerError } from '../../common/error/errors';
+import { EntityNotFoundError, ForbiddenError, InternalServerError } from '../../common/error/errors';
 import { MimeTypeError } from '../../common/error/generated-graphql-admin-errors';
 import { ChannelAware } from '../../common/types/common-types';
 import { Translated } from '../../common/types/locale-types';
@@ -113,7 +114,11 @@ export class AssetService {
             .findOneInChannel(ctx, Asset, id, ctx.channelId, {
                 relations: relations ?? [],
             })
-            .then(result => (result ? this.translator.translate(result, ctx) : undefined));
+            .then(result =>
+                result?.visibility === AssetVisibility.PUBLIC
+                    ? this.translator.translate(result, ctx)
+                    : undefined,
+            );
     }
 
     findAll(
@@ -126,6 +131,7 @@ export class AssetService {
             relations: [...(relations ?? []), 'tags'],
             channelId: ctx.channelId,
         });
+        qb.andWhere('asset.visibility = :visibility', { visibility: AssetVisibility.PUBLIC });
         const tags = options?.tags;
         if (tags && tags.length) {
             const operator = options?.tagsOperator ?? LogicalOperator.AND;
@@ -271,6 +277,7 @@ export class AssetService {
             const assets = await this.connection.findByIdsInChannel(ctx, Asset, assetIds, ctx.channelId, {});
             const sortedAssets = assetIds
                 .map(id => assets.find(a => idsAreEqual(a.id, id)))
+                .filter(asset => asset?.visibility === AssetVisibility.PUBLIC)
                 .filter(notNullOrUndefined);
             await this.removeExistingOrderableAssets(ctx, entity);
             if (sortedAssets.length > 0) {
@@ -317,11 +324,51 @@ export class AssetService {
     }
 
     /**
+     * Creates an Asset owned by another domain object. Private Assets are excluded from
+     * ordinary Asset queries and are managed through their owning domain operation.
+     *
+     * @internal
+     */
+    async createPrivate(
+        ctx: RequestContext,
+        uploadInput: CreateAssetInput['file'],
+        options: { imageOnly?: boolean } = {},
+    ): Promise<Translated<Asset> | MimeTypeError> {
+        const upload = await uploadInput;
+        const storedMedia = await this.storedMediaService.storeUpload(ctx, upload, options);
+        if (isGraphQlErrorResult(storedMedia)) {
+            return storedMedia;
+        }
+        const result = await this.createAssetInternal(
+            ctx,
+            storedMedia,
+            upload.filename,
+            undefined,
+            undefined,
+            AssetVisibility.PRIVATE,
+        );
+        const translatedAsset = this.translator.translate(result, ctx);
+        await this.eventBus.publish(new AssetEvent(ctx, translatedAsset, 'created', { file: uploadInput }));
+        return translatedAsset;
+    }
+
+    /** @internal */
+    async deletePrivate(ctx: RequestContext, asset: Asset): Promise<void> {
+        if (asset.visibility !== AssetVisibility.PRIVATE) {
+            throw new InternalServerError('Cannot delete a public Asset through a private owner');
+        }
+        await this.deleteUnconditional(ctx, [asset]);
+    }
+
+    /**
      * @description
      * Updates the name, focalPoint, tags & custom fields of an Asset.
      */
     async update(ctx: RequestContext, input: UpdateAssetInput): Promise<Translated<Asset>> {
         const asset = await this.connection.getEntityOrThrow(ctx, Asset, input.id);
+        if (asset.visibility !== AssetVisibility.PUBLIC) {
+            throw new EntityNotFoundError('Asset', input.id);
+        }
         if (input.focalPoint) {
             const to3dp = (x: number) => +x.toFixed(3);
             input.focalPoint.x = to3dp(input.focalPoint.x);
@@ -369,9 +416,11 @@ export class AssetService {
         force: boolean = false,
         deleteFromAllChannels: boolean = false,
     ): Promise<DeletionResponse> {
-        const assets = await this.connection.findByIdsInChannel(ctx, Asset, ids, ctx.channelId, {
-            relations: ['channels'],
-        });
+        const assets = (
+            await this.connection.findByIdsInChannel(ctx, Asset, ids, ctx.channelId, {
+                relations: ['channels'],
+            })
+        ).filter(asset => asset.visibility === AssetVisibility.PUBLIC);
         let channelsOfAssets: ID[] = [];
         assets.forEach(a => a.channels.forEach(c => channelsOfAssets.push(c.id)));
         channelsOfAssets = unique(channelsOfAssets);
@@ -440,13 +489,9 @@ export class AssetService {
         if (!hasPermission) {
             throw new ForbiddenError();
         }
-        const assets = await this.connection.findByIdsInChannel(
-            ctx,
-            Asset,
-            input.assetIds,
-            ctx.channelId,
-            {},
-        );
+        const assets = (
+            await this.connection.findByIdsInChannel(ctx, Asset, input.assetIds, ctx.channelId, {})
+        ).filter(asset => asset.visibility === AssetVisibility.PUBLIC);
         await Promise.all(
             assets.map(async asset => {
                 await this.channelService.assignToChannels(ctx, Asset, asset.id, [input.channelId]);
@@ -554,14 +599,18 @@ export class AssetService {
         filename: string,
         customFields?: { [key: string]: any },
         translations?: Array<{ languageCode: LanguageCode; name?: string | null; customFields?: any }>,
+        visibility: AssetVisibility = AssetVisibility.PUBLIC,
     ): Promise<Asset> {
         // Save asset first
         const asset = new Asset({
             ...storedMedia,
+            visibility,
             focalPoint: null,
             customFields,
         });
-        await this.channelService.assignToCurrentChannel(asset, ctx);
+        if (visibility === AssetVisibility.PUBLIC) {
+            await this.channelService.assignToCurrentChannel(asset, ctx);
+        }
         const savedAsset = await this.connection.getRepository(ctx, Asset).save(asset);
 
         // Create and save translations with the base relationship set

@@ -86,7 +86,7 @@ export enum AdjustmentType {
 
 export type Administrator = Node & {
   __typename?: 'Administrator';
-  avatar?: Maybe<AdministratorAvatar>;
+  avatar?: Maybe<Asset>;
   createdAt: Scalars['DateTime']['output'];
   customFields?: Maybe<Scalars['JSON']['output']>;
   emailAddress: Scalars['String']['output'];
@@ -95,15 +95,6 @@ export type Administrator = Node & {
   lastName: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   user: User;
-};
-
-export type AdministratorAvatar = {
-  __typename?: 'AdministratorAvatar';
-  height: Scalars['Int']['output'];
-  mimeType: Scalars['String']['output'];
-  preview: Scalars['String']['output'];
-  source: Scalars['String']['output'];
-  width: Scalars['Int']['output'];
 };
 
 export type AdministratorFilterParameter = {
@@ -274,6 +265,7 @@ export type Asset = Node & {
   translations: Array<AssetTranslation>;
   type: AssetType;
   updatedAt: Scalars['DateTime']['output'];
+  visibility: AssetVisibility;
   width: Scalars['Int']['output'];
 };
 
@@ -291,6 +283,7 @@ export type AssetFilterParameter = {
   source?: InputMaybe<StringOperators>;
   type?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
+  visibility?: InputMaybe<StringOperators>;
   width?: InputMaybe<NumberOperators>;
 };
 
@@ -348,6 +341,11 @@ export enum AssetType {
   BINARY = 'BINARY',
   IMAGE = 'IMAGE',
   VIDEO = 'VIDEO'
+}
+
+export enum AssetVisibility {
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC'
 }
 
 export type AssignAssetsToChannelInput = {

@@ -21,7 +21,6 @@ import { ListQueryOptions } from '../../common/types/common-types';
 import { assertFound, idsAreEqual, normalizeEmailAddress } from '../../common/utils';
 import { ConfigService } from '../../config';
 import { TransactionalConnection } from '../../connection/transactional-connection';
-import { AdministratorAvatar } from '../../entity/administrator/administrator-avatar';
 import { Administrator } from '../../entity/administrator/administrator.entity';
 import { NativeAuthenticationMethod } from '../../entity/authentication-method/native-authentication-method.entity';
 import { Role } from '../../entity/role/role.entity';
@@ -35,11 +34,12 @@ import { CustomFieldRelationService } from '../helpers/custom-field-relation/cus
 import { ListQueryBuilder } from '../helpers/list-query-builder/list-query-builder';
 import { PasswordCipher } from '../helpers/password-cipher/password-cipher';
 import { RequestContextService } from '../helpers/request-context/request-context.service';
-import { StoredMediaService, StoredMediaUpload } from '../helpers/stored-media/stored-media.service';
+import { StoredMediaUpload } from '../helpers/stored-media/stored-media.service';
 import { checkSuperadminCredentials } from '../helpers/utils/check-superadmin-credentials';
 import { getChannelPermissions } from '../helpers/utils/get-user-channels-permissions';
 import { patchEntity } from '../helpers/utils/patch-entity';
 
+import { AssetService } from './asset.service';
 import { RoleService } from './role.service';
 import { UserService } from './user.service';
 
@@ -60,7 +60,7 @@ export class AdministratorService {
         private userService: UserService,
         private roleService: RoleService,
         private customFieldRelationService: CustomFieldRelationService,
-        private storedMediaService: StoredMediaService,
+        private assetService: AssetService,
         private eventBus: EventBus,
         private requestContextService: RequestContextService,
     ) {}
@@ -85,28 +85,27 @@ export class AdministratorService {
             administrator.avatar = null;
             await this.connection.getRepository(ctx, Administrator).save(administrator, { reload: false });
             if (previousAvatar) {
-                await this.storedMediaService.delete(previousAvatar);
+                await this.assetService.deletePrivate(ctx, previousAvatar);
             }
             return administrator;
         }
 
-        const storedMedia = await this.storedMediaService.storeUpload(ctx, upload, { imageOnly: true });
-        if (isGraphQlErrorResult(storedMedia)) {
+        const avatar = await this.assetService.createPrivate(ctx, upload, { imageOnly: true });
+        if (isGraphQlErrorResult(avatar)) {
             throw new UserInputError('error.mime-type-not-permitted', {
-                fileName: storedMedia.fileName,
-                mimeType: storedMedia.mimeType,
+                fileName: avatar.fileName,
+                mimeType: avatar.mimeType,
             });
         }
-        const avatar = new AdministratorAvatar(storedMedia);
         administrator.avatar = avatar;
         try {
             await this.connection.getRepository(ctx, Administrator).save(administrator, { reload: false });
         } catch (error) {
-            await this.storedMediaService.delete(avatar);
+            await this.assetService.deletePrivate(ctx, avatar);
             throw error;
         }
         if (previousAvatar) {
-            await this.storedMediaService.delete(previousAvatar);
+            await this.assetService.deletePrivate(ctx, previousAvatar);
         }
         return administrator;
     }
@@ -127,7 +126,7 @@ export class AdministratorService {
     ): Promise<PaginatedList<Administrator>> {
         return this.listQueryBuilder
             .build(Administrator, options, {
-                relations: relations ?? ['user', 'user.roles'],
+                relations: relations ?? ['avatar', 'user', 'user.roles'],
                 where: { deletedAt: IsNull() },
                 ctx,
             })
@@ -150,7 +149,7 @@ export class AdministratorService {
         return this.connection
             .getRepository(ctx, Administrator)
             .findOne({
-                relations: relations ?? ['user', 'user.roles'],
+                relations: relations ?? ['avatar', 'user', 'user.roles'],
                 where: {
                     id: administratorId,
                     deletedAt: IsNull(),
@@ -171,7 +170,7 @@ export class AdministratorService {
         return this.connection
             .getRepository(ctx, Administrator)
             .findOne({
-                relations,
+                relations: relations ?? ['avatar'],
                 where: {
                     user: { id: userId },
                     deletedAt: IsNull(),

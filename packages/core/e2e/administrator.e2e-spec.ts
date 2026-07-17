@@ -28,6 +28,7 @@ import {
     getActiveAdministratorDocument,
     getAdministratorDocument,
     getAdministratorsDocument,
+    getAssetDocument,
     getAssetListDocument,
     getCustomerListDocument,
     requestAdminPasswordResetDocument,
@@ -548,6 +549,8 @@ describe('Administrator resolver', () => {
                 mapVariables: () => ({ file: null }),
             });
             expect(firstUpload.setActiveAdministratorAvatar.avatar).toMatchObject({
+                id: expect.any(String),
+                visibility: 'PRIVATE',
                 mimeType: 'image/jpeg',
                 width: expect.any(Number),
                 height: expect.any(Number),
@@ -561,10 +564,26 @@ describe('Administrator resolver', () => {
                 mapVariables: () => ({ file: null }),
             });
             expect(secondUpload.setActiveAdministratorAvatar.avatar.source).toContain('pps2.jpg');
+            expect(secondUpload.setActiveAdministratorAvatar.avatar.id).not.toBe(
+                firstUpload.setActiveAdministratorAvatar.avatar.id,
+            );
 
             const queried = await adminClient.query(getActiveAdministratorAvatarDocument);
             expect(queried.activeAdministrator?.avatar?.source).toContain('pps2.jpg');
 
+            await loginAsCurrentSuperAdmin();
+            const assetsWhileAvatarExists = await adminClient.query(getAssetListDocument, {});
+            expect(assetsWhileAvatarExists.assets.totalItems).toBe(assetsBefore.assets.totalItems);
+            const privateAssetLookup = await adminClient.query(getAssetDocument, {
+                id: secondUpload.setActiveAdministratorAvatar.avatar.id,
+            });
+            expect(privateAssetLookup.asset).toBeNull();
+
+            await adminClient.asAnonymousUser();
+            await adminClient.query(attemptLoginDocument, {
+                username: 'profile-owner@example.com',
+                password: 'profile-owner-password',
+            });
             const removed = await adminClient.query(setActiveAdministratorAvatarDocument, { file: null });
             expect(removed.setActiveAdministratorAvatar.avatar).toBeNull();
 

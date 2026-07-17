@@ -1,4 +1,4 @@
-import { AssetType } from '@vendure/common/lib/generated-types';
+import { AssetType, AssetVisibility } from '@vendure/common/lib/generated-types';
 import { DeepPartial } from '@vendure/common/lib/shared-types';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 
@@ -31,6 +31,13 @@ export class Asset extends VendureEntity implements Taggable, ChannelAware, HasC
     name: LocaleString;
 
     @Column('varchar') type: AssetType;
+
+    /**
+     * Controls whether this Asset is discoverable through ordinary Asset queries.
+     * This does not control access to the underlying storage URL.
+     */
+    @Column('varchar', { default: AssetVisibility.PUBLIC })
+    visibility: AssetVisibility;
 
     @Column() mimeType: string;
 

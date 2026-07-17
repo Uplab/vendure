@@ -5,16 +5,8 @@ type Administrator implements Node {
     firstName: String!
     lastName: String!
     emailAddress: String!
-    avatar: AdministratorAvatar
+    avatar: Asset
     user: User!
-}
-
-type AdministratorAvatar {
-    source: String!
-    preview: String!
-    mimeType: String!
-    width: Int!
-    height: Int!
 }
 
 type AdministratorList implements PaginatedList {

@@ -134,6 +134,8 @@ export const getActiveAdministratorAvatarDocument = graphql(`
         activeAdministrator {
             id
             avatar {
+                id
+                visibility
                 source
                 preview
                 mimeType
@@ -149,6 +151,8 @@ export const setActiveAdministratorAvatarDocument = graphql(`
         setActiveAdministratorAvatar(file: $file) {
             id
             avatar {
+                id
+                visibility
                 source
                 preview
                 mimeType

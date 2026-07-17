@@ -102,6 +102,7 @@ export type Asset = Node & {
     translations: Array<AssetTranslation>;
     type: AssetType;
     updatedAt: Scalars['DateTime']['output'];
+    visibility: AssetVisibility;
     width: Scalars['Int']['output'];
 };
 
@@ -124,6 +125,11 @@ export enum AssetType {
     BINARY = 'BINARY',
     IMAGE = 'IMAGE',
     VIDEO = 'VIDEO',
+}
+
+export enum AssetVisibility {
+    PRIVATE = 'PRIVATE',
+    PUBLIC = 'PUBLIC',
 }
 
 export type AuthenticationInput = {

@@ -3,10 +3,10 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 import { SoftDeletable } from '../../common/types/common-types';
 import { HasCustomFields } from '../../config/custom-field/custom-field-types';
+import { Asset } from '../asset/asset.entity';
 import { VendureEntity } from '../base/base.entity';
 import { CustomAdministratorFields } from '../custom-entity-fields';
 import { User } from '../user/user.entity';
-import { AdministratorAvatar } from './administrator-avatar';
 
 /**
  * @description
@@ -32,12 +32,9 @@ export class Administrator extends VendureEntity implements SoftDeletable, HasCu
     @Column()
     emailAddress: string;
 
-    /**
-     * Dedicated profile media owned by this Administrator. It intentionally does not
-     * create an Asset record and therefore never appears in the catalog asset library.
-     */
-    @Column(type => AdministratorAvatar)
-    avatar: AdministratorAvatar | null;
+    @OneToOne(type => Asset, { nullable: true, onDelete: 'SET NULL' })
+    @JoinColumn()
+    avatar: Asset | null;
 
     @OneToOne(type => User)
     @JoinColumn()

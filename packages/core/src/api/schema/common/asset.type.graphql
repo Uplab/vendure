@@ -5,6 +5,7 @@ type Asset implements Node {
     languageCode: LanguageCode!
     name: String!
     type: AssetType!
+    visibility: AssetVisibility!
     fileSize: Int!
     mimeType: String!
     width: Int!
@@ -35,7 +36,12 @@ type AssetList implements PaginatedList {
 }
 
 enum AssetType {
-    IMAGE,
-    VIDEO,
+    IMAGE
+    VIDEO
     BINARY
+}
+
+enum AssetVisibility {
+    PUBLIC
+    PRIVATE
 }
