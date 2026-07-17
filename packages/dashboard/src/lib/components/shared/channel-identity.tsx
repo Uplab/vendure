@@ -31,5 +31,13 @@ export function ChannelIdentity({ color, className }: { color: ChannelColor; cla
 }
 
 export function ChannelColorSwatch({ color }: { color: ChannelColor }) {
-    return <span className={cn('size-5 rounded-full border border-border/40', colorClasses[color])} />;
+    return (
+        <span
+            className={cn(
+                'inline-flex size-4 shrink-0 rounded-full border border-border/40',
+                colorClasses[color],
+            )}
+            aria-hidden="true"
+        />
+    );
 }

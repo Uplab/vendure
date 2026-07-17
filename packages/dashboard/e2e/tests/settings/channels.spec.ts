@@ -156,7 +156,7 @@ test.describe('Channels CRUD', () => {
 
         await expect(page.getByText('Appearance', { exact: true })).toBeVisible();
         const colorOption = page.getByRole('radio', { name: 'Color 2' });
-        await colorOption.click();
+        await page.getByText('Color 2', { exact: true }).click();
         await expect(colorOption).toHaveAttribute('aria-checked', 'true');
         await expect.poll(() => Object.values(channelColors)).toContain('viz-2');
     });

@@ -22,5 +22,6 @@ describe('ChannelColorSwatch', () => {
         const markup = renderToStaticMarkup(<ChannelColorSwatch color={color} />);
 
         expect(markup).toContain(expectedClass);
+        expect(markup).toContain('inline-flex');
     });
 });
