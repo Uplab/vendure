@@ -12,6 +12,8 @@ class Asset extends VendureEntity implements Taggable, ChannelAware, HasCustomFi
     constructor(input?: DeepPartial<Asset>)
     name: LocaleString;
     @Column('varchar') type: AssetType;
+    @Column('varchar', { default: AssetVisibility.PUBLIC })
+    visibility: AssetVisibility;
     @Column() mimeType: string;
     @Column({ default: 0 }) width: number;
     @Column({ default: 0 }) height: number;
@@ -55,6 +57,11 @@ class Asset extends VendureEntity implements Taggable, ChannelAware, HasCustomFi
 ### type
 
 <MemberInfo kind="property" type={`AssetType`}   />
+
+
+### visibility
+
+<MemberInfo kind="property" type={`<a href='/reference/typescript-api/entities/asset-visibility#assetvisibility'>AssetVisibility</a>`}   />
 
 
 ### mimeType
