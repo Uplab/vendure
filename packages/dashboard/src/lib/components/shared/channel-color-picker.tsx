@@ -1,10 +1,13 @@
 import { ChannelColorSwatch } from '@/vdb/components/shared/channel-identity.js';
-import { Label } from '@/vdb/components/ui/label.js';
-import { RadioGroup, RadioGroupItem } from '@/vdb/components/ui/radio-group.js';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/vdb/components/ui/select.js';
 import { ChannelColor, channelColorValues, useChannelColors } from '@/vdb/hooks/use-channel-colors.js';
-import { cn } from '@/vdb/lib/utils.js';
 import { Trans } from '@lingui/react/macro';
-import { Check } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 const colorLabels: Record<ChannelColor, ReactNode> = {
@@ -16,7 +19,16 @@ const colorLabels: Record<ChannelColor, ReactNode> = {
     'viz-5': <Trans>Color 5</Trans>,
 };
 
-export function ChannelColorPicker({ channelId, className }: { channelId: string; className?: string }) {
+function ChannelColorLabel({ color }: { color: ChannelColor }) {
+    return (
+        <span className="flex min-w-0 items-center gap-2">
+            <ChannelColorSwatch color={color} />
+            <span className="truncate">{colorLabels[color]}</span>
+        </span>
+    );
+}
+
+export function ChannelColorPicker({ channelId }: { channelId: string }) {
     const { getColor, setColor, canEdit, isAvailable, isSaving } = useChannelColors();
 
     if (!isAvailable || !canEdit) {
@@ -26,42 +38,21 @@ export function ChannelColorPicker({ channelId, className }: { channelId: string
     const selectedColor = getColor(channelId);
 
     return (
-        <RadioGroup
+        <Select
             value={selectedColor}
-            onValueChange={value => setColor(channelId, value as ChannelColor)}
-            className={cn('grid grid-cols-3 gap-2', className)}
+            onValueChange={value => value && setColor(channelId, value as ChannelColor)}
             disabled={isSaving}
         >
-            {channelColorValues.map(color => {
-                const selected = selectedColor === color;
-                return (
-                    <Label
-                        key={color}
-                        htmlFor={`channel-color-${channelId}-${color}`}
-                        className={cn(
-                            'relative flex min-w-0 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-md border bg-background px-1 py-2.5 transition-colors hover:bg-accent',
-                            selected && 'border-primary bg-accent',
-                        )}
-                    >
-                        <RadioGroupItem
-                            id={`channel-color-${channelId}-${color}`}
-                            value={color}
-                            className="sr-only"
-                        />
-                        <ChannelColorSwatch color={color} />
-                        <span className="w-full truncate text-center text-xs font-medium">
-                            {colorLabels[color]}
-                        </span>
-                        <Check
-                            className={cn(
-                                'absolute right-1 top-1 size-3.5 text-primary',
-                                !selected && 'invisible',
-                            )}
-                            aria-hidden="true"
-                        />
-                    </Label>
-                );
-            })}
-        </RadioGroup>
+            <SelectTrigger className="w-full">
+                <SelectValue>{(value: ChannelColor) => <ChannelColorLabel color={value} />}</SelectValue>
+            </SelectTrigger>
+            <SelectContent align="start">
+                {channelColorValues.map(color => (
+                    <SelectItem key={color} value={color}>
+                        <ChannelColorLabel color={color} />
+                    </SelectItem>
+                ))}
+            </SelectContent>
+        </Select>
     );
 }

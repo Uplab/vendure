@@ -42,7 +42,7 @@ export function ChannelColorsDialog({ channels, open, onOpenChange }: ChannelCol
                                 <ChannelIdentity color={getColor(channel.id)} />
                                 <ChannelCodeLabel code={channel.code} />
                             </div>
-                            <ChannelColorPicker channelId={channel.id} className="sm:grid-cols-6" />
+                            <ChannelColorPicker channelId={channel.id} />
                         </div>
                     ))}
                 </div>

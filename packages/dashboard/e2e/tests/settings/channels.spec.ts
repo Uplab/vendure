@@ -154,10 +154,14 @@ test.describe('Channels CRUD', () => {
         await lp.expectLoaded();
         await lp.clickEntity('Default channel');
 
-        await expect(page.getByText('Appearance', { exact: true })).toBeVisible();
-        const colorOption = page.getByRole('radio', { name: 'Color 2' });
-        await page.getByText('Color 2', { exact: true }).click();
-        await expect(colorOption).toHaveAttribute('aria-checked', 'true');
+        const appearanceCard = page
+            .getByText('Appearance', { exact: true })
+            .locator('xpath=ancestor::*[@data-slot="card"]');
+        await expect(appearanceCard).toBeVisible();
+        const colorSelect = appearanceCard.getByRole('combobox');
+        await colorSelect.click();
+        await page.getByRole('option', { name: 'Color 2' }).click();
+        await expect(colorSelect).toContainText('Color 2');
         await expect.poll(() => Object.values(channelColors)).toContain('viz-2');
     });
 

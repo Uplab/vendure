@@ -1,9 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { NavMenuItem, NavMenuSection } from '@/vdb/framework/nav-menu/nav-menu-extensions.js';
+import {
+    NavigationShortcut,
+    NavMenuItem,
+    NavMenuSection,
+} from '@/vdb/framework/nav-menu/nav-menu-extensions.js';
 import { buildShortcutMap, isEditableTarget } from './navigation-shortcuts.js';
 
-const item = (id: string, shortcut?: string): NavMenuItem => ({
+const item = (id: string, shortcut?: NavigationShortcut): NavMenuItem => ({
     id,
     title: id,
     url: `/${id}`,
