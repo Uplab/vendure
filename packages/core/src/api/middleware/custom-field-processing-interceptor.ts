@@ -2,18 +2,12 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nes
 import { ModuleRef } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { getGraphQlInputName } from '@vendure/common/lib/shared-utils';
-import {
-    getNamedType,
-    GraphQLSchema,
-    OperationDefinitionNode,
-    TypeInfo,
-    visit,
-    visitWithTypeInfo,
-} from 'graphql';
+import { OperationDefinitionNode } from 'graphql';
 
 import { Injector } from '../../common/injector';
 import { ConfigService } from '../../config/config.service';
 import { CustomFieldConfig, CustomFields } from '../../config/custom-field/custom-field-types';
+import { getArgumentMap } from '../common/graphql-argument-map';
 import { parseContext } from '../common/parse-context';
 import { internal_getRequestContext, RequestContext } from '../common/request-context';
 import { validateCustomFieldValue } from '../common/validate-custom-field-value';
@@ -70,7 +64,7 @@ export class CustomFieldProcessingInterceptor implements NestInterceptor {
         const ctx = internal_getRequestContext(parseContext(context).req);
         const injector = new Injector(this.moduleRef);
 
-        const inputTypeNames = this.getArgumentMap(operation, schema);
+        const inputTypeNames = getArgumentMap(operation, schema);
 
         for (const [inputName, typeName] of Object.entries(inputTypeNames)) {
             if (this.hasCustomFields(typeName) && variables[inputName]) {
@@ -139,29 +133,7 @@ export class CustomFieldProcessingInterceptor implements NestInterceptor {
         return false;
     }
 
-    private getArgumentMap(
-        operation: OperationDefinitionNode,
-        schema: GraphQLSchema,
-    ): { [inputName: string]: string } {
-        const typeInfo = new TypeInfo(schema);
-        const map: { [inputName: string]: string } = {};
 
-        const visitor = {
-            enter(node: any) {
-                if (node.kind === 'Field') {
-                    const fieldDef = typeInfo.getFieldDef();
-                    if (fieldDef) {
-                        for (const arg of fieldDef.args) {
-                            map[arg.name] = getNamedType(arg.type).name;
-                        }
-                    }
-                }
-            },
-        };
-
-        visit(operation, visitWithTypeInfo(typeInfo, visitor));
-        return map;
-    }
 
     private applyDefaultsToInput(typeName: string, variableValues: any) {
         if (typeName === 'OrderLineCustomFieldsInput') {
