@@ -2,7 +2,7 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nes
 import { ModuleRef } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { getGraphQlInputName } from '@vendure/common/lib/shared-utils';
-import { OperationDefinitionNode } from 'graphql';
+import { GraphQLSchema, OperationDefinitionNode } from 'graphql';
 
 import { Injector } from '../../common/injector';
 import { ConfigService } from '../../config/config.service';
