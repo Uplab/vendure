@@ -31,10 +31,15 @@ describe('authOptions.disableLastLoginUpdate (default false)', () => {
         const before = await adminClient.query(getCustomerDocument, { id: customer.id });
         expect(before.customer?.user?.lastLogin).toBeNull();
 
-        await shopClient.asUserWithCredentials(customer.emailAddress, 'test');
+        // Allow 1s slack: some DBs store datetime with second precision.
+        const startOfTest = Date.now() - 1000;
+        const login = await shopClient.asUserWithCredentials(customer.emailAddress, 'test');
+        expect(login.identifier).toBe(customer.emailAddress);
 
         const after = await adminClient.query(getCustomerDocument, { id: customer.id });
-        expect(after.customer?.user?.lastLogin).not.toBeNull();
+        const lastLogin = after.customer!.user!.lastLogin;
+        expect(lastLogin).not.toBeNull();
+        expect(new Date(lastLogin as string).getTime()).toBeGreaterThanOrEqual(startOfTest);
     });
 });
 
@@ -67,9 +72,10 @@ describe('authOptions.disableLastLoginUpdate (true)', () => {
         const before = await adminClient.query(getCustomerDocument, { id: customer.id });
         expect(before.customer?.user?.lastLogin).toBeNull();
 
-        await shopClient.asUserWithCredentials(customer.emailAddress, 'test');
+        const login = await shopClient.asUserWithCredentials(customer.emailAddress, 'test');
+        expect(login.identifier).toBe(customer.emailAddress);
 
         const after = await adminClient.query(getCustomerDocument, { id: customer.id });
-        expect(after.customer?.user?.lastLogin).toBeNull();
+        expect(after.customer!.user!.lastLogin).toBeNull();
     });
 });

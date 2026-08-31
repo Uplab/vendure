@@ -101,8 +101,11 @@ export class AuthService {
         }
         if (!this.configService.authOptions.disableLastLoginUpdate) {
             user.lastLogin = new Date();
-            await this.connection.getRepository(ctx, User).save(user);
         }
+        // The save is unconditional: an AuthenticationStrategy may have set fields on the
+        // User (e.g. `verified`, custom fields) which this is the only place to persist.
+        // With no changed columns, TypeORM issues no UPDATE, so the `user` row is not written.
+        await this.connection.getRepository(ctx, User).save(user);
         const session = await this.sessionService.createNewAuthenticatedSession(
             ctx,
             user,
