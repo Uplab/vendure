@@ -1198,7 +1198,7 @@
                   "title": "Bootstrap",
                   "slug": "bootstrap",
                   "file": "docs/reference/typescript-api/common/bootstrap.mdx",
-                  "lastModified": "2026-08-26T15:26:00Z"
+                  "lastModified": "2026-09-01T12:16:20+02:00"
                 },
                 {
                   "title": "CurrencyCode",
@@ -1512,7 +1512,7 @@
                   "title": "CustomFieldConfig",
                   "slug": "custom-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/custom-field-config.mdx",
-                  "lastModified": "2026-08-31T11:46:55Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "CustomFieldType",
@@ -1524,22 +1524,22 @@
                   "title": "StructCustomFieldConfig",
                   "slug": "struct-custom-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/struct-custom-field-config.mdx",
-                  "lastModified": "2026-08-31T11:46:55Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "StructFieldConfig",
                   "slug": "struct-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/struct-field-config.mdx",
-                  "lastModified": "2026-08-31T11:46:55Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "TypedCustomSingleFieldConfig",
                   "slug": "typed-custom-single-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/typed-custom-single-field-config.mdx",
-                  "lastModified": "2026-08-31T11:46:55Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 }
               ],
-              "lastModified": "2026-08-31T11:46:55Z"
+              "lastModified": "2026-09-01T11:21:59+02:00"
             },
             {
               "title": "Data Access",
@@ -2392,13 +2392,13 @@
                   "title": "DeduplicateTranslations",
                   "slug": "deduplicate-translations",
                   "file": "docs/reference/typescript-api/migration/deduplicate-translations.mdx",
-                  "lastModified": "2026-08-26T15:26:00Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "GenerateMigration",
                   "slug": "generate-migration",
                   "file": "docs/reference/typescript-api/migration/generate-migration.mdx",
-                  "lastModified": "2026-08-26T15:26:00Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "MigrateAssetTranslationData",
@@ -2874,7 +2874,7 @@
                   "title": "DeserializedCachedSession",
                   "slug": "deserialized-cached-session",
                   "file": "docs/reference/typescript-api/request/deserialized-cached-session.mdx",
-                  "lastModified": "2026-08-26T15:26:00Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "Relations Decorator",
@@ -3578,7 +3578,7 @@
                   "title": "BootstrapWorker",
                   "slug": "bootstrap-worker",
                   "file": "docs/reference/typescript-api/worker/bootstrap-worker.mdx",
-                  "lastModified": "2026-08-26T15:26:00Z"
+                  "lastModified": "2026-09-01T12:16:20+02:00"
                 },
                 {
                   "title": "VendureWorker",
@@ -3963,13 +3963,13 @@
                   "title": "AssetGallery",
                   "slug": "asset-gallery",
                   "file": "docs/reference/dashboard/components/asset-gallery.mdx",
-                  "lastModified": "2026-08-26T15:26:00Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "AssetPickerDialog",
                   "slug": "asset-picker-dialog",
                   "file": "docs/reference/dashboard/components/asset-picker-dialog.mdx",
-                  "lastModified": "2026-08-26T15:26:00Z"
+                  "lastModified": "2026-09-01T11:21:59+02:00"
                 },
                 {
                   "title": "ChannelChip",
