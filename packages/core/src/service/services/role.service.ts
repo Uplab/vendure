@@ -38,6 +38,7 @@ import { Role } from '../../entity/role/role.entity';
 import { User } from '../../entity/user/user.entity';
 import { EventBus } from '../../event-bus';
 import { RoleEvent } from '../../event-bus/events/role-event';
+import { CustomFieldRelationService } from '../helpers/custom-field-relation/custom-field-relation.service';
 import { ListQueryBuilder } from '../helpers/list-query-builder/list-query-builder';
 import {
     getChannelPermissions,
@@ -72,6 +73,7 @@ export class RoleService {
         private eventBus: EventBus,
         private requestContextCache: RequestContextCacheService,
         private cacheService: CacheService,
+        private customFieldRelationService: CustomFieldRelationService,
     ) {
         // When a Role is created, updated or deleted, we need to invalidate the roles cache
         this.eventBus.ofType(RoleEvent).subscribe(event => {
@@ -367,11 +369,13 @@ export class RoleService {
             permissions: input.permissions
                 ? unique([Permission.Authenticated, ...input.permissions])
                 : undefined,
+            customFields: input.customFields,
         });
         if (targetChannels) {
             role.channels = targetChannels;
         }
         await this.connection.getRepository(ctx, Role).save(role, { reload: false });
+        await this.customFieldRelationService.updateRelations(ctx, Role, input, role);
         const updatedRole = await assertFound(this.findOne(ctx, role.id));
         await this.eventBus.publish(new RoleEvent(ctx, updatedRole, 'updated', input));
         return updatedRole;
@@ -517,14 +521,17 @@ export class RoleService {
         }
     }
 
-    private createRoleForChannels(ctx: RequestContext, input: CreateRoleInput, channels: Channel[]) {
+    private async createRoleForChannels(ctx: RequestContext, input: CreateRoleInput, channels: Channel[]) {
         const role = new Role({
             code: input.code,
             description: input.description,
             permissions: unique([Permission.Authenticated, ...input.permissions]),
+            customFields: input.customFields,
         });
         role.channels = channels;
-        return this.connection.getRepository(ctx, Role).save(role);
+        const newRole = await this.connection.getRepository(ctx, Role).save(role);
+        await this.customFieldRelationService.updateRelations(ctx, Role, input, newRole);
+        return newRole;
     }
 
     private getAllAssignablePermissions(): Permission[] {
