@@ -964,7 +964,7 @@
                   "title": "AssetOptions",
                   "slug": "asset-options",
                   "file": "docs/reference/typescript-api/assets/asset-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "AssetPreviewStrategy",
@@ -1014,7 +1014,7 @@
                   "title": "AuthOptions",
                   "slug": "auth-options",
                   "file": "docs/reference/typescript-api/auth/auth-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "BcryptPasswordHashingStrategy",
@@ -1110,7 +1110,7 @@
                   "title": "SuperadminCredentials",
                   "slug": "superadmin-credentials",
                   "file": "docs/reference/typescript-api/auth/superadmin-credentials.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "VerificationTokenStrategy",
@@ -1438,7 +1438,7 @@
                   "title": "EntityOptions",
                   "slug": "entity-options",
                   "file": "docs/reference/typescript-api/configuration/entity-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "MergeConfig",
@@ -1462,7 +1462,7 @@
                   "title": "RuntimeVendureConfig",
                   "slug": "runtime-vendure-config",
                   "file": "docs/reference/typescript-api/configuration/runtime-vendure-config.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "SecretAccessStrategy",
@@ -1486,7 +1486,7 @@
                   "title": "SystemOptions",
                   "slug": "system-options",
                   "file": "docs/reference/typescript-api/configuration/system-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "TrustProxyOptions",
@@ -1498,7 +1498,7 @@
                   "title": "VendureConfig",
                   "slug": "vendure-config",
                   "file": "docs/reference/typescript-api/configuration/vendure-config.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 }
               ],
               "lastModified": "2026-01-28T14:49:21+01:00"
@@ -2236,7 +2236,7 @@
                   "title": "ImportExportOptions",
                   "slug": "import-export-options",
                   "file": "docs/reference/typescript-api/import-export/import-export-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "ImportParser",
@@ -2316,7 +2316,7 @@
                   "title": "JobQueueOptions",
                   "slug": "job-queue-options",
                   "file": "docs/reference/typescript-api/job-queue/job-queue-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "JobQueueService",
@@ -2576,7 +2576,7 @@
                   "title": "OrderOptions",
                   "slug": "order-options",
                   "file": "docs/reference/typescript-api/orders/order-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "OrderPlacedStrategy",
@@ -2662,7 +2662,7 @@
                   "title": "PaymentOptions",
                   "slug": "payment-options",
                   "file": "docs/reference/typescript-api/payment/payment-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "PaymentProcess",
@@ -2756,7 +2756,7 @@
                   "title": "CatalogOptions",
                   "slug": "catalog-options",
                   "file": "docs/reference/typescript-api/products-stock/catalog-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "DefaultProductVariantPriceCalculationStrategy",
@@ -2830,7 +2830,7 @@
                   "title": "PromotionOptions",
                   "slug": "promotion-options",
                   "file": "docs/reference/typescript-api/promotions/promotion-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 }
               ],
               "lastModified": "2026-01-28T14:49:21+01:00"
@@ -2924,7 +2924,7 @@
                   "title": "SchedulerOptions",
                   "slug": "scheduler-options",
                   "file": "docs/reference/typescript-api/scheduled-tasks/scheduler-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "SchedulerService",
@@ -3346,7 +3346,7 @@
                   "title": "ShippingOptions",
                   "slug": "shipping-options",
                   "file": "docs/reference/typescript-api/shipping/shipping-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "ShouldRunCheckFn",
@@ -3422,7 +3422,7 @@
                   "title": "TaxOptions",
                   "slug": "tax-options",
                   "file": "docs/reference/typescript-api/tax/tax-options.mdx",
-                  "lastModified": "2026-07-31T11:54:35+02:00"
+                  "lastModified": "2026-08-25T15:27:12Z"
                 },
                 {
                   "title": "TaxZoneStrategy",
