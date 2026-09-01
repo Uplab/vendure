@@ -259,6 +259,12 @@ function applyCustomFieldModifiers(zodType: ZodType, customField: CustomFieldCon
     }
     if (customField.nullable !== false || customField.readonly) {
         modifiedType = modifiedType.optional().nullable();
+    } else {
+        // A non-nullable custom field is left out of the create form's default values (see
+        // `omitNullDefaultsForNonNullableCustomFields`), so the schema must accept it missing.
+        // The same schema also backs the update form, where an explicit null must still fail:
+        // the column is NOT NULL, so clearing the input would be rejected by the server.
+        modifiedType = modifiedType.optional();
     }
     if (customField.readonly) {
         modifiedType = modifiedType.readonly();
@@ -369,7 +375,35 @@ export function getDefaultValuesFromFields(
             defaultValues[field.name] = getDefaultValueFromField(field, defaultLanguageCode);
         }
     }
-    return applyNullableSelectCustomFieldDefaults(defaultValues, customFieldConfigs);
+    return omitNullDefaultsForNonNullableCustomFields(
+        applyNullableSelectCustomFieldDefaults(defaultValues, customFieldConfigs),
+        customFieldConfigs,
+    );
+}
+
+/**
+ * Custom fields are always nullable in the GraphQL input type, so a `nullable: false` custom field
+ * gets seeded `null` here while its schema requires a value, leaving the create form invalid at
+ * mount (#5241). The server guarantees such a field has a `defaultValue`, which becomes the
+ * column's SQL DEFAULT, so omitting the key lets the database supply the configured value.
+ *
+ * The condition mirrors the one in {@link applyCustomFieldModifiers}: only fields whose schema is
+ * left non-nullable there may have their default omitted here.
+ */
+function omitNullDefaultsForNonNullableCustomFields<T extends Record<string, any>>(
+    values: T,
+    customFieldConfigs?: CustomFieldConfig[],
+): T {
+    if (!customFieldConfigs?.length || values.customFields == null) return values;
+
+    const customFields = { ...values.customFields };
+    for (const config of customFieldConfigs) {
+        const inputName = getGraphQlInputName(config);
+        if (config.nullable === false && !config.readonly && customFields[inputName] === null) {
+            delete customFields[inputName];
+        }
+    }
+    return { ...values, customFields };
 }
 
 /**
