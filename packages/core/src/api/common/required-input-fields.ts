@@ -10,6 +10,11 @@
  * Both create and update inputs are registered because an update that explicitly sets a field
  * to blank should also be rejected, even though the field is optional on update types.
  *
+ * Scope: Only top-level mutation arguments are validated. Nested input types that appear
+ * inside other inputs (e.g. CreateFacetValueWithFacetInput within CreateFacetInput.values,
+ * CreateGroupOptionInput within CreateProductOptionGroupInput.options) are not covered.
+ * These should be validated in the service layer if needed.
+ *
  * MAINTENANCE: Keep this registry in sync with the GraphQL schema definitions in
  * `packages/core/src/api/schema/admin-api/` and `packages/core/src/api/schema/shop-api/`.
  * When a new entity with required string fields is added, or an existing field is renamed,
@@ -32,7 +37,6 @@ export const requiredInputFields: Record<string, { fields?: string[]; translatio
     UpdateFacetInput: { fields: ['code'], translations: ['name'] },
     CreateFacetValueInput: { fields: ['code'], translations: ['name'] },
     UpdateFacetValueInput: { fields: ['code'], translations: ['name'] },
-    CreateFacetValueWithFacetInput: { fields: ['code'], translations: ['name'] },
 
     CreateCollectionInput: { translations: ['name', 'slug'] },
     UpdateCollectionInput: { translations: ['name', 'slug'] },

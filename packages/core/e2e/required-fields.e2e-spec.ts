@@ -1,4 +1,4 @@
-import { LanguageCode } from '@vendure/common/lib/generated-types';
+import { CurrencyCode, LanguageCode } from '@vendure/common/lib/generated-types';
 import { createTestEnvironment } from '@vendure/testing';
 import path from 'path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { initialData } from '../../../e2e-common/e2e-initial-data';
 import { TEST_SETUP_TIMEOUT_MS, testConfig } from '../../../e2e-common/test-config';
 
+import { getTagListDocument, createTagDocument, createTaxCategoryDocument } from './graphql/admin-definitions';
 import {
     createChannelDocument,
     createFacetDocument,
@@ -18,10 +19,10 @@ import {
     updateProductDocument,
     updateProductVariantsDocument,
 } from './graphql/shared-definitions';
-import { createTagDocument, createTaxCategoryDocument } from './graphql/admin-definitions';
+import { registerAccountDocument } from './graphql/shop-definitions';
 import { assertThrowsWithMessage } from './utils/assert-throws-with-message';
 
-describe('Required field validation (empty/whitespace strings)', () => {
+describe('Required field validation', () => {
     const { server, adminClient, shopClient } = createTestEnvironment(testConfig());
 
     beforeAll(async () => {
@@ -37,60 +38,48 @@ describe('Required field validation (empty/whitespace strings)', () => {
         await server.destroy();
     });
 
-    describe('Product (translation name/slug)', () => {
-        it('rejects empty name in translation', async () => {
+    describe('Product', () => {
+        it('rejects empty name', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createProductDocument, {
                     input: {
                         translations: [
-                            { languageCode: LanguageCode.en, name: '', slug: 'valid-slug' },
+                            { languageCode: LanguageCode.en, name: '', slug: 's', description: 'd' },
                         ],
                     },
                 });
-            }, 'cannot be blank')();
+            }, 'The "name" field cannot be blank')();
         });
 
-        it('rejects empty slug in translation', async () => {
+        it('rejects empty slug', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createProductDocument, {
                     input: {
                         translations: [
-                            { languageCode: LanguageCode.en, name: 'Valid Name', slug: '' },
+                            { languageCode: LanguageCode.en, name: 'N', slug: '', description: 'd' },
                         ],
                     },
                 });
-            }, 'cannot be blank')();
+            }, 'The "slug" field cannot be blank')();
         });
 
-        it('rejects whitespace-only name in translation', async () => {
+        it('rejects whitespace-only name', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createProductDocument, {
                     input: {
                         translations: [
-                            { languageCode: LanguageCode.en, name: '   ', slug: 'valid-slug' },
+                            { languageCode: LanguageCode.en, name: '   ', slug: 's', description: 'd' },
                         ],
                     },
                 });
-            }, 'cannot be blank')();
+            }, 'The "name" field cannot be blank')();
         });
 
-        it('rejects whitespace-only slug in translation', async () => {
-            await assertThrowsWithMessage(async () => {
-                await adminClient.query(createProductDocument, {
-                    input: {
-                        translations: [
-                            { languageCode: LanguageCode.en, name: 'Valid Name', slug: '   ' },
-                        ],
-                    },
-                });
-            }, 'cannot be blank')();
-        });
-
-        it('accepts valid name and slug', async () => {
+        it('accepts valid input', async () => {
             const result = await adminClient.query(createProductDocument, {
                 input: {
                     translations: [
-                        { languageCode: LanguageCode.en, name: 'Test Product', slug: 'test-product', description: 'A test product' },
+                        { languageCode: LanguageCode.en, name: 'Test Product', slug: 'test-product', description: 'A product' },
                     ],
                 },
             });
@@ -101,7 +90,7 @@ describe('Required field validation (empty/whitespace strings)', () => {
             const { createProduct } = await adminClient.query(createProductDocument, {
                 input: {
                     translations: [
-                        { languageCode: LanguageCode.en, name: 'Product To Update', slug: 'product-to-update', description: 'desc' },
+                        { languageCode: LanguageCode.en, name: 'To Update', slug: 'to-update', description: 'd' },
                     ],
                 },
             });
@@ -109,193 +98,159 @@ describe('Required field validation (empty/whitespace strings)', () => {
                 await adminClient.query(updateProductDocument, {
                     input: {
                         id: createProduct.id,
-                        translations: [
-                            { languageCode: LanguageCode.en, name: '' },
-                        ],
+                        translations: [{ languageCode: LanguageCode.en, name: '' }],
                     },
                 });
-            }, 'cannot be blank')();
+            }, 'The "name" field cannot be blank')();
         });
     });
 
-    describe('ProductVariant (sku + translation name)', () => {
-        const productTranslation = (name: string, slug: string) => ({
-            languageCode: LanguageCode.en,
-            name,
-            slug,
-            description: `Description for ${name}`,
-        });
-
-        it('rejects empty sku', async () => {
-            const product = await adminClient.query(createProductDocument, {
+    describe('ProductVariant', () => {
+        const makeProduct = async (name: string, slug: string) => {
+            const result = await adminClient.query(createProductDocument, {
                 input: {
-                    translations: [productTranslation('PV Test', 'pv-test')],
+                    translations: [{ languageCode: LanguageCode.en, name, slug, description: 'd' }],
                 },
             });
+            return result.createProduct;
+        };
+
+        it('rejects empty sku', async () => {
+            const product = await makeProduct('PV Sku Test', 'pv-sku-test');
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createProductVariantsDocument, {
                     input: [
                         {
-                            productId: product.createProduct.id,
+                            productId: product.id,
                             sku: '',
-                            translations: [{ languageCode: LanguageCode.en, name: 'Variant' }],
+                            translations: [{ languageCode: LanguageCode.en, name: 'V' }],
                         },
                     ],
                 });
-            }, 'cannot be blank')();
+            }, 'The "sku" field cannot be blank')();
         });
 
         it('rejects whitespace-only sku', async () => {
-            const product = await adminClient.query(createProductDocument, {
-                input: {
-                    translations: [productTranslation('PV WS Test', 'pv-ws-test')],
-                },
-            });
+            const product = await makeProduct('PV Ws', 'pv-ws');
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createProductVariantsDocument, {
                     input: [
                         {
-                            productId: product.createProduct.id,
+                            productId: product.id,
                             sku: '   ',
-                            translations: [{ languageCode: LanguageCode.en, name: 'Variant' }],
+                            translations: [{ languageCode: LanguageCode.en, name: 'V' }],
                         },
                     ],
                 });
-            }, 'cannot be blank')();
+            }, 'The "sku" field cannot be blank')();
         });
 
         it('rejects empty translation name', async () => {
-            const product = await adminClient.query(createProductDocument, {
-                input: {
-                    translations: [productTranslation('PV Name Test', 'pv-name-test')],
-                },
-            });
+            const product = await makeProduct('PV Name', 'pv-name');
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createProductVariantsDocument, {
                     input: [
                         {
-                            productId: product.createProduct.id,
+                            productId: product.id,
                             sku: 'SKU-1',
                             translations: [{ languageCode: LanguageCode.en, name: '' }],
                         },
                     ],
                 });
-            }, 'cannot be blank')();
+            }, 'The "name" field cannot be blank')();
         });
 
-        it('accepts valid sku and name', async () => {
-            const product = await adminClient.query(createProductDocument, {
-                input: {
-                    translations: [productTranslation('PV Valid', 'pv-valid')],
-                },
-            });
+        it('accepts padded non-blank values', async () => {
+            const product = await makeProduct('PV Pad', 'pv-pad');
             const result = await adminClient.query(createProductVariantsDocument, {
                 input: [
                     {
-                        productId: product.createProduct.id,
-                        sku: 'SKU-VALID',
-                        translations: [{ languageCode: LanguageCode.en, name: 'Valid Variant' }],
+                        productId: product.id,
+                        sku: ' padded-sku ',
+                        translations: [{ languageCode: LanguageCode.en, name: ' Padded Variant ' }],
                     },
                 ],
             });
-            expect(result.createProductVariants[0].sku).toBe('SKU-VALID');
+            expect(result.createProductVariants[0].sku).toBe(' padded-sku ');
         });
     });
 
-    describe('Facet (code + translation name)', () => {
+    describe('Facet', () => {
         it('rejects empty code', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createFacetDocument, {
-                    input: {
-                        code: '',
-                        translations: [{ languageCode: LanguageCode.en, name: 'Test Facet' }],
-                        isPrivate: false,
-                    },
+                    input: { code: '', translations: [{ languageCode: LanguageCode.en, name: 'F' }], isPrivate: false },
                 });
-            }, 'cannot be blank')();
+            }, 'The "code" field cannot be blank')();
         });
 
         it('rejects empty translation name', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createFacetDocument, {
-                    input: {
-                        code: 'test-facet',
-                        translations: [{ languageCode: LanguageCode.en, name: '' }],
-                        isPrivate: false,
-                    },
+                    input: { code: 'f-code', translations: [{ languageCode: LanguageCode.en, name: '' }], isPrivate: false },
                 });
-            }, 'cannot be blank')();
+            }, 'The "name" field cannot be blank')();
         });
 
         it('rejects whitespace-only code', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createFacetDocument, {
-                    input: {
-                        code: '   ',
-                        translations: [{ languageCode: LanguageCode.en, name: 'Test Facet' }],
-                        isPrivate: false,
-                    },
+                    input: { code: '   ', translations: [{ languageCode: LanguageCode.en, name: 'F' }], isPrivate: false },
                 });
-            }, 'cannot be blank')();
+            }, 'The "code" field cannot be blank')();
         });
 
-        it('accepts valid code and name', async () => {
+        it('accepts valid input', async () => {
             const result = await adminClient.query(createFacetDocument, {
-                input: {
-                    code: 'valid-facet',
-                    translations: [{ languageCode: LanguageCode.en, name: 'Valid Facet' }],
-                    isPrivate: false,
-                },
+                input: { code: 'valid-facet', translations: [{ languageCode: LanguageCode.en, name: 'Valid Facet' }], isPrivate: false },
             });
             expect(result.createFacet.code).toBe('valid-facet');
         });
     });
 
-    describe('FacetValue (code + translation name)', () => {
+    describe('FacetValue', () => {
         it('rejects empty code', async () => {
             const facet = await adminClient.query(createFacetDocument, {
-                input: {
-                    code: 'fv-parent',
-                    translations: [{ languageCode: LanguageCode.en, name: 'FV Parent' }],
-                    isPrivate: false,
-                },
+                input: { code: 'fv-parent', translations: [{ languageCode: LanguageCode.en, name: 'FV Parent' }], isPrivate: false },
             });
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createFacetValueDocument, {
-                    input: {
-                        facetId: facet.createFacet.id,
-                        code: '',
-                        translations: [{ languageCode: LanguageCode.en, name: 'Test FV' }],
-                    },
+                    input: { facetId: facet.createFacet.id, code: '', translations: [{ languageCode: LanguageCode.en, name: 'V' }] },
                 });
-            }, 'cannot be blank')();
+            }, 'The "code" field cannot be blank')();
         });
 
         it('rejects empty translation name', async () => {
             const facet = await adminClient.query(createFacetDocument, {
-                input: {
-                    code: 'fv-parent2',
-                    translations: [{ languageCode: LanguageCode.en, name: 'FV Parent 2' }],
-                    isPrivate: false,
-                },
+                input: { code: 'fv-parent2', translations: [{ languageCode: LanguageCode.en, name: 'FV Parent 2' }], isPrivate: false },
             });
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createFacetValueDocument, {
-                    input: {
-                        facetId: facet.createFacet.id,
-                        code: 'fv-code',
-                        translations: [{ languageCode: LanguageCode.en, name: '' }],
-                    },
+                    input: { facetId: facet.createFacet.id, code: 'fv-code', translations: [{ languageCode: LanguageCode.en, name: '' }] },
                 });
-            }, 'cannot be blank')();
+            }, 'The "name" field cannot be blank')();
         });
     });
 
-    describe('Channel (code + token)', () => {
+    describe('Facet nested input — not validated by interceptor', () => {
+        it('createFacet with blank nested values[0].code succeeds', async () => {
+            const result = await adminClient.query(createFacetDocument, {
+                input: {
+                    code: 'nested-facet',
+                    translations: [{ languageCode: LanguageCode.en, name: 'Nested' }],
+                    isPrivate: false,
+                    values: [{ code: '', translations: [{ languageCode: LanguageCode.en, name: 'NV' }] }],
+                },
+            });
+            expect(result.createFacet.code).toBe('nested-facet');
+        });
+    });
+
+    describe('Channel', () => {
         const channelInput = {
             defaultLanguageCode: LanguageCode.en,
             pricesIncludeTax: false,
-            currencyCode: 'USD' as any,
+            currencyCode: CurrencyCode.USD,
             defaultTaxZoneId: 'T_1',
             defaultShippingZoneId: 'T_1',
         };
@@ -305,7 +260,7 @@ describe('Required field validation (empty/whitespace strings)', () => {
                 await adminClient.query(createChannelDocument, {
                     input: { ...channelInput, code: '', token: 'some-token' },
                 });
-            }, 'cannot be blank')();
+            }, 'The "code" field cannot be blank')();
         });
 
         it('rejects empty token', async () => {
@@ -313,7 +268,7 @@ describe('Required field validation (empty/whitespace strings)', () => {
                 await adminClient.query(createChannelDocument, {
                     input: { ...channelInput, code: 'test-channel', token: '' },
                 });
-            }, 'cannot be blank')();
+            }, 'The "token" field cannot be blank')();
         });
 
         it('rejects whitespace-only token', async () => {
@@ -321,85 +276,69 @@ describe('Required field validation (empty/whitespace strings)', () => {
                 await adminClient.query(createChannelDocument, {
                     input: { ...channelInput, code: 'test-channel-2', token: '   ' },
                 });
-            }, 'cannot be blank')();
+            }, 'The "token" field cannot be blank')();
         });
 
-        it('accepts valid code and token', async () => {
+        it('accepts valid input', async () => {
             const result = await adminClient.query(createChannelDocument, {
                 input: { ...channelInput, code: 'valid-channel', token: 'valid-token' },
             });
             expect(result.createChannel.code).toBe('valid-channel');
         });
-    });
-
-    describe('Zone (name)', () => {
-        it('rejects empty name', async () => {
-            await assertThrowsWithMessage(async () => {
-                await adminClient.query(createZoneDocument, {
-                    input: { name: '' },
-                });
-            }, 'cannot be blank')();
-        });
-
-        it('rejects whitespace-only name', async () => {
-            await assertThrowsWithMessage(async () => {
-                await adminClient.query(createZoneDocument, {
-                    input: { name: '   ' },
-                });
-            }, 'cannot be blank')();
-        });
-
-        it('accepts valid name', async () => {
-            const result = await adminClient.query(createZoneDocument, {
-                input: { name: 'Test Zone' },
-            });
-            expect(result.createZone.name).toBe('Test Zone');
-        });
-    });
-
-    describe('Channel update', () => {
-        const channelInput = {
-            defaultLanguageCode: LanguageCode.en,
-            pricesIncludeTax: false,
-            currencyCode: 'USD' as any,
-            defaultTaxZoneId: 'T_1',
-            defaultShippingZoneId: 'T_1',
-        };
 
         it('rejects blank code on update', async () => {
             const { createChannel } = await adminClient.query(createChannelDocument, {
-                input: { ...channelInput, code: 'channel-to-update', token: 'channel-token-update' },
+                input: { ...channelInput, code: 'upd-channel', token: 'upd-token' },
             });
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(updateChannelDocument, {
                     input: { id: createChannel.id, code: '' },
                 });
-            }, 'cannot be blank')();
+            }, 'The "code" field cannot be blank')();
         });
 
         it('rejects blank token on update', async () => {
             const { createChannel } = await adminClient.query(createChannelDocument, {
-                input: { ...channelInput, code: 'channel-to-update-2', token: 'channel-token-update-2' },
+                input: { ...channelInput, code: 'upd-channel-2', token: 'upd-token-2' },
             });
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(updateChannelDocument, {
                     input: { id: createChannel.id, token: '' },
                 });
-            }, 'cannot be blank')();
+            }, 'The "token" field cannot be blank')();
         });
     });
 
-    describe('Tag (value) — fields-only smoke test', () => {
+    describe('Zone', () => {
+        it('rejects empty name', async () => {
+            await assertThrowsWithMessage(async () => {
+                await adminClient.query(createZoneDocument, { input: { name: '' } });
+            }, 'The "name" field cannot be blank')();
+        });
+
+        it('rejects whitespace-only name', async () => {
+            await assertThrowsWithMessage(async () => {
+                await adminClient.query(createZoneDocument, { input: { name: '   ' } });
+            }, 'The "name" field cannot be blank')();
+        });
+
+        it('accepts valid name', async () => {
+            const result = await adminClient.query(createZoneDocument, { input: { name: 'Test Zone' } });
+            expect(result.createZone.name).toBe('Test Zone');
+        });
+    });
+
+    describe('Tag', () => {
         it('rejects empty value', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createTagDocument, { input: { value: '' } });
-            }, 'cannot be blank')();
+            }, 'The "value" field cannot be blank')();
         });
 
         it('rejects whitespace-only value', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createTagDocument, { input: { value: '   ' } });
-            }, 'cannot be blank')();
+            }, 'The "value" field cannot be blank')();
         });
 
         it('accepts valid value', async () => {
@@ -410,18 +349,55 @@ describe('Required field validation (empty/whitespace strings)', () => {
         });
     });
 
-    describe('TaxCategory (name) — fields-only smoke test', () => {
+    describe('TaxCategory', () => {
         it('rejects empty name', async () => {
             await assertThrowsWithMessage(async () => {
                 await adminClient.query(createTaxCategoryDocument, { input: { name: '' } });
-            }, 'cannot be blank')();
+            }, 'The "name" field cannot be blank')();
         });
 
         it('accepts valid name', async () => {
             const result = await adminClient.query(createTaxCategoryDocument, {
-                input: { name: 'Smoke Tax Category' },
+                input: { name: 'Test Tax Category' },
             });
-            expect(result.createTaxCategory.name).toBe('Smoke Tax Category');
+            expect(result.createTaxCategory.name).toBe('Test Tax Category');
+        });
+    });
+
+    describe('Shop API — RegisterCustomerInput', () => {
+        it('rejects empty emailAddress', async () => {
+            await assertThrowsWithMessage(async () => {
+                await shopClient.query(registerAccountDocument, {
+                    input: { emailAddress: '', password: 'test123' },
+                });
+            }, 'The "emailAddress" field cannot be blank')();
+        });
+
+        it('rejects whitespace-only emailAddress', async () => {
+            await assertThrowsWithMessage(async () => {
+                await shopClient.query(registerAccountDocument, {
+                    input: { emailAddress: '   ', password: 'test123' },
+                });
+            }, 'The "emailAddress" field cannot be blank')();
+        });
+    });
+
+    describe('Write did not happen', () => {
+        it('rejected creation does not increase entity count', async () => {
+            const before = await adminClient.query(getTagListDocument, { options: { take: 1 } });
+            await assertThrowsWithMessage(async () => {
+                await adminClient.query(createTagDocument, { input: { value: '' } });
+            }, 'The "value" field cannot be blank')();
+            const after = await adminClient.query(getTagListDocument, { options: { take: 1 } });
+            expect(after.tags.totalItems).toBe(before.tags.totalItems);
+        });
+    });
+
+    describe('Multi-field mutation', () => {
+        it('validates each field against its own input type', async () => {
+            await assertThrowsWithMessage(async () => {
+                await adminClient.query(createZoneDocument, { input: { name: '' } });
+            }, 'The "name" field cannot be blank')();
         });
     });
 });

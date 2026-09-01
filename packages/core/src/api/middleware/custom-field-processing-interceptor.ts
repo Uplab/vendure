@@ -2,12 +2,11 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nes
 import { ModuleRef } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { getGraphQlInputName } from '@vendure/common/lib/shared-utils';
-import { GraphQLSchema, OperationDefinitionNode } from 'graphql';
+import { getNamedType, GraphQLSchema, OperationDefinitionNode } from 'graphql';
 
 import { Injector } from '../../common/injector';
 import { ConfigService } from '../../config/config.service';
 import { CustomFieldConfig, CustomFields } from '../../config/custom-field/custom-field-types';
-import { getArgumentMap } from '../common/graphql-argument-map';
 import { parseContext } from '../common/parse-context';
 import { internal_getRequestContext, RequestContext } from '../common/request-context';
 import { validateCustomFieldValue } from '../common/validate-custom-field-value';
@@ -19,8 +18,8 @@ import { validateCustomFieldValue } from '../common/validate-custom-field-value'
  * 1. Applying default values when fields are explicitly set to null (create operations only)
  * 2. Validating custom field values according to their constraints
  *
- * Uses native GraphQL utilities (visit, visitWithTypeInfo, getNamedType) for efficient
- * AST traversal and type analysis.
+ * Scoped to the field being resolved via info.fieldName, ensuring correct type
+ * resolution even when a single document contains multiple mutation fields.
  */
 @Injectable()
 export class CustomFieldProcessingInterceptor implements NestInterceptor {
@@ -46,9 +45,9 @@ export class CustomFieldProcessingInterceptor implements NestInterceptor {
             return next.handle();
         }
 
-        const { operation, schema } = parsedContext.info;
+        const { operation, schema, fieldName } = parsedContext.info;
         if (operation.operation === 'mutation') {
-            await this.processMutationCustomFields(context, operation, schema);
+            await this.processMutationCustomFields(context, operation, schema, fieldName);
         }
 
         return next.handle();
@@ -58,17 +57,23 @@ export class CustomFieldProcessingInterceptor implements NestInterceptor {
         context: ExecutionContext,
         operation: OperationDefinitionNode,
         schema: GraphQLSchema,
+        fieldName: string,
     ) {
         const gqlExecutionContext = GqlExecutionContext.create(context);
         const variables = gqlExecutionContext.getArgs();
         const ctx = internal_getRequestContext(parseContext(context).req);
         const injector = new Injector(this.moduleRef);
 
-        const inputTypeNames = getArgumentMap(operation, schema);
+        const mutationType = schema.getMutationType();
+        const fieldDef = mutationType?.getFields()[fieldName];
+        if (!fieldDef) {
+            return;
+        }
 
-        for (const [inputName, typeName] of Object.entries(inputTypeNames)) {
-            if (this.hasCustomFields(typeName) && variables[inputName]) {
-                await this.processInputVariables(typeName, variables[inputName], ctx, injector, operation);
+        for (const arg of fieldDef.args) {
+            const typeName = getNamedType(arg.type).name;
+            if (this.hasCustomFields(typeName) && variables[arg.name]) {
+                await this.processInputVariables(typeName, variables[arg.name], ctx, injector, operation);
             }
         }
     }
@@ -118,13 +123,13 @@ export class CustomFieldProcessingInterceptor implements NestInterceptor {
         // Check if any field in the operation is a "create/add" operation for order lines
         for (const selection of operation.selectionSet.selections) {
             if (selection.kind === 'Field') {
-                const fieldName = selection.name.value;
+                const name = selection.name.value;
                 // These mutations create new order lines, so should apply defaults
-                if (fieldName === 'addItemToOrder' || fieldName === 'addItemToDraftOrder') {
+                if (name === 'addItemToOrder' || name === 'addItemToDraftOrder') {
                     return true;
                 }
                 // These mutations modify existing order lines, so should NOT apply defaults
-                if (fieldName === 'adjustOrderLine' || fieldName === 'adjustDraftOrderLine') {
+                if (name === 'adjustOrderLine' || name === 'adjustDraftOrderLine') {
                     return false;
                 }
             }
@@ -132,8 +137,6 @@ export class CustomFieldProcessingInterceptor implements NestInterceptor {
         // Default to false for safety (don't apply defaults unless we're sure it's a create)
         return false;
     }
-
-
 
     private applyDefaultsToInput(typeName: string, variableValues: any) {
         if (typeName === 'OrderLineCustomFieldsInput') {
@@ -180,10 +183,10 @@ export class CustomFieldProcessingInterceptor implements NestInterceptor {
 
     private applyDefaultsToCustomFieldsObject(customFieldConfig: any[], customFieldsObject: any) {
         for (const config of customFieldConfig) {
-            const fieldName = getGraphQlInputName(config);
+            const name = getGraphQlInputName(config);
             // Only apply default if the field is explicitly null and has a default value
-            if (customFieldsObject[fieldName] === null && config.defaultValue !== undefined) {
-                customFieldsObject[fieldName] = config.defaultValue;
+            if (customFieldsObject[name] === null && config.defaultValue !== undefined) {
+                customFieldsObject[name] = config.defaultValue;
             }
         }
     }
