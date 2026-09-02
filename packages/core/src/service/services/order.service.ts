@@ -81,6 +81,7 @@ import { ListQueryOptions } from '../../common/types/common-types';
 import { assertFound, idsAreEqual } from '../../common/utils';
 import { ConfigService } from '../../config/config.service';
 import { Logger } from '../../config/logger/vendure-logger';
+import { findOptionsArrayToObject } from '../../connection/find-options-array-to-object';
 import { TransactionalConnection } from '../../connection/transactional-connection';
 import { Channel } from '../../entity/channel/channel.entity';
 import { Customer } from '../../entity/customer/customer.entity';
@@ -110,7 +111,7 @@ import { RefundStateTransitionEvent } from '../../event-bus/events/refund-state-
 import { CustomFieldRelationService } from '../helpers/custom-field-relation/custom-field-relation.service';
 import { FulfillmentState } from '../helpers/fulfillment-state-machine/fulfillment-state';
 import { ListQueryBuilder } from '../helpers/list-query-builder/list-query-builder';
-import { OrderCalculator } from '../helpers/order-calculator/order-calculator';
+import { ApplyPriceAdjustmentsOptions, OrderCalculator } from '../helpers/order-calculator/order-calculator';
 import { OrderMerger } from '../helpers/order-merger/order-merger';
 import { OrderModifier } from '../helpers/order-modifier/order-modifier';
 import { OrderState } from '../helpers/order-state-machine/order-state';
@@ -290,7 +291,7 @@ export class OrderService implements OnApplicationBootstrap {
             .map(r => r.replace('lines.', ''));
 
         qb.setFindOptions({
-            relations: orderRelations,
+            relations: findOptionsArrayToObject<Order>(orderRelations),
             relationLoadStrategy: 'query',
         })
             .leftJoin('order.channels', 'channel')
@@ -308,7 +309,7 @@ export class OrderService implements OnApplicationBootstrap {
                 const linesQb = this.connection.getRepository(ctx, OrderLine).createQueryBuilder('line');
                 linesQb
                     .setFindOptions({
-                        relations: lineRelations,
+                        relations: findOptionsArrayToObject<OrderLine>(lineRelations),
                     })
                     .where('line.orderId = :orderId', { orderId })
                     .addOrderBy('line.createdAt', 'ASC')
@@ -340,7 +341,7 @@ export class OrderService implements OnApplicationBootstrap {
         relations?: RelationPaths<Order>,
     ): Promise<Order | undefined> {
         const order = await this.connection.getRepository(ctx, Order).findOne({
-            relations: ['customer'],
+            relations: { customer: true },
             where: {
                 code: orderCode,
             },
@@ -391,7 +392,7 @@ export class OrderService implements OnApplicationBootstrap {
      */
     getOrderPayments(ctx: RequestContext, orderId: ID): Promise<Payment[]> {
         return this.connection.getRepository(ctx, Payment).find({
-            relations: ['refunds'],
+            relations: { refunds: true },
             where: {
                 order: { id: orderId } as any,
             },
@@ -407,7 +408,7 @@ export class OrderService implements OnApplicationBootstrap {
             where: {
                 order: { id: orderId },
             },
-            relations: ['lines', 'payment', 'refund', 'surcharges'],
+            relations: { lines: true, payment: true, refund: true, surcharges: true },
         });
     }
 
@@ -428,7 +429,7 @@ export class OrderService implements OnApplicationBootstrap {
             where: {
                 aggregateOrderId: order.id,
             },
-            relations: ['channels'],
+            relations: { channels: true },
         });
     }
 
@@ -437,7 +438,10 @@ export class OrderService implements OnApplicationBootstrap {
             ? undefined
             : this.connection
                   .getRepository(ctx, Order)
-                  .findOne({ where: { id: order.aggregateOrderId }, relations: ['channels', 'lines'] })
+                  .findOne({
+                      where: { id: order.aggregateOrderId },
+                      relations: { channels: true, lines: true },
+                  })
                   .then(result => result ?? undefined);
     }
 
@@ -881,12 +885,6 @@ export class OrderService implements OnApplicationBootstrap {
                 }
 
                 orderLine.customFields = mergedCustomFields;
-                await this.customFieldRelationService.updateRelations(
-                    ctx,
-                    OrderLine,
-                    { customFields: mergedCustomFields },
-                    orderLine,
-                );
             }
             const existingQuantityInOtherLines = summate(
                 order.lines.filter(
@@ -910,6 +908,16 @@ export class OrderService implements OnApplicationBootstrap {
                 await this.eventBus.publish(new OrderLineEvent(ctx, order, deletedOrderLine, 'deleted'));
             } else {
                 await this.orderModifier.updateOrderLineQuantity(ctx, orderLine, correctedQuantity, order);
+                if (customFields != null) {
+                    // This must run after the OrderLine has been saved with the merged custom field
+                    // values, since it re-loads the entity from the database to resolve the relations.
+                    await this.customFieldRelationService.updateRelations(
+                        ctx,
+                        OrderLine,
+                        { customFields },
+                        orderLine,
+                    );
+                }
                 updatedOrderLines.push(orderLine);
             }
             const quantityWasAdjustedDown = correctedQuantity < quantity;
@@ -1857,7 +1865,7 @@ export class OrderService implements OnApplicationBootstrap {
             where: {
                 id: In(input.lines.map(l => l.orderLineId)),
             },
-            relations: ['productVariant'],
+            relations: { productVariant: true },
         });
 
         for (const line of lines) {
@@ -2119,9 +2127,10 @@ export class OrderService implements OnApplicationBootstrap {
         const orderToDelete =
             orderOrId instanceof Order
                 ? orderOrId
-                : await this.connection
-                      .getRepository(ctx, Order)
-                      .findOneOrFail({ where: { id: orderOrId }, relations: ['lines', 'shippingLines'] });
+                : await this.connection.getRepository(ctx, Order).findOneOrFail({
+                      where: { id: orderOrId },
+                      relations: { lines: true, shippingLines: true },
+                  });
         // If there is a Session referencing the Order to be deleted, we must first remove that
         // reference in order to avoid a foreign key error. See https://github.com/vendurehq/vendure/issues/1454
         const sessions = await this.connection
@@ -2384,7 +2393,7 @@ export class OrderService implements OnApplicationBootstrap {
         order: Order,
         updatedOrderLines?: OrderLine[],
         relations?: RelationPaths<Order>,
-        options?: { recalculateShipping?: boolean; recalculateShippingPromotions?: boolean },
+        options?: ApplyPriceAdjustmentsOptions,
     ): Promise<Order> {
         const allPromotions = await this.promotionService.getActivePromotionsInChannel(ctx);
         const activePromotionsPre = await this.promotionService.getActivePromotionsOnOrder(ctx, order.id);
@@ -2461,6 +2470,7 @@ export class OrderService implements OnApplicationBootstrap {
         // a race condition where changing one or the other in parallel can
         // overwrite the other's changes. The other omissions prevent the save
         // function from doing more work than necessary.
+        updatedOrder.pricingUpdatedAt = new Date();
         await this.connection
             .getRepository(ctx, Order)
             .save(
@@ -2484,6 +2494,67 @@ export class OrderService implements OnApplicationBootstrap {
         await this.connection.getRepository(ctx, ShippingLine).save(order.shippingLines, { reload: false });
 
         return assertFound(this.findOne(ctx, order.id, relations));
+    }
+
+    /**
+     * @description
+     * Recalculates the given active Order's prices, promotions, taxes and shipping promotions if the
+     * configured {@link OrderRecalculationStrategy} reports it as stale. The shipping *method* and
+     * *rate* are deliberately NOT re-evaluated on this read path — the customer's chosen method is
+     * never silently swapped; those are re-evaluated when the Order transitions to `ArrangingPayment`.
+     * Only Orders in the `AddingItems` state are eligible; no-ops (returning the Order unchanged)
+     * otherwise. Invoked on the active-order read path.
+     *
+     * @since 3.8.0
+     */
+    async applyPriceAdjustmentsIfStale(ctx: RequestContext, order: Order): Promise<Order> {
+        if (!order.active || order.state !== 'AddingItems') {
+            return order;
+        }
+        const { orderRecalculationStrategy } = this.configService.orderOptions;
+        const stale = await orderRecalculationStrategy.shouldRecalculate(ctx, order);
+        if (!stale) {
+            return order;
+        }
+        return this.connection.withTransaction(ctx, async txCtx => {
+            // Acquire a pessimistic write lock on the Order row to serialize concurrent reads.
+            // On SQLite the lock is not supported; SQLite serializes writes at the engine level.
+            let lockedOrder: Order | null = null;
+            try {
+                lockedOrder = await this.connection
+                    .getRepository(txCtx, Order)
+                    .createQueryBuilder('order')
+                    .setLock('pessimistic_write')
+                    .where('order.id = :id', { id: order.id })
+                    .getOne();
+            } catch (e) {
+                if (!(e instanceof LockNotSupportedOnGivenDriverError)) {
+                    throw e;
+                }
+                // Lock not supported (e.g. SQLite) — continue without it
+                lockedOrder = await this.connection.getRepository(txCtx, Order).findOne({
+                    where: { id: order.id },
+                });
+            }
+            if (!lockedOrder) {
+                return order;
+            }
+            // Double-checked locking: re-evaluate staleness after acquiring the lock.
+            // Another concurrent request may have already recalculated the order.
+            const stillStale = await orderRecalculationStrategy.shouldRecalculate(ctx, lockedOrder);
+            if (!stillStale) {
+                return assertFound(this.findOne(txCtx, order.id));
+            }
+            // Load full relations required for recalculation.
+            const fullOrder = await this.getOrderOrThrow(txCtx, order.id);
+            return this.applyPriceAdjustments(txCtx, fullOrder, fullOrder.lines, undefined, {
+                // Freeze the chosen shipping method/rate on read (never swap it silently),
+                // but still re-test shipping promotions so a disabled promotion's discount
+                // is cleared instead of surviving on the order.
+                recalculateShipping: false,
+                recalculateShippingPromotions: true,
+            });
+        });
     }
 
     /**
@@ -2557,13 +2628,11 @@ export class OrderService implements OnApplicationBootstrap {
 
             const orders = await this.connection.getRepository(orderCtx, Order).find({
                 where: { id: In(affectedOrders.map(o => o.id)) },
-                relations: [
-                    'lines',
-                    'lines.productVariant',
-                    'lines.productVariant.productVariantPrices',
-                    'shippingLines',
-                    'surcharges',
-                ],
+                relations: {
+                    lines: { productVariant: { productVariantPrices: true } },
+                    shippingLines: true,
+                    surcharges: true,
+                },
             });
 
             for (const order of orders) {
