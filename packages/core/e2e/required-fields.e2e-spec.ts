@@ -14,6 +14,7 @@ import {
     createProductDocument,
     createProductVariantsDocument,
     createZoneDocument,
+    multiFieldMutationDocument,
     updateChannelDocument,
     updateFacetDocument,
     updateProductDocument,
@@ -232,18 +233,10 @@ describe('Required field validation', () => {
         });
     });
 
-    describe('Facet nested input — not validated by interceptor', () => {
-        it('createFacet with blank nested values[0].code succeeds', async () => {
-            const result = await adminClient.query(createFacetDocument, {
-                input: {
-                    code: 'nested-facet',
-                    translations: [{ languageCode: LanguageCode.en, name: 'Nested' }],
-                    isPrivate: false,
-                    values: [{ code: '', translations: [{ languageCode: LanguageCode.en, name: 'NV' }] }],
-                },
-            });
-            expect(result.createFacet.code).toBe('nested-facet');
-        });
+    describe('Facet nested input — out of scope', () => {
+        // Nested input types (e.g. CreateFacetValueWithFacetInput inside CreateFacetInput.values)
+        // are not validated by this interceptor. They should be validated in the service layer.
+        it.todo('createFacet with blank nested values[0].code should be validated in the service layer');
     });
 
     describe('Channel', () => {
@@ -394,10 +387,28 @@ describe('Required field validation', () => {
     });
 
     describe('Multi-field mutation', () => {
-        it('validates each field against its own input type', async () => {
+        it('validates each field against its own input type when argument names collide', async () => {
+            // Both createFacet and createChannel take `input` as their argument name.
+            // The interceptor must resolve each field's argument type from the schema,
+            // not from a flat map of argument names across the operation.
             await assertThrowsWithMessage(async () => {
-                await adminClient.query(createZoneDocument, { input: { name: '' } });
-            }, 'The "name" field cannot be blank')();
+                await adminClient.query(multiFieldMutationDocument, {
+                    facet: {
+                        code: 'multi-facet',
+                        translations: [{ languageCode: LanguageCode.en, name: 'Multi' }],
+                        isPrivate: false,
+                    },
+                    channel: {
+                        code: 'multi-channel',
+                        token: '', // blank — should be caught by ChannelInput spec, not FacetInput spec
+                        defaultLanguageCode: LanguageCode.en,
+                        pricesIncludeTax: false,
+                        currencyCode: CurrencyCode.USD,
+                        defaultTaxZoneId: 'T_1',
+                        defaultShippingZoneId: 'T_1',
+                    },
+                });
+            }, 'The "token" field cannot be blank')();
         });
     });
 });
