@@ -341,7 +341,7 @@ export class RoleService {
         await this.checkActiveUserHasSufficientPermissions(ctx, targetChannels, input.permissions);
         const role = await this.createRoleForChannels(ctx, input, targetChannels);
         await this.eventBus.publish(new RoleEvent(ctx, role, 'created', input));
-        return role;
+        return assertFound(this.findOne(ctx, role.id));
     }
 
     async update(ctx: RequestContext, input: UpdateRoleInput): Promise<Role> {

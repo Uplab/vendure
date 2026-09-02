@@ -1377,6 +1377,64 @@ describe('Custom fields', () => {
             expect(updateRole.description).toBe('Role with custom fields (edited)');
             expect(updateRole.customFields).toEqual({ note: 'updated' });
         });
+
+        it('can filter the roles list by a custom field', async () => {
+            await adminClient.query(createRoleWithCustomFieldsDocument, {
+                input: {
+                    code: 'custom-fields-role-filter',
+                    description: 'Role used for the custom field filter test',
+                    permissions: [Permission.ReadCatalog],
+                    customFields: { note: 'filter-target' },
+                },
+            });
+
+            const { roles } = await adminClient.query(getRolesFilterByCustomFieldDocument);
+
+            expect(roles.totalItems).toBe(1);
+            expect(roles.items.map(i => i.code)).toEqual(['custom-fields-role-filter']);
+        });
+
+        it('can sort the roles list by a custom field', async () => {
+            // Both roles are created here, and the list is filtered down to just
+            // these two, so the assertion does not depend on how the database
+            // orders the null notes of all the other roles.
+            for (const note of ['sort-note-b', 'sort-note-a']) {
+                await adminClient.query(createRoleWithCustomFieldsDocument, {
+                    input: {
+                        code: `custom-fields-role-${note}`,
+                        description: 'Role used for the custom field sort test',
+                        permissions: [Permission.ReadCatalog],
+                        customFields: { note },
+                    },
+                });
+            }
+
+            const { roles: asc } = await adminClient.query(getRolesSortByCustomFieldAscDocument);
+
+            expect(asc.totalItems).toBe(2);
+            expect(asc.items.map(i => i.customFields?.note)).toEqual(['sort-note-a', 'sort-note-b']);
+
+            const { roles: desc } = await adminClient.query(getRolesSortByCustomFieldDescDocument);
+
+            expect(desc.totalItems).toBe(2);
+            expect(desc.items.map(i => i.customFields?.note)).toEqual(['sort-note-b', 'sort-note-a']);
+        });
+
+        // Runs last: the tests above assert the note is still 'updated'.
+        it('updateRole can set a custom field back to null', async () => {
+            const { updateRole } = await adminClient.query(updateRoleWithCustomFieldsDocument, {
+                input: {
+                    id: roleId,
+                    customFields: { note: null },
+                },
+            });
+
+            expect(updateRole.customFields).toEqual({ note: null });
+
+            const { role } = await adminClient.query(getRoleCustomFieldsDocument, { id: roleId });
+
+            expect(role?.customFields).toEqual({ note: null });
+        });
     });
 });
 
@@ -1410,6 +1468,46 @@ const getRoleCustomFieldsDocument = graphql(`
             id
             customFields {
                 note
+            }
+        }
+    }
+`);
+
+const getRolesFilterByCustomFieldDocument = graphql(`
+    query GetRolesFilterByCustomField {
+        roles(options: { filter: { note: { eq: "filter-target" } } }) {
+            totalItems
+            items {
+                id
+                code
+            }
+        }
+    }
+`);
+
+const getRolesSortByCustomFieldAscDocument = graphql(`
+    query GetRolesSortByCustomFieldAsc {
+        roles(options: { filter: { note: { contains: "sort-note-" } }, sort: { note: ASC } }) {
+            totalItems
+            items {
+                id
+                customFields {
+                    note
+                }
+            }
+        }
+    }
+`);
+
+const getRolesSortByCustomFieldDescDocument = graphql(`
+    query GetRolesSortByCustomFieldDesc {
+        roles(options: { filter: { note: { contains: "sort-note-" } }, sort: { note: DESC } }) {
+            totalItems
+            items {
+                id
+                customFields {
+                    note
+                }
             }
         }
     }

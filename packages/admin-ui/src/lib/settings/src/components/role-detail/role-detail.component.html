@@ -59,17 +59,6 @@
                     </vdr-form-field>
                 </div>
             </vdr-card>
-            <vdr-card
-                formGroupName="customFields"
-                *ngIf="customFields.length"
-                [title]="'common.custom-fields' | translate"
-            >
-                <vdr-tabbed-custom-fields
-                    entityName="Role"
-                    [customFields]="customFields"
-                    [customFieldsFormGroup]="detailForm.get('customFields')"
-                ></vdr-tabbed-custom-fields>
-            </vdr-card>
         </vdr-page-block>
     </vdr-page-detail-layout>
     <vdr-page-block class="mt-2">

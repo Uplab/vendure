@@ -4,7 +4,6 @@ import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import {
     CreateRoleInput,
     DataService,
-    getCustomFieldsDefaults,
     GetRoleDetailDocument,
     LanguageCode,
     NotificationService,
@@ -39,13 +38,11 @@ export class RoleDetailComponent
     extends TypedBaseDetailComponent<typeof GetRoleDetailDocument, 'role'>
     implements OnInit, OnDestroy
 {
-    customFields = this.getCustomFieldConfig('Role');
     detailForm = this.formBuilder.group({
         code: ['', Validators.required],
         description: ['', Validators.required],
         channelIds: [[] as string[]],
         permissions: [[] as Permission[]],
-        customFields: this.formBuilder.group(getCustomFieldsDefaults(this.customFields)),
     });
     permissionDefinitions = this.serverConfigService.getPermissionDefinitions();
     constructor(
@@ -87,7 +84,7 @@ export class RoleDetailComponent
     }
 
     create() {
-        const { code, description, permissions, channelIds, customFields } = this.detailForm.value;
+        const { code, description, permissions, channelIds } = this.detailForm.value;
         if (!code || !description) {
             return;
         }
@@ -96,7 +93,6 @@ export class RoleDetailComponent
             description,
             permissions: permissions ?? [],
             channelIds,
-            customFields,
         };
         this.dataService.administrator.createRole(role).subscribe(
             data => {
@@ -144,9 +140,6 @@ export class RoleDetailComponent
             channelIds: role.channels.map(c => c.id),
             permissions: role.permissions,
         });
-        if (this.customFields.length) {
-            this.setCustomFieldFormValues(this.customFields, this.detailForm.get(['customFields']), role);
-        }
         // This was required to get the channel selector component to
         // correctly display its contents. A while spent debugging the root
         // cause did not yield a solution, therefore this next line.
