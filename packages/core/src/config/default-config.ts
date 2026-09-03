@@ -249,6 +249,7 @@ export const defaultConfig: RuntimeVendureConfig = {
         Promotion: [],
         Refund: [],
         Region: [],
+        Role: [],
         Seller: [],
         Session: [],
         ShippingLine: [],
