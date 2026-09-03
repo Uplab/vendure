@@ -470,6 +470,8 @@ export class RoleService {
             superAdminRole.permissions = assignablePermissions;
             await this.connection.rawConnection.getRepository(Role).save(superAdminRole, { reload: false });
         } catch (err: any) {
+            // getSuperAdminRole() throws when the role does not exist yet, which is
+            // expected on first startup. Create it instead of reporting the error.
             const defaultChannel = await this.channelService.getDefaultChannel();
             await this.createRoleForChannels(
                 RequestContext.empty(),
@@ -490,6 +492,8 @@ export class RoleService {
         try {
             await this.getCustomerRole();
         } catch (err: any) {
+            // getCustomerRole() throws when the role does not exist yet, which is
+            // expected on first startup. Create it instead of reporting the error.
             const defaultChannel = await this.channelService.getDefaultChannel();
             await this.createRoleForChannels(
                 RequestContext.empty(),
