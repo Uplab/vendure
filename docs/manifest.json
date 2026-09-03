@@ -1204,7 +1204,7 @@
                   "title": "CurrencyCode",
                   "slug": "currency-code",
                   "file": "docs/reference/typescript-api/common/currency-code.mdx",
-                  "lastModified": "2026-09-01T11:19:25Z"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 },
                 {
                   "title": "EntityRelationPaths",
@@ -1240,7 +1240,7 @@
                   "title": "JobState",
                   "slug": "job-state",
                   "file": "docs/reference/typescript-api/common/job-state.mdx",
-                  "lastModified": "2026-09-01T11:19:25Z"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 },
                 {
                   "title": "JsonCompatible",
@@ -1252,7 +1252,7 @@
                   "title": "LanguageCode",
                   "slug": "language-code",
                   "file": "docs/reference/typescript-api/common/language-code.mdx",
-                  "lastModified": "2026-09-01T11:19:25Z"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 },
                 {
                   "title": "Middleware",
@@ -1270,7 +1270,7 @@
                   "title": "Permission",
                   "slug": "permission",
                   "file": "docs/reference/typescript-api/common/permission.mdx",
-                  "lastModified": "2026-09-01T11:19:25Z"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 },
                 {
                   "title": "PriceCalculationResult",
@@ -1539,7 +1539,7 @@
                   "lastModified": "2026-09-01T11:21:59+02:00"
                 }
               ],
-              "lastModified": "2026-09-01T11:21:59+02:00"
+              "lastModified": "2026-09-03T13:25:27Z"
             },
             {
               "title": "Data Access",
@@ -1920,7 +1920,7 @@
                   "title": "Role",
                   "slug": "role",
                   "file": "docs/reference/typescript-api/entities/role.mdx",
-                  "lastModified": "2026-04-20T16:08:16+02:00"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 },
                 {
                   "title": "Seller",
@@ -3168,7 +3168,7 @@
                   "title": "RoleService",
                   "slug": "role-service",
                   "file": "docs/reference/typescript-api/services/role-service.mdx",
-                  "lastModified": "2026-09-01T13:17:25+02:00"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 },
                 {
                   "title": "SearchService",
@@ -3886,7 +3886,7 @@
                   "title": "Input Objects",
                   "slug": "input-types",
                   "file": "docs/reference/graphql-api/admin/input-types.mdx",
-                  "lastModified": "2026-08-14T14:30:25+02:00"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 },
                 {
                   "title": "Mutations",
@@ -3904,7 +3904,7 @@
                   "title": "Types",
                   "slug": "object-types",
                   "file": "docs/reference/graphql-api/admin/object-types.mdx",
-                  "lastModified": "2026-09-01T11:19:25Z"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 }
               ],
               "lastModified": "2026-01-28T14:49:21+01:00"
@@ -3942,7 +3942,7 @@
                   "title": "Types",
                   "slug": "object-types",
                   "file": "docs/reference/graphql-api/shop/object-types.mdx",
-                  "lastModified": "2026-09-01T11:19:25Z"
+                  "lastModified": "2026-09-03T13:25:27Z"
                 }
               ],
               "lastModified": "2026-01-28T14:49:21+01:00"
