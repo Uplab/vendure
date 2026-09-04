@@ -353,6 +353,33 @@ test.describe('Product List', () => {
             ).toBeVisible();
         });
 
+        test('should keep column filters applied when a search term is entered', async ({ page }) => {
+            const lp = listPage(page);
+            await lp.goto();
+            await lp.expectLoaded();
+
+            // Filter down to the 3 products with "Camera" in the name
+            await lp.openAddFilterMenu();
+            const dropdown = page.locator('[data-slot="dropdown-menu-content"]');
+            await dropdown.getByRole('menuitem', { name: /name/i }).click();
+
+            const dialog = page.locator('[role="dialog"]');
+            await dialog.getByPlaceholder('Enter filter value...').fill('Camera');
+            await dialog.getByRole('button', { name: 'Apply filter' }).click();
+            await page.waitForResponse(resp => resp.url().includes('/admin-api') && resp.status() === 200);
+            await lp.expectRowCount(3);
+
+            // Searching within that filter must AND the two, not OR them
+            await lp.search('Lens');
+            await lp.expectRowCount(1);
+            await expect(lp.getRows().filter({ hasText: 'Camera Lens' })).toHaveCount(1);
+            await expect(lp.getRows().filter({ hasText: 'Instant Camera' })).toHaveCount(0);
+
+            await lp.clearSearch();
+            await page.getByRole('button', { name: 'Clear all' }).click();
+            await page.waitForResponse(resp => resp.url().includes('/admin-api') && resp.status() === 200);
+        });
+
         test('should clear an applied filter via the clear all button', async ({ page }) => {
             const lp = listPage(page);
             await lp.goto();
