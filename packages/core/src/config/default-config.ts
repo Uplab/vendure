@@ -101,6 +101,9 @@ export const defaultConfig: RuntimeVendureConfig = {
         middleware: [],
         introspection: true,
         apolloServerPlugins: [],
+        inputValidation: {
+            requiredFieldValidation: true,
+        },
     },
     entityIdStrategy: new AutoIncrementIdStrategy(),
     authOptions: {
