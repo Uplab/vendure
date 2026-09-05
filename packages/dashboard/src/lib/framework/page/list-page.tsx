@@ -15,6 +15,7 @@ import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { AnyRoute, AnyRouter, useNavigate } from '@tanstack/react-router';
 import { ColumnFiltersState, SortingState, Table } from '@tanstack/react-table';
 import { TableOptions } from '@tanstack/table-core';
+import { useEffect } from 'react';
 
 import { BulkActionsInput } from '@/vdb/framework/extension-api/types/index.js';
 import {
@@ -272,6 +273,33 @@ export interface ListPageProps<
      * ```
      */
     defaultSort?: SortingState;
+    /**
+     * @description
+     * Allows you to specify column filters which are applied when the current user has not
+     * yet configured any filters for this page. They behave exactly as if the user had set
+     * them: they show up as active filter chips, and can be edited or removed.
+     *
+     * Once the user edits the filters, their choice is persisted and these defaults are no
+     * longer applied — including when the user removes every filter. Clearing the filters is
+     * persisted as a deliberate choice, so the defaults do not reappear on the next visit.
+     *
+     * Requires `pageId` to be set, since the persisted table settings are what distinguishes
+     * "not configured yet" from "cleared by the user". Without a `pageId` the filters live
+     * only in the URL, which cannot express that difference, and the defaults are ignored.
+     *
+     * @example
+     * ```tsx
+     *  <ListPage
+     *    pageId="product-list"
+     *    listQuery={productListQuery}
+     *    title="Products"
+     *    // hide archived products until the user says otherwise
+     *    defaultColumnFilters={[{ id: 'isArchived', value: { eq: false } }]}
+     *  />
+     * ```
+     * @since 3.8.0
+     */
+    defaultColumnFilters?: ColumnFiltersState;
     /**
      * @description
      * Allows you to specify the default columns that are visible in the table.
@@ -536,6 +564,7 @@ export function ListPage<
     additionalColumns,
     defaultColumnOrder,
     defaultSort,
+    defaultColumnFilters,
     route: routeOrFn,
     defaultVisibility,
     onSearchTermChange,
@@ -558,8 +587,21 @@ export function ListPage<
     const route = typeof routeOrFn === 'function' ? routeOrFn() : routeOrFn;
     const routeSearch = route.useSearch();
     const navigate = useNavigate<AnyRouter>({ from: route.fullPath });
-    const { setTableSettings, settings } = useUserSettings();
+    const { setTableSettings, settings, settingsReady } = useUserSettings();
     const tableSettings = pageId ? settings.tableSettings?.[pageId] : undefined;
+
+    // `defaultColumnFilters` is a silent no-op without a `pageId`, so say so in development
+    // rather than leaving the author to wonder why their defaults never show up.
+    useEffect(() => {
+        if (process.env.NODE_ENV !== 'production' && defaultColumnFilters && !pageId) {
+            // eslint-disable-next-line no-console
+            console.warn(
+                `ListPage: "defaultColumnFilters" was set without a "pageId", so it has no effect. ` +
+                    `The persisted table settings are what tell "not configured yet" apart from ` +
+                    `"cleared by the user", and there are none without a "pageId".`,
+            );
+        }
+    }, [defaultColumnFilters, pageId]);
 
     const pagination = {
         page: routeSearch.page ? Number.parseInt(routeSearch.page) : 1,
@@ -570,7 +612,22 @@ export function ListPage<
 
     // Column visibility/order user-settings merging is owned by useViewOptionDefaults inside
     // PaginatedListDataTable, so only raw code defaults are passed down here.
-    const columnFilters = pageId ? tableSettings?.columnFilters : routeSearch.filters;
+    // `defaultColumnFilters` only applies until the user has configured filters for this page.
+    // The saved table settings hold no `columnFilters` entry until the user edits the filters,
+    // and hold an empty array once the user has cleared them all, so an absent entry — rather
+    // than an empty one — is what marks the defaults as still applicable.
+    const columnFilters = pageId
+        ? (tableSettings?.columnFilters ?? defaultColumnFilters)
+        : routeSearch.filters;
+
+    // The DataTable seeds its filter state from `columnFilters` once, on mount. The user
+    // settings resolve asynchronously — the local values are in effect until the server-side
+    // SettingsStore responds and replaces them — so a table mounted before that keeps filters
+    // that no longer match the persisted state. With `defaultColumnFilters` that becomes
+    // user-visible: the default chips would be on screen while the list query ran unfiltered.
+    // So hold the table back until the settings have resolved, but only on pages that use the
+    // feature, leaving every other list page mounting exactly as before.
+    const awaitingSettings = !!defaultColumnFilters && !!pageId && !settingsReady;
 
     const sorting: SortingState = (routeSearch.sort ?? '')
         .split(',')
@@ -662,12 +719,14 @@ export function ListPage<
             <PageActionBar dropdownMenuItems={dropdownMenuItems}>{children}</PageActionBar>
             <PageLayout>
                 <FullWidthPageBlock blockId="list-table">
-                    <PaginatedListDataTable
-                        {...commonTableProps}
-                        enableViews
-                        onReorder={onReorder}
-                        disableDragAndDrop={disableDragAndDrop}
-                    />
+                    {awaitingSettings ? null : (
+                        <PaginatedListDataTable
+                            {...commonTableProps}
+                            enableViews
+                            onReorder={onReorder}
+                            disableDragAndDrop={disableDragAndDrop}
+                        />
+                    )}
                 </FullWidthPageBlock>
             </PageLayout>
         </Page>
