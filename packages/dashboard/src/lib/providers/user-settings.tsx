@@ -56,6 +56,54 @@ export interface UserSettings {
      * newly registered widgets are visible by default with no migration needed.
      */
     hiddenWidgets?: string[];
+    /**
+     * @description
+     * The version of the persisted `tableSettings` shape, written by
+     * {@link migrateTableSettings}. Absent in settings saved before that migration existed.
+     */
+    tableSettingsVersion?: number;
+}
+
+/**
+ * The current version of the persisted `tableSettings` shape. Bump this when a change to
+ * how table settings are written means existing saved settings need migrating on load.
+ */
+export const TABLE_SETTINGS_VERSION = 1;
+
+/**
+ * @description
+ * Brings persisted table settings written by an earlier dashboard version up to
+ * `TABLE_SETTINGS_VERSION`, and stamps them so it only ever runs once per stored copy.
+ *
+ * Version 1 drops saved `columnFilters` entries that are empty. Until this version, the
+ * DataTable reported its filter state on mount, so merely visiting a list page saved
+ * `columnFilters: []` for it. That makes "has never configured filters here" and "has
+ * cleared every filter" the same stored value, and `ListPage`'s `defaultColumnFilters`
+ * relies on telling those apart — without this, the defaults would never apply for anyone
+ * who had visited the page before upgrading, which is every existing user.
+ *
+ * A legacy auto-write is indistinguishable from a genuine clear, so this drops both. The
+ * cost is that a user who really had cleared every filter on a page that declares defaults
+ * sees those defaults once more, and clears them once more; that is much less bad than
+ * defaults that silently never apply.
+ *
+ * Returns the input unchanged (by reference) when it is already at the current version, so
+ * callers can tell whether the migrated settings still need writing back.
+ */
+export function migrateTableSettings(settings: UserSettings): UserSettings {
+    if (settings.tableSettingsVersion === TABLE_SETTINGS_VERSION) {
+        return settings;
+    }
+    const tableSettings = Object.fromEntries(
+        Object.entries(settings.tableSettings ?? {}).map(([tableId, table]) => {
+            if (Array.isArray(table?.columnFilters) && table.columnFilters.length === 0) {
+                const { columnFilters, ...rest } = table;
+                return [tableId, rest];
+            }
+            return [tableId, table];
+        }),
+    );
+    return { ...settings, tableSettings, tableSettingsVersion: TABLE_SETTINGS_VERSION };
 }
 
 const defaultSettings: UserSettings = {
@@ -69,6 +117,9 @@ const defaultSettings: UserSettings = {
     devMode: false,
     hasSeenOnboarding: false,
     tableSettings: {},
+    // No `tableSettingsVersion` here on purpose: these defaults are spread *under* the stored
+    // settings, so a version stamped here would make un-migrated stored settings look current.
+    // The stamp is added by `migrateTableSettings()`, which every load path runs through.
 };
 
 export interface UserSettingsContextType {
@@ -149,12 +200,12 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({ quer
         try {
             const storedSettings = localStorage.getItem(LS_KEY_USER_SETTINGS);
             if (storedSettings) {
-                return { ...defaultSettings, ...JSON.parse(storedSettings) };
+                return migrateTableSettings({ ...defaultSettings, ...JSON.parse(storedSettings) });
             }
         } catch (e) {
             console.error('Failed to load user settings from localStorage', e);
         }
-        return { ...defaultSettings };
+        return migrateTableSettings({ ...defaultSettings });
     };
 
     const [settings, setSettings] = useState<UserSettings>(loadSettings);
@@ -217,7 +268,16 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({ quer
                 if (serverSettingsData) {
                     // Server has settings, use them
                     const mergedSettings = { ...defaultSettings, ...serverSettingsData };
-                    setSettings(mergedSettings);
+                    // The server copy was written by whichever dashboard version saved it last,
+                    // so it needs the same migration as the local copy. Without this, a server
+                    // payload in the old shape would land on top of the already-migrated local
+                    // settings and resurrect the empty `columnFilters` entries just dropped.
+                    const migratedSettings = migrateTableSettings(mergedSettings);
+                    setSettings(migratedSettings);
+                    // `serverSettings` mirrors what the server actually holds. When the migration
+                    // changed something, keeping the pre-migration value here makes the save
+                    // effect below push the migrated settings — and the version stamp — back up,
+                    // so the migration runs once rather than on every session.
                     setServerSettings(mergedSettings);
                     setIsReady(true);
                 } else {
